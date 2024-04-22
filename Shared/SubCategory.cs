@@ -11,5 +11,5 @@ public class SubCategory
     public string Text { get; set; } = "";
     
     [JsonPropertyName("questions")]
-    public List<Question> questions { get; set; } = [];
+    public List<QuestionModel> questions { get; set; } = [];
 }

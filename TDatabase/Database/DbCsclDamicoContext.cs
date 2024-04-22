@@ -37,7 +37,9 @@ public partial class DbCsclDamicoContext : DbContext
 
     public virtual DbSet<SubCategory> SubCategories { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=v00rca2-vm.sphostserver.com\\axterisco2019;Initial Catalog=DB_CSCL_DAMICO;User ID=sa;password=AdmP@ss2003;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -278,6 +280,25 @@ public partial class DbCsclDamicoContext : DbContext
                 .HasConstraintName("FK__QUESTION__ID_SUB__2C3393D0");
 
             entity.HasMany(d => d.IdChoices).WithMany(p => p.IdQuestions)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ChoiceQuestion",
+                    r => r.HasOne<Choice>().WithMany()
+                        .HasForeignKey("IdChoice")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__CHOICE_QU__ID_CH__5812160E"),
+                    l => l.HasOne<Question>().WithMany()
+                        .HasForeignKey("IdQuestion")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__CHOICE_QU__ID_QU__571DF1D5"),
+                    j =>
+                    {
+                        j.HasKey("IdQuestion", "IdChoice").HasName("PK__CHOICE_Q__F037DAD3A13BCEBD");
+                        j.ToTable("CHOICE_QUESTION");
+                        j.IndexerProperty<int>("IdQuestion").HasColumnName("ID_QUESTION");
+                        j.IndexerProperty<int>("IdChoice").HasColumnName("ID_CHOICE");
+                    });
+
+            entity.HasMany(d => d.IdChoicesNavigation).WithMany(p => p.IdQuestionsNavigation)
                 .UsingEntity<Dictionary<string, object>>(
                     "QuestionChoice",
                     r => r.HasOne<Choice>().WithMany()

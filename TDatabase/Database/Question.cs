@@ -20,4 +20,6 @@ public partial class Question
     public virtual ICollection<QuestionChosen> QuestionChosens { get; set; } = new List<QuestionChosen>();
 
     public virtual ICollection<Choice> IdChoices { get; set; } = new List<Choice>();
+
+    public virtual ICollection<Choice> IdChoicesNavigation { get; set; } = new List<Choice>();
 }
