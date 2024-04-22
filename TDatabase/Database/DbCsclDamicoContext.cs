@@ -41,10 +41,7 @@ public partial class DbCsclDamicoContext : DbContext
 
     public virtual DbSet<SubCategory> SubCategories { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=v00rca2-vm.sphostserver.com\\axterisco2019;Initial Catalog=DB_CSCL_DAMICO;User ID=sa;password=AdmP@ss2003;TrustServerCertificate=True");
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Attachment>(entity =>
@@ -90,7 +87,7 @@ public partial class DbCsclDamicoContext : DbContext
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.AttachmentQuestions)
                 .HasForeignKey(d => d.IdQuestion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ATTACHMEN__ID_QU__4D94879B");
+                .HasConstraintName("FK__ATTACHMEN__ID_QU__5FB337D6");
         });
 
         modelBuilder.Entity<Choice>(entity =>
@@ -267,7 +264,7 @@ public partial class DbCsclDamicoContext : DbContext
 
         modelBuilder.Entity<Question>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__QUESTION__3214EC2752B2003E");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27E2EE7E53");
 
             entity.ToTable("QUESTION");
 
@@ -277,15 +274,20 @@ public partial class DbCsclDamicoContext : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
+            entity.Property(e => e.IdMacroCategory).HasColumnName("ID_MACRO_CATEGORY");
             entity.Property(e => e.IdSubCategory).HasColumnName("ID_SUB_CATEGORY");
             entity.Property(e => e.Text)
                 .IsUnicode(false)
                 .HasColumnName("TEXT");
 
+            entity.HasOne(d => d.IdMacroCategoryNavigation).WithMany(p => p.Questions)
+                .HasForeignKey(d => d.IdMacroCategory)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__QUESTION__ID_MAC__619B8048");
+
             entity.HasOne(d => d.IdSubCategoryNavigation).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.IdSubCategory)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION__ID_SUB__2C3393D0");
+                .HasConstraintName("FK__QUESTION__ID_SUB__5DCAEF64");
         });
 
         modelBuilder.Entity<QuestionChoice>(entity =>
@@ -307,8 +309,7 @@ public partial class DbCsclDamicoContext : DbContext
 
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.QuestionChoices)
                 .HasForeignKey(d => d.IdQuestion)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION___ID_QU__33D4B598");
+                .HasConstraintName("FK__QUESTION___ID_QU__5EBF139D");
         });
 
         modelBuilder.Entity<QuestionChosen>(entity =>
@@ -343,7 +344,7 @@ public partial class DbCsclDamicoContext : DbContext
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.QuestionChosens)
                 .HasForeignKey(d => d.IdQuestion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION___ID_QU__5441852A");
+                .HasConstraintName("FK__QUESTION___ID_QU__60A75C0F");
         });
 
         modelBuilder.Entity<SubCategory>(entity =>
@@ -358,15 +359,9 @@ public partial class DbCsclDamicoContext : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
-            entity.Property(e => e.IdMacroCategory).HasColumnName("ID_MACRO_CATEGORY");
             entity.Property(e => e.Text)
                 .IsUnicode(false)
                 .HasColumnName("TEXT");
-
-            entity.HasOne(d => d.IdMacroCategoryNavigation).WithMany(p => p.SubCategories)
-                .HasForeignKey(d => d.IdMacroCategory)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__SUB_CATEG__ID_MA__286302EC");
         });
 
         OnModelCreatingPartial(modelBuilder);

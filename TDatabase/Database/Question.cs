@@ -7,7 +7,9 @@ public partial class Question
 {
     public int Id { get; set; }
 
-    public int IdSubCategory { get; set; }
+    public int IdMacroCategory { get; set; }
+
+    public int? IdSubCategory { get; set; }
 
     public string Text { get; set; } = null!;
 
@@ -15,7 +17,9 @@ public partial class Question
 
     public virtual ICollection<AttachmentQuestion> AttachmentQuestions { get; set; } = new List<AttachmentQuestion>();
 
-    public virtual SubCategory IdSubCategoryNavigation { get; set; } = null!;
+    public virtual MacroCategory IdMacroCategoryNavigation { get; set; } = null!;
+
+    public virtual SubCategory? IdSubCategoryNavigation { get; set; }
 
     public virtual ICollection<QuestionChoice> QuestionChoices { get; set; } = new List<QuestionChoice>();
 

@@ -13,20 +13,14 @@ namespace TDatabase.Queries
 
             if (idMacroCategory > 0)
             {
-                questions = from mc in db.MacroCategories
-                            where mc.Id == idMacroCategory
-                            select mc into macro
-                            join sc in db.SubCategories on macro.Id equals sc.IdMacroCategory
-                            select sc into sub                            
-                            join q in questions on sub.Id equals q.IdSubCategory
-                            where sub.Id == idSubCategory
+                questions = from q in questions
+                            where q.IdMacroCategory == idMacroCategory
                             select q;
             }
             if (idSubCategory > 0)
             {
-                questions = from sc in db.SubCategories
-                            join q in questions on sc.Id equals q.IdSubCategory
-                            where sc.Id == idSubCategory
+                questions = from q in questions
+                            where q.IdSubCategory == idSubCategory
                             select q;
             }
 
@@ -48,7 +42,7 @@ namespace TDatabase.Queries
             return list;
         } 
 
-        public static async Task<int> Insert(DB db, QuestionModel question)
+        public static async Task<int> Insert(DB db, QuestionModel question, SubCategory sub)
         {
             var questionId = 0;
             try
@@ -58,7 +52,7 @@ namespace TDatabase.Queries
                 {
                     Id = nextId,
                     Text = question.Text,
-                    IdSubCategory = question.IdSubCategory,
+                    IdSubCategory = sub.Id,
                     Active = true
                 };
                 db.Questions.Add(newQuestion);
@@ -90,7 +84,7 @@ namespace TDatabase.Queries
                     var q = db.Questions.Where(x=>x.Id == elem.Id).FirstOrDefault();
                     if (q is not null)
                     {
-                        q.IdSubCategory = elem.IdSubCategory;
+                        //q.IdSubCategory = elem.IdSubCategory;
                         q.Text = elem.Text;
 
                         db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));

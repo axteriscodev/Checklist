@@ -11,5 +11,5 @@ public partial class MacroCategory
 
     public bool Active { get; set; }
 
-    public virtual ICollection<SubCategory> SubCategories { get; set; } = new List<SubCategory>();
+    public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
 }

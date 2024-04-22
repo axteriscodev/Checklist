@@ -7,9 +7,6 @@ public class QuestionModel
     [JsonPropertyName("id")]
     public int Id { get; set; }
 
-    [JsonPropertyName("idSubCategory")]
-    public int IdSubCategory { get; set; }
-
     [JsonPropertyName("text")]
     public string Text { get; set; } = "";
 
