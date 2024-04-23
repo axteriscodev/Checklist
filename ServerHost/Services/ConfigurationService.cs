@@ -56,9 +56,6 @@ namespace ServerHost.Services
             return IsWindows() ? WIN_CONFIG_FILE : LINUX_CONFIG_FILE;
         }
 
-
-
-
         #endregion
 
         #region Metodi Privati
