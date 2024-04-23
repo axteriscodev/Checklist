@@ -7,20 +7,20 @@ namespace TDatabase.Queries
 {
     public class QuestionDbHelper
     {
-        public static List<QuestionModel> Select(DB db, int idSubCategory, int idMacroCategory)
+        public static List<QuestionModel> Select(DB db, int idCategory = 0, int idSubject = 0)
         {
             var questions = db.Questions.AsQueryable();
 
-            if (idMacroCategory > 0)
+            if (idSubject > 0)
             {
                 questions = from q in questions
-                            //where q.IdMacroCategory == idMacroCategory
+                            where q.IdSubject == idSubject
                             select q;
             }
-            if (idSubCategory > 0)
+            if (idCategory > 0)
             {
                 questions = from q in questions
-                            //where q.IdSubCategory == idSubCategory
+                            where q.IdCategory == idCategory
                             select q;
             }
 
@@ -52,7 +52,8 @@ namespace TDatabase.Queries
                 {
                     Id = nextId,
                     Text = question.Text,
-                    
+                    IdSubject = question.IdSubject,
+                    IdCategory = question.IdCategory,
                     Active = true
                 };
                 db.Questions.Add(newQuestion);
@@ -84,7 +85,8 @@ namespace TDatabase.Queries
                     var q = db.Questions.Where(x=>x.Id == elem.Id).FirstOrDefault();
                     if (q is not null)
                     {
-                        //q.IdSubCategory = elem.IdSubCategory;
+                        q.IdCategory = elem.IdCategory;
+                        q.IdSubject = elem.IdSubject;
                         q.Text = elem.Text;
 
                         db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));

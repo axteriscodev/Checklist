@@ -1,21 +1,23 @@
 ﻿using Shared;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclDamicoContext;
+using DB = TDatabase.Database.DbCsclAxteriscoContext;
 
 namespace TDatabase.Queries
 {
-    public class MacroCategoriesDbHelper
+    public class CategoriesDbHelper
     {
         public static List<CategoryModel> Select(DB db)
         {
-            return db.MacroCategories.Select(x => new CategoryModel()
+            return db.Categories.Select(x => new CategoryModel()
             {
                 Id = x.Id,
                 Text = x.Text,
-                Questions = (db.Questions.Where(q => q.IdMacroCategory == x.Id).Select(q => new QuestionModel()
+                Questions = (db.Questions.Where(q => q.IdCategory == x.Id).Select(q => new QuestionModel()
                 {
                     Id = q.Id,
                     Text = q.Text,
+                    IdCategory = q.IdCategory,
+                    IdSubject = q.IdSubject,
                     Choices = (from qc in db.QuestionChoices
                                join c in db.Choices on qc.IdChoice equals c.Id
                                where qc.IdQuestion == q.Id
@@ -34,14 +36,14 @@ namespace TDatabase.Queries
             var macroId = 0;
             try
             {
-                var nextId = (db.MacroCategories.Any() ? db.MacroCategories.Max(x => x.Id) : 0) + 1;
-                MacroCategory newMacro = new()
+                var nextId = (db.Categories.Any() ? db.Categories.Max(x => x.Id) : 0) + 1;
+                Category newMacro = new()
                 {
                     Id = nextId,
                     Text = macro.Text,
                     Active = true
                 };
-                db.MacroCategories.Add(newMacro);
+                db.Categories.Add(newMacro);
                 await db.SaveChangesAsync();
                 macroId = nextId;
             }
@@ -57,7 +59,7 @@ namespace TDatabase.Queries
             {
                 foreach (var elem in macros)
                 {
-                    var m = db.MacroCategories.Where(x => x.Id == elem.Id).SingleOrDefault();
+                    var m = db.Categories.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (m is not null)
                     {
                         m.Text = elem.Text;
@@ -80,7 +82,7 @@ namespace TDatabase.Queries
             {
                 foreach (var elem in choices)
                 {
-                    var mc = db.MacroCategories.Where(x => x.Id == elem.Id).SingleOrDefault();
+                    var mc = db.Categories.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (mc is not null)
                     {
                         mc.Active = false;

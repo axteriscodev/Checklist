@@ -1,18 +1,18 @@
 ﻿using Shared;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclDamicoContext;
+using DB = TDatabase.Database.DbCsclAxteriscoContext;
 
 namespace TDatabase.Queries
 {
-    public class SubCategoriesDbHelper
+    public class SubjectDbHelper
     {
         public static List<SubjectModel> Select(DB db)
         {
-            return db.SubCategories.Select(s => new SubjectModel()
+            return db.Subjects.Select(s => new SubjectModel()
             {
                 Id = s.Id,
                 Text = s.Text,
-                questions = (db.Questions.Where(q => q.IdSubCategory == s.Id).Select(q => new QuestionModel()
+                questions = db.Questions.Where(q => q.IdSubject == s.Id).Select(q => new QuestionModel()
                 {
                     Id = q.Id,
                     Text = q.Text,
@@ -25,7 +25,7 @@ namespace TDatabase.Queries
                                    Tag = c.Tag,
                                    Value = c.Value,
                                }).ToList(),
-                })).ToList(),
+                }).ToList(),
             }).ToList();
         }
 
@@ -34,14 +34,14 @@ namespace TDatabase.Queries
             var subId = 0;
             try
             {
-                var nextId = (db.SubCategories.Any() ? db.SubCategories.Max(x => x.Id) : 0) + 1;
-                SubCategory newSub = new()
+                var nextId = (db.Subjects.Any() ? db.Subjects.Max(x => x.Id) : 0) + 1;
+                Subject newSub = new()
                 {
                     Id = nextId,
                     Text = sub.Text,
                     Active = true,
                 };
-                db.SubCategories.Add(newSub);
+                db.Subjects.Add(newSub);
                 await db.SaveChangesAsync();
                 subId = nextId;
             }
@@ -57,7 +57,7 @@ namespace TDatabase.Queries
             {
                 foreach (var elem in subs)
                 {
-                    var s = db.SubCategories.Where(x => x.Id == elem.Id).SingleOrDefault();
+                    var s = db.Subjects.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (s is not null)
                     {
                         s.Text = elem.Text;
@@ -80,7 +80,7 @@ namespace TDatabase.Queries
             {
                 foreach (var elem in choices)
                 {
-                    var mc = db.MacroCategories.Where(x => x.Id == elem.Id).SingleOrDefault();
+                    var mc = db.Subjects.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (mc is not null)
                     {
                         mc.Active = false;
