@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerHost", "ServerHost\Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientWebApp", "ClientWebApp\ClientWebApp.csproj", "{ABA120D6-2624-47DA-9991-392655A14663}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{A2472F83-685A-4EDA-A8CD-B3712C6163BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{A2472F83-685A-4EDA-A8CD-B3712C6163BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDatabase", "TDatabase\TDatabase.csproj", "{8E011CE8-CCC4-44E6-8DF3-7F83E0050493}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDatabase", "TDatabase\TDatabase.csproj", "{8E011CE8-CCC4-44E6-8DF3-7F83E0050493}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
