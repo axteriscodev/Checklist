@@ -5,11 +5,11 @@ using Radzen;
 using Radzen.Blazor;
 using Shared;
 
-namespace ClientWebApp.Components.Categories;
+namespace ClientWebApp.Components.Subjects;
 
-public partial class TableCategories
+public partial class TableSubjects
 {
-     private List<CategoryModel> categories = [];
+    private List<SubjectModel> subjects = [];
 
         /// <summary>
         /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -35,12 +35,12 @@ public partial class TableCategories
         /// <summary>
         /// Stringa indica la pagina e gli elementi
         /// </summary>
-        private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} categorie)";
+        private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} argomenti)";
 
         /// <summary>
         /// Riferimento al componente tabella
         /// </summary>
-        private RadzenDataGrid<CategoryModel>? grid;
+        private RadzenDataGrid<SubjectModel>? grid;
 
         [Parameter]
         public string Param { get; set; } = "";
@@ -57,11 +57,11 @@ public partial class TableCategories
 
         private async Task LoadData()
         {
-            var response = await HttpManager.SendHttpRequest("Category/CategoriesList", "");
+            var response = await HttpManager.SendHttpRequest("Category/SubjectsList", "");
             if (response.Code.Equals("0"))
             {
-                categories = JsonSerializer.Deserialize<List<CategoryModel>>(response.Content.ToString() ?? "") ?? [];
-                count = categories.Count;
+                subjects = JsonSerializer.Deserialize<List<SubjectModel>>(response.Content.ToString() ?? "") ?? [];
+                count = subjects.Count;
             }
         }
 
@@ -84,11 +84,11 @@ public partial class TableCategories
                 { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
                 { "CreationMode", true },
             };
-            await DialogService.OpenAsync<FormCategories>("Nuova categoria", parameters: param, options: newOptions);
+            await DialogService.OpenAsync<FormSubjects>("Nuovo argomento", parameters: param, options: newOptions);
         }
 
 
-        private async Task OpenUpdateForm(CategoryModel item)
+        private async Task OpenUpdateForm(SubjectModel item)
         {
             //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
             var additionalStyle = "min-width:600px;min-height:fit-content;height:fit-content;width:600px;";
@@ -104,18 +104,18 @@ public partial class TableCategories
                 { "Object", item},
                 {"CreationMode", false },
             };
-            await DialogService.OpenAsync<FormCategories>("Aggiorna categoria", parameters: param, options: newOptions);
+            await DialogService.OpenAsync<FormSubjects>("Aggiorna argomento", parameters: param, options: newOptions);
         }
 
-        private async Task Hide(CategoryModel category)
+        private async Task Hide(SubjectModel subject)
         {
             var titolo = "Disattivazione sezione";
-            var text = "Vuoi disattivare la sezione: " + category.Text + "?";
+            var text = "Vuoi disattivare la sezione: " + subject.Text + "?";
             var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
             Console.WriteLine("cliccato: " + confirmationResult);
             if (confirmationResult == true)
             {
-                var response = await HttpManager.SendHttpRequest("Category/HideCategories", category);
+                var response = await HttpManager.SendHttpRequest("Category/HideSubjects", subject);
                 //NotificationService.Notify(response);
                 if (response.Code.Equals("0"))
                 {
