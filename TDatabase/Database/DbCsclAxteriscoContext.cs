@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TDatabase.Database;
 
-public partial class DbCsclDamicoContext : DbContext
+public partial class DbCsclAxteriscoContext : DbContext
 {
-    public DbCsclDamicoContext()
+    public DbCsclAxteriscoContext()
     {
     }
 
-    public DbCsclDamicoContext(DbContextOptions<DbCsclDamicoContext> options)
+    public DbCsclAxteriscoContext(DbContextOptions<DbCsclAxteriscoContext> options)
         : base(options)
     {
     }
@@ -18,6 +18,8 @@ public partial class DbCsclDamicoContext : DbContext
     public virtual DbSet<Attachment> Attachments { get; set; }
 
     public virtual DbSet<AttachmentQuestion> AttachmentQuestions { get; set; }
+
+    public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Choice> Choices { get; set; }
 
@@ -31,17 +33,16 @@ public partial class DbCsclDamicoContext : DbContext
 
     public virtual DbSet<Document> Documents { get; set; }
 
-    public virtual DbSet<MacroCategory> MacroCategories { get; set; }
-
     public virtual DbSet<Question> Questions { get; set; }
 
     public virtual DbSet<QuestionChoice> QuestionChoices { get; set; }
 
     public virtual DbSet<QuestionChosen> QuestionChosens { get; set; }
 
-    public virtual DbSet<SubCategory> SubCategories { get; set; }
+    public virtual DbSet<Subject> Subjects { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){}
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Attachment>(entity =>
@@ -87,7 +88,24 @@ public partial class DbCsclDamicoContext : DbContext
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.AttachmentQuestions)
                 .HasForeignKey(d => d.IdQuestion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ATTACHMEN__ID_QU__5FB337D6");
+                .HasConstraintName("FK__ATTACHMEN__ID_QU__6C190EBB");
+        });
+
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__CATEGORY__3214EC2751661B68");
+
+            entity.ToTable("CATEGORY");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
+            entity.Property(e => e.Text)
+                .IsUnicode(false)
+                .HasColumnName("TEXT");
         });
 
         modelBuilder.Entity<Choice>(entity =>
@@ -245,26 +263,9 @@ public partial class DbCsclDamicoContext : DbContext
                 .HasConstraintName("FK__DOCUMENT__ID_CON__44FF419A");
         });
 
-        modelBuilder.Entity<MacroCategory>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__MACRO_CA__3214EC272B89DED4");
-
-            entity.ToTable("MACRO_CATEGORY");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
-            entity.Property(e => e.Active)
-                .HasDefaultValue(true)
-                .HasColumnName("ACTIVE");
-            entity.Property(e => e.Text)
-                .IsUnicode(false)
-                .HasColumnName("TEXT");
-        });
-
         modelBuilder.Entity<Question>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27E2EE7E53");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC276FC0932C");
 
             entity.ToTable("QUESTION");
 
@@ -274,20 +275,20 @@ public partial class DbCsclDamicoContext : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
-            entity.Property(e => e.IdMacroCategory).HasColumnName("ID_MACRO_CATEGORY");
-            entity.Property(e => e.IdSubCategory).HasColumnName("ID_SUB_CATEGORY");
+            entity.Property(e => e.IdCategory).HasColumnName("ID_CATEGORY");
+            entity.Property(e => e.IdSubject).HasColumnName("ID_SUBJECT");
             entity.Property(e => e.Text)
                 .IsUnicode(false)
                 .HasColumnName("TEXT");
 
-            entity.HasOne(d => d.IdMacroCategoryNavigation).WithMany(p => p.Questions)
-                .HasForeignKey(d => d.IdMacroCategory)
+            entity.HasOne(d => d.IdCategoryNavigation).WithMany(p => p.Questions)
+                .HasForeignKey(d => d.IdCategory)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION__ID_MAC__619B8048");
+                .HasConstraintName("FK__QUESTION__ID_CAT__6E01572D");
 
-            entity.HasOne(d => d.IdSubCategoryNavigation).WithMany(p => p.Questions)
-                .HasForeignKey(d => d.IdSubCategory)
-                .HasConstraintName("FK__QUESTION__ID_SUB__5DCAEF64");
+            entity.HasOne(d => d.IdSubjectNavigation).WithMany(p => p.Questions)
+                .HasForeignKey(d => d.IdSubject)
+                .HasConstraintName("FK__QUESTION__ID_SUB__6EF57B66");
         });
 
         modelBuilder.Entity<QuestionChoice>(entity =>
@@ -309,7 +310,7 @@ public partial class DbCsclDamicoContext : DbContext
 
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.QuestionChoices)
                 .HasForeignKey(d => d.IdQuestion)
-                .HasConstraintName("FK__QUESTION___ID_QU__5EBF139D");
+                .HasConstraintName("FK__QUESTION___ID_QU__6B24EA82");
         });
 
         modelBuilder.Entity<QuestionChosen>(entity =>
@@ -344,14 +345,14 @@ public partial class DbCsclDamicoContext : DbContext
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.QuestionChosens)
                 .HasForeignKey(d => d.IdQuestion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION___ID_QU__60A75C0F");
+                .HasConstraintName("FK__QUESTION___ID_QU__6D0D32F4");
         });
 
-        modelBuilder.Entity<SubCategory>(entity =>
+        modelBuilder.Entity<Subject>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__SUB_CATE__3214EC27EB35D049");
+            entity.HasKey(e => e.Id).HasName("PK__SUBJECT__3214EC27DE923220");
 
-            entity.ToTable("SUB_CATEGORY");
+            entity.ToTable("SUBJECT");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TDatabase.Database;
 
-public partial class SubCategory
+public partial class Category
 {
     public int Id { get; set; }
 

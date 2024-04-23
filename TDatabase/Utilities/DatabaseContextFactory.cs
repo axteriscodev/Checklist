@@ -13,11 +13,11 @@ namespace TDatabase.Utilities
         /// Metodo per creare un contesto del database
         /// </summary>
         /// <returns></returns>
-        public static DbCsclDamicoContext Create(string connectionString)
+        public static DbCsclAxteriscoContext Create(string connectionString)
         {
-            var OptionsBuilder = new DbContextOptionsBuilder<DbCsclDamicoContext>();
+            var OptionsBuilder = new DbContextOptionsBuilder<DbCsclAxteriscoContext>();
             OptionsBuilder.UseSqlServer(connectionString);
-            return new DbCsclDamicoContext(OptionsBuilder.Options);
+            return new DbCsclAxteriscoContext(OptionsBuilder.Options);
         }
     }
 }
