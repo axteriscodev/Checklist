@@ -38,7 +38,7 @@ public class CategoryController : DefaultController
 
     [LogAction]
     [HttpPost]
-    public AXT_WebResponse SaveCategory(CategoryModel newCategory)
+    public async Task<AXT_WebResponse> SaveCategory(CategoryModel newCategory)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -47,7 +47,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = CategoriesDbHelper.Insert(db, newCategory);
+            var list = await CategoriesDbHelper.Insert(db, newCategory);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -61,7 +61,7 @@ public class CategoryController : DefaultController
 
     [LogAction]
     [HttpPost]
-    public AXT_WebResponse UpdateCategories(List<CategoryModel> categories)
+    public async Task<AXT_WebResponse> UpdateCategories(List<CategoryModel> categories)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -70,7 +70,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = CategoriesDbHelper.Update(db, categories);
+            var list = await CategoriesDbHelper.Update(db, categories);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -84,7 +84,7 @@ public class CategoryController : DefaultController
 
     [LogAction]
     [HttpPost]
-    public AXT_WebResponse HideCategories(List<CategoryModel> categories)
+    public async Task<AXT_WebResponse> HideCategories(List<CategoryModel> categories)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -93,7 +93,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = CategoriesDbHelper.Hide(db, categories);
+            var list = await CategoriesDbHelper.Hide(db, categories);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -134,7 +134,7 @@ public class CategoryController : DefaultController
 
     [LogAction]
     [HttpPost]
-    public AXT_WebResponse SaveSubject(SubjectModel newSubject)
+    public async Task<AXT_WebResponse> SaveSubject(SubjectModel newSubject)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -143,7 +143,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = SubjectDbHelper.Insert(db, newSubject);
+            var list = await SubjectDbHelper.Insert(db, newSubject);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -157,7 +157,7 @@ public class CategoryController : DefaultController
 
     [LogAction]
     [HttpPost]
-    public AXT_WebResponse UpdateSubjects(List<SubjectModel> subjects)
+    public async Task<AXT_WebResponse> UpdateSubjects(List<SubjectModel> subjects)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -166,7 +166,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = SubjectDbHelper.Update(db, subjects);
+            var list = await SubjectDbHelper.Update(db, subjects);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -180,7 +180,7 @@ public class CategoryController : DefaultController
 
     [LogAction]
     [HttpPost]
-    public AXT_WebResponse HideSubjects(List<SubjectModel> subjects)
+    public async Task<AXT_WebResponse> HideSubjects(List<SubjectModel> subjects)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -189,7 +189,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = SubjectDbHelper.Hide(db, subjects);
+            var list = await SubjectDbHelper.Hide(db, subjects);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }

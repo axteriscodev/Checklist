@@ -78,12 +78,12 @@ public partial class FormCategories
         AXT_WebResponse response;
         if (CreationMode)
         {
-            response = await HttpManager.SendHttpRequest("Categories/SaveCategory", new CategoryModel { Text = form.Nome ?? ""});
+            response = await HttpManager.SendHttpRequest("Category/SaveCategory", new CategoryModel { Text = form.Nome ?? ""});
      
         }
         else
         {
-            response = await HttpManager.SendHttpRequest("Categories/UpdateCategories", new[] {new CategoryModel(){ Id = form.Id, Text = form.Nome ?? ""}});
+            response = await HttpManager.SendHttpRequest("Category/UpdateCategories", new[] {new CategoryModel(){ Id = form.Id, Text = form.Nome ?? ""}});
             
         }
 

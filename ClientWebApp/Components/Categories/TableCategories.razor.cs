@@ -116,7 +116,7 @@ public partial class TableCategories
             if (confirmationResult == true)
             {
                 var response = await HttpManager.SendHttpRequest("Category/Hide", category);
-                NotificationService.Notify(response);
+                //NotificationService.Notify(response);
                 if (response.Code.Equals("0"))
                 {
                     await ReloadTable();
