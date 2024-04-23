@@ -53,6 +53,18 @@ namespace ServerHost.Services
             return value;
         }
 
+        /// <summary>
+        /// Metodo statico che restituisce il nome della cartella dove vengono scritti i file di log
+        /// </summary>
+        /// <returns>il percorso della cartella</returns>
+        public static string GetLogsFolder()
+        {
+            var config = GetConfigFile();
+            var folderName = config.GetValue<string>("logs");
+            var directory = AppDomain.CurrentDomain.BaseDirectory;
+            return directory + folderName;
+        }
+
         #region Metodi per modificare/creare/leggere il file appsettings.json
 
         /// <summary>

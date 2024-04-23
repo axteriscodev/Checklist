@@ -127,7 +127,7 @@ namespace ServerHost.Services
         /// <returns>stringa con il percorso del file di log</returns>
         private static string GetFileLogPath(string fileName)
         {
-            var path = ConfigurationService.GetConfiguration("logs") ?? "";
+            var path = ConfigurationService.GetLogsFolder();
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
