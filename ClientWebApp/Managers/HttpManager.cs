@@ -21,7 +21,7 @@ public class HttpManager(HttpClient client)
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
-    protected async Task SendHttpGet(string path)
+    public async Task SendHttpGet(string path)
     {
         var url = GetServerBaseUrl() + path;
         var resp = await httpClient.GetAsync(url);
@@ -34,7 +34,7 @@ public class HttpManager(HttpClient client)
     /// <param name="path">metodo da richiamare sul server</param>
     /// <param name="content">il contenuto da inviare nella richiesta</param>
     /// <returns>WebResponse</returns>
-    protected async Task<AXT_WebResponse> SendHttpUploadRequest(string path, HttpContent? content)
+    public async Task<AXT_WebResponse> SendHttpUploadRequest(string path, HttpContent? content)
     {
         AXT_WebResponse webResponse;
         var url = GetServerBaseUrl() + path;
@@ -56,7 +56,7 @@ public class HttpManager(HttpClient client)
     /// <param name="path">metodo da richiamare sul server</param>
     /// <param name="content">il contenuto da inviare nella richiesta</param>
     /// <returns>WebResponse</returns>
-    protected async Task<AXT_WebResponse> SendHttpRequest(string path, object content)
+    public async Task<AXT_WebResponse> SendHttpRequest(string path, object content)
     {
         AXT_WebResponse webResponse;
         var url = GetServerBaseUrl() + path;
