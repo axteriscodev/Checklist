@@ -23,7 +23,6 @@ public partial class FormCreation
     /// Booleano che è impostata durante una ricerca
     /// </summary>
     private bool isLoading = false;
-    private bool first = true;
 
     /// <summary>
     /// Intero che ci dice quanti sono gli elementi
