@@ -1,4 +1,5 @@
-﻿using ClientWebApp.Repositories;
+﻿using System.Security.Cryptography.X509Certificates;
+using ClientWebApp.Repositories;
 using Microsoft.AspNetCore.Components;
 using Shared;
 
@@ -47,7 +48,7 @@ public partial class FormCreation
         count = categories.Count;
         foreach (var category in categories)
         {
-            selected.Add(new() { Id = category.Id, Text=category.Text, Questions=category.Questions });
+            selected.Add(new() { Id = category.Id, Text = category.Text, Questions = category.Questions });
         }
     }
 
@@ -58,13 +59,17 @@ public partial class FormCreation
         //await grid!.Reload();
     }
 
-
-    class IdCategoryAndQuestions
+    private void CreateForm()
     {
-        public int Id { get; set;}
-        public string Text { get; set; } = "";
-        public IEnumerable<int> QuestionIds { get; set; } = [];
-        public List<QuestionModel> Questions { get; set; } = [];
+
     }
 
+}
+
+class IdCategoryAndQuestions
+{
+    public int Id { get; set; }
+    public string Text { get; set; } = "";
+    public IEnumerable<int> SelectedQuestionIds { get; set; } = [];
+    public List<QuestionModel> Questions { get; set; } = [];
 }
