@@ -3,6 +3,7 @@
 @using Shared;
 
 @inject CategoriesRepository CategoriesRepository
+@inject DocumentsRepository DocumentsRepository
 @inject DialogService DialogService
 
 @if (initialLoading)
@@ -17,7 +18,7 @@ else
         <RadzenFieldset Text="Seleziona le domande" class="shadow rounded" Style="font-weight:400;">
             @foreach (var s in selected)
             {
-                <RadzenCheckBoxList Value="@s.SelectedQuestionIds" class="fw-bold" AllowSelectAll="true" SelectAllText=@s.Text TValue="int" Orientation="Orientation.Vertical">
+                <RadzenCheckBoxList @bind-Value=@s.SelectedQuestionIds class="fw-bold" AllowSelectAll="true" SelectAllText=@s.Text TValue="int" Orientation="Orientation.Vertical">
                     <Items>
                         @foreach(var q in s.Questions)
                         {

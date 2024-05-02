@@ -90,7 +90,9 @@ public class DocumentDbHelper
             await db.SaveChangesAsync();
             documentId = nextId;
         }
-        catch (Exception) { }
+        catch (Exception e) {
+            var ex = e.Message;
+         }
 
         return documentId;
     }

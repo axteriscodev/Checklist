@@ -58,9 +58,36 @@ public partial class FormCreation
         //await grid!.Reload();
     }
 
-    private void CreateForm()
+    private async Task CreateForm()
     {
+        List<CategoryModel> documentCategories = [];
 
+        foreach (var selection in selected)
+        {
+            if (selection.SelectedQuestionIds.Any())
+            {
+                var category = new CategoryModel()
+                {
+                    Id = selection.Id,
+                    Text = selection.Text,
+                };
+
+                foreach (var selectedQuestionId in selection.SelectedQuestionIds)
+                {
+                    var selectedQuestion = selection.Questions.First(x => x.Id == selectedQuestionId);
+                    category.Questions.Add(selectedQuestion);
+                }
+
+                documentCategories.Add(category);
+            }
+        }
+
+        var document = new DocumentModel()
+        {
+            Categories = documentCategories,
+        };
+
+        await DocumentsRepository.SaveDocument(document);
     }
 
 }

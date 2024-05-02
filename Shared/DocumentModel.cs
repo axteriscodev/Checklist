@@ -11,7 +11,7 @@ public class DocumentModel
     public string Title { get; set;} = "";
 
     [JsonPropertyName("date")]
-    public DateTime Date { get; set;}
+    public DateTime Date { get; set;} = DateTime.Now;
 
     [JsonPropertyName("client")]
     public Client client { get; set;} = new Client();
