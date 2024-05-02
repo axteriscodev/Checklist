@@ -13,8 +13,16 @@ else
     <h2>@Param</h2>
     
     <div class="mt-4 m-5">
-        <RadzenFieldset Text="Seleziona le domande" class="shadow rounded" Style="font-weight:400;">
-        
+        <RadzenFieldset Text="Questionario" class="shadow rounded" Style="font-weight:400;">
+        @foreach(var category in documentModel.Categories)
+        {
+            <h6>@category.Text</h6>
+
+            @foreach(var question in category.Questions)
+            {
+                <p>@question.Text</p>
+            }
+        }
         </RadzenFieldset>
     </div>
 }

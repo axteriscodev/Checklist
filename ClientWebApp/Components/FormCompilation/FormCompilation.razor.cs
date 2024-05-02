@@ -27,8 +27,7 @@ public partial class FormCompilation
 
     private async Task LoadData()
     {
-        var documentsList = await DocumentsRepository.GetDocuments();
-        documentModel = documentsList.First();
+        documentModel = await DocumentsRepository.GetDocumentById(1);
 
         Console.WriteLine(documentModel.Id);
         //count = categories.Count;
