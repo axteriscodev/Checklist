@@ -36,7 +36,7 @@ namespace ClientWebApp.Components.Questions
         /// <summary>
         /// Riferimento alla lista di questions
         /// </summary>
-        private List<QuestionModel> list = [];
+        private List<QuestionModel> questions = [];
 
         private async Task OpenNewForm()
         {
@@ -69,7 +69,7 @@ namespace ClientWebApp.Components.Questions
             {
                 //tra i parametri che invio al dialog creo un EventCallback da passare al componente
                 { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
-                { "Object", model},
+                { "Question", model},
                 {"CreationMode", false },
             };
             await DialogService.OpenAsync<FormQuestions>("Aggiorna domanda", parameters: param, options: newOptions);
@@ -110,8 +110,8 @@ namespace ClientWebApp.Components.Questions
             var response = await HttpManager.SendHttpRequest("Question/QuestionsList", "");
             if (response.Code.Equals("0"))
             {
-                list = JsonSerializer.Deserialize<List<QuestionModel>>(response.Content.ToString() ?? "") ?? [];
-                count = list.Count;
+                questions = JsonSerializer.Deserialize<List<QuestionModel>>(response.Content.ToString() ?? "") ?? [];
+                count = questions.Count;
             }
         }
     }

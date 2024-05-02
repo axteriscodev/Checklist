@@ -13,7 +13,7 @@ public partial class FormQuestions
     [Parameter]
     public bool CreationMode { get; set; }
     [Parameter]
-    public object? Object { get; set; }
+    public QuestionModel? Question { get; set; }
 
     /// <summary>
     /// Classe utilizzata per incapsulare le informazioni relative alla scelta dell'utente
@@ -43,19 +43,19 @@ public partial class FormQuestions
     /// </summary>
     private void Setup()
     {
-        if (!CreationMode && Object is not null)
+        if (!CreationMode && Question is not null)
         {
             form = new FormQuestionData()
             {
-                Id = ((QuestionModel)Object).Id,
-                Text = ((QuestionModel)Object).Text,
-                IdCategory = ((QuestionModel)Object).IdCategory,
-                IdSubject = ((QuestionModel)Object).IdSubject,
-                Choices = ((QuestionModel)Object).Choices,
-                CurrentChoice = ((QuestionModel)Object).CurrentChoice,
-                Note = ((QuestionModel)Object).Note,
-                Printable = ((QuestionModel)Object).Printable,
-                Hidden = ((QuestionModel)Object).Hidden,
+                Id = Question.Id,
+                Text = Question.Text,
+                IdCategory = Question.IdCategory,
+                IdSubject = Question.IdSubject,
+                Choices = Question.Choices,
+                CurrentChoice = Question.CurrentChoice,
+                Note = Question.Note,
+                Printable = Question.Printable,
+                Hidden = Question.Hidden,
             };
         }
     }
@@ -68,14 +68,14 @@ public partial class FormQuestions
         {
             response = await HttpManager.SendHttpRequest("Question/SaveQuestion", new QuestionModel
             {
-                Text = ((QuestionModel)Object).Text, 
-                IdCategory = ((QuestionModel)Object).IdCategory,
-                IdSubject = ((QuestionModel)Object).IdSubject,
-                Choices = ((QuestionModel)Object).Choices,
-                CurrentChoice = ((QuestionModel)Object).CurrentChoice,
-                Note = ((QuestionModel)Object).Note,
-                Printable = ((QuestionModel)Object).Printable,
-                Hidden = ((QuestionModel)Object).Hidden,
+                Text = form.Text, 
+                IdCategory = form.IdCategory,
+                IdSubject = form.IdSubject,
+                Choices = form.Choices,
+                CurrentChoice = form.CurrentChoice,
+                Note = form.Note ?? "",
+                Printable = form.Printable,
+                Hidden = form.Hidden,
             });
         }
         else
@@ -83,14 +83,15 @@ public partial class FormQuestions
             List<QuestionModel> list = [];
             list.Add(new()
             {
-                Text = ((QuestionModel)Object).Text,
-                IdCategory = ((QuestionModel)Object).IdCategory,
-                IdSubject = ((QuestionModel)Object).IdSubject,
-                Choices = ((QuestionModel)Object).Choices,
-                CurrentChoice = ((QuestionModel)Object).CurrentChoice,
-                Note = ((QuestionModel)Object).Note,
-                Printable = ((QuestionModel)Object).Printable,
-                Hidden = ((QuestionModel)Object).Hidden,
+                Id = form.Id,
+                Text = form.Text,
+                IdCategory = form.IdCategory,
+                IdSubject = form.IdSubject,
+                Choices = form.Choices,
+                CurrentChoice = form.CurrentChoice,
+                Note = form.Note ?? "",
+                Printable = form.Printable,
+                Hidden = form.Hidden,
             });
             response = await HttpManager.SendHttpRequest("Question/UpdateQuestion", list);
         }

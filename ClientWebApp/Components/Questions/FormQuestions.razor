@@ -13,14 +13,14 @@
                 </Helper>
             </RadzenFormField>
 
-            <RadzenFormField Text="Scelta <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+            @* <RadzenFormField Text="Scelta <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
                 <ChildContent>
                     <RadzenTextBox Name="Scelta" @bind-Value="@form.Choices[0].Value" />
                 </ChildContent>
                 <Helper>
                     <RadzenRequiredValidator Component="Scelta" Popup=false Text="Il campo Scelta è obbligatorio" />
                 </Helper>
-            </RadzenFormField>
+            </RadzenFormField> *@
 
             <RadzenFormField Text="Note <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
                 <ChildContent>
