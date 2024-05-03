@@ -39,6 +39,7 @@ public class DocumentDbHelper
                                                        from q in db.Questions
                                                        where qc.IdDocument == d.Id
                                                        && q.Id == qc.IdQuestion
+                                                       && q.IdCategory == c.Id
                                                        select new QuestionModel()
                                                        {
                                                            Id = qc.IdQuestion,
