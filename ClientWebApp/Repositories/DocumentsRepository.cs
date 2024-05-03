@@ -14,7 +14,7 @@ public class DocumentsRepository(HttpManager httpManager)
     {
         if (Documents.Count == 0)
         {
-            var response = await _httpManager.SendHttpRequest("Document/DocumentsList", "");
+            var response = await _httpManager.SendHttpRequest("Document/DocumentsList", 0);
             if (response.Code.Equals("0"))
             {
                 Documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
