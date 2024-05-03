@@ -18,7 +18,6 @@ public class DocumentDbHelper
         }
 
         var docs = (from d in documents
-                    //where d.Id == idDocument
                     select new DocumentModel()
                     {
                         Id = d.Id,
@@ -26,7 +25,7 @@ public class DocumentDbHelper
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
                                                  where qc.IdDocument == d.Id
-                                                 && q.Id == qc.Id
+                                                 && q.Id == qc.IdQuestion
                                                  group q by q.IdCategory into q2
                                                  select new { IdCategory = q2.First().IdCategory })
 
@@ -39,7 +38,7 @@ public class DocumentDbHelper
                                           Questions = (from qc in db.QuestionChosens
                                                        from q in db.Questions
                                                        where qc.IdDocument == d.Id
-                                                       && qc.Id == q.Id
+                                                       && q.Id == qc.IdQuestion
                                                        select new QuestionModel()
                                                        {
                                                            Id = qc.Id,
