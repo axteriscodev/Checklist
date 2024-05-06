@@ -44,6 +44,7 @@ public class DocumentDbHelper
                                                        {
                                                            Id = qc.IdQuestion,
                                                            Text = q.Text,
+                                                           Order = qc.Order,
                                                            CurrentChoice = (from cc in db.Choices
                                                                             where cc.Id == qc.IdCurrentChoice
                                                                             select new ChoiceModel() 
@@ -100,6 +101,7 @@ public class DocumentDbHelper
                         Id = nextQuestionChosenId,
                         IdDocument = nextId,
                         IdQuestion = q.Id,
+                        Order = q.Order,
                         Printable = true,
                         Hidden = false
                     };
@@ -136,6 +138,9 @@ public class DocumentDbHelper
                             if(qc is not null)
                             {
                                 qc.IdCurrentChoice = q.CurrentChoice.Id;
+                                qc.Order = q.Order;
+                                qc.Printable = q.Printable;
+                                qc.Hidden = q.Hidden;
                                 await db.SaveChangesAsync();
                                 modified.Add(qc.Id);
                             }

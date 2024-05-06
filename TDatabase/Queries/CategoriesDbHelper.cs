@@ -12,6 +12,7 @@ namespace TDatabase.Queries
             {
                 Id = x.Id,
                 Text = x.Text,
+                Order = x.Order,
                 Questions = (db.Questions.Where(q => q.IdCategory == x.Id).Select(q => new QuestionModel()
                 {
                     Id = q.Id,
@@ -41,6 +42,7 @@ namespace TDatabase.Queries
                 {
                     Id = nextId,
                     Text = category.Text,
+                    Order = category.Order,
                     Active = true
                 };
                 db.Categories.Add(newMacro);
@@ -63,6 +65,7 @@ namespace TDatabase.Queries
                     if (m is not null)
                     {
                         m.Text = elem.Text;
+                        m.Order = elem.Order;
                         if (await db.SaveChangesAsync() > 0)
                         {
                             modified.Add(elem.Id);
