@@ -60,6 +60,24 @@ public partial class TableCategories
         count = categories.Count;
     }
 
+    private async Task OpenOrderForm()
+    {
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = "min-width:600px;min-height:fit-content;height:fit-content;width:800px;";
+        var newOptions = new DialogOptions
+        {
+            Style = additionalStyle
+        };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+            {
+                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+                { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
+                { "Categories", categories },
+            };
+        await DialogService.OpenAsync<SortCategories>("Ordinamento", parameters: param, options: newOptions);
+    }
+
     /// <summary>
     /// Metodo che apre la form per aggiungere un record al sistema
     /// </summary>

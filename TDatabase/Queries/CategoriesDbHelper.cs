@@ -13,7 +13,7 @@ namespace TDatabase.Queries
                 Id = x.Id,
                 Text = x.Text,
                 Order = x.Order,
-                Questions = (db.Questions.Where(q => q.IdCategory == x.Id).Select(q => new QuestionModel()
+                Questions = db.Questions.Where(q => q.IdCategory == x.Id).Select(q => new QuestionModel()
                 {
                     Id = q.Id,
                     Text = q.Text,
@@ -28,8 +28,8 @@ namespace TDatabase.Queries
                                    Tag = c.Tag,
                                    Value = c.Value,
                                }).ToList(),
-                })).ToList(),
-            }).ToList();
+                }).ToList(),
+            }).OrderBy(x => x.Order).ToList();
         }
 
         public static async Task<int> Insert(DB db, CategoryModel category)
