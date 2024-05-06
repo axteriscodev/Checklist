@@ -22,6 +22,9 @@ public class QuestionModel
     [JsonPropertyName("currentChoice")]
     public ChoiceModel? CurrentChoice { get; set; }
 
+    [JsonPropertyName("order")]
+    public int Order { get; set; }
+
     [JsonPropertyName("note")]
     public string Note { get; set; } = "";
 

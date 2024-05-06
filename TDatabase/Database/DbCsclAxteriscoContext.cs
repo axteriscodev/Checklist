@@ -41,10 +41,7 @@ public partial class DbCsclAxteriscoContext : DbContext
 
     public virtual DbSet<Subject> Subjects { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=v00rca2-vm.sphostserver.com\\axterisco2019;Initial Catalog=DB_CSCL_AXTERISCO;User ID=sa;password=AdmP@ss2003;TrustServerCertificate=True");
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Attachment>(entity =>
@@ -95,7 +92,7 @@ public partial class DbCsclAxteriscoContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CATEGORY__3214EC2751661B68");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27AF281335");
 
             entity.ToTable("CATEGORY");
 
@@ -105,6 +102,7 @@ public partial class DbCsclAxteriscoContext : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
+            entity.Property(e => e.Order).HasColumnName("ORDER");
             entity.Property(e => e.Text)
                 .IsUnicode(false)
                 .HasColumnName("TEXT");
@@ -284,7 +282,7 @@ public partial class DbCsclAxteriscoContext : DbContext
             entity.HasOne(d => d.IdCategoryNavigation).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.IdCategory)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION__ID_CAT__6E01572D");
+                .HasConstraintName("FK__QUESTION__ID_CAT__75A278F5");
 
             entity.HasOne(d => d.IdSubjectNavigation).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.IdSubject)
@@ -315,7 +313,7 @@ public partial class DbCsclAxteriscoContext : DbContext
 
         modelBuilder.Entity<QuestionChosen>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__QUESTION__3214EC271E06FC8E");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27F537A62B");
 
             entity.ToTable("QUESTION_CHOSEN");
 
@@ -329,23 +327,24 @@ public partial class DbCsclAxteriscoContext : DbContext
             entity.Property(e => e.Note)
                 .IsUnicode(false)
                 .HasColumnName("NOTE");
+            entity.Property(e => e.Order).HasColumnName("ORDER");
             entity.Property(e => e.Printable)
                 .HasDefaultValue(true)
                 .HasColumnName("PRINTABLE");
 
             entity.HasOne(d => d.IdCurrentChoiceNavigation).WithMany(p => p.QuestionChosens)
                 .HasForeignKey(d => d.IdCurrentChoice)
-                .HasConstraintName("FK__QUESTION___ID_CU__534D60F1");
+                .HasConstraintName("FK__QUESTION___ID_CU__7C4F7684");
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.QuestionChosens)
                 .HasForeignKey(d => d.IdDocument)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION___ID_DO__52593CB8");
+                .HasConstraintName("FK__QUESTION___ID_DO__7B5B524B");
 
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.QuestionChosens)
                 .HasForeignKey(d => d.IdQuestion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION___ID_QU__6D0D32F4");
+                .HasConstraintName("FK__QUESTION___ID_QU__7D439ABD");
         });
 
         modelBuilder.Entity<Subject>(entity =>
