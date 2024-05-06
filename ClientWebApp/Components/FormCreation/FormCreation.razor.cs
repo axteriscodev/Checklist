@@ -102,14 +102,24 @@ public partial class FormCreation
 
     #region Visualizzazione
 
-    private string CategoryText(IdCategoryAndQuestions group)
+    private static string CategoryText(IdCategoryAndQuestions group)
     {
         return group.Order + ". " + group.Text;
     }
 
-    private string QuestionText(IdCategoryAndQuestions group, string questionText, int order)
+    private static string QuestionText(IdCategoryAndQuestions group, string questionText, int order)
     {
         return group.Order + "."  + order + " " + questionText;
+    }
+
+    private void ShowQuestions(IdCategoryAndQuestions group)
+    {
+        group.ShowQuestion = !group.ShowQuestion;
+    }
+
+    private string AccordionIcon(IdCategoryAndQuestions group)
+    {
+        return group.ShowQuestion ? "remove" : "add";
     }
 
     #endregion
@@ -198,6 +208,7 @@ public partial class FormCreation
         public int Order { get; set; }
         public string Text { get; set; } = "";
         public bool? State { get; set; } = false;
+        public bool ShowQuestion = true;
         public List<int> SelectedQuestionIds { get; set; } = [];
         public List<QuestionModel> Questions { get; set; } = [];
     }
