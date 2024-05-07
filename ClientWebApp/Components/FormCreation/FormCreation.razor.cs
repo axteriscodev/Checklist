@@ -26,12 +26,12 @@ public partial class FormCreation
     /// Booleano che è impostata durante una ricerca
     /// </summary>
     private bool isLoading = false;
+    private bool onSaving = false;
 
     /// <summary>
     /// Intero che ci dice quanti sono gli elementi
     /// </summary>
     private int count;
-    private int qCount = 0;
 
     /// <summary>
     /// il design degli elementi della form
@@ -70,6 +70,7 @@ public partial class FormCreation
 
     private async Task CreateForm()
     {
+        onSaving = true;
         List<CategoryModel> documentCategories = [];
 
         foreach (var group in groups)
@@ -98,6 +99,7 @@ public partial class FormCreation
         };
 
         await DocumentsRepository.SaveDocument(document);
+        onSaving = false;
     }
 
     #region Visualizzazione
@@ -167,6 +169,31 @@ public partial class FormCreation
     #endregion
 
     #region Ordinamento domande 
+
+
+    private void OrderCategories((int oldIndex, int newIndex) indici)
+    {
+        // spezzo la tupla
+        var (oldIndex, newIndex) = indici;
+
+        var items = groups;
+        var itemToMove = items[oldIndex];
+        items.RemoveAt(oldIndex);
+
+        if (newIndex < items.Count)
+        {
+            items.Insert(newIndex, itemToMove);
+        }
+        else
+        {
+            items.Add(itemToMove);
+        }
+
+        for (int i = 0; i < groups.Count; i++)
+        {
+            groups[i].Order = i + 1;
+        }
+    }
 
     private void OrderList((int oldIndex, int newIndex, int groupNumber) indici)
     {
