@@ -35,9 +35,12 @@ else
                         <RadzenDropDown @bind-Value=@question.CurrentChoice Data=@question.Choices TextProperty="Value"
                             Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
                     </div>
+
                     <div class="col-md-6 col-lg-4 p-3">
                         <RadzenCard>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Note relative alla domanda</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">TextArea with placeholder</RadzenText>
+                            <RadzenTextArea @bind-Value=@question.Note Placeholder="Inserisci nota..." class="w-100"
+                                aria-label="TextArea with placeholder" />
                         </RadzenCard>
                     </div>
                 }
