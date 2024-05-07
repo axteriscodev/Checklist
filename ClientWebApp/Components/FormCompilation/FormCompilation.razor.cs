@@ -42,6 +42,14 @@ public partial class FormCompilation
         }
     }
 
+//     private async Task addQuestionNote(int id, string note)
+//     {
+//  if (docLists.Count != 0)
+//         {
+//                 DocumentsList[id].Note = note
+//         }
+//     }
+
     private async Task OnDocumentSelected()
     {
         documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);

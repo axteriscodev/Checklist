@@ -4,38 +4,48 @@
 @inject DocumentsRepository DocumentsRepository
 @inject DialogService DialogService
 
-@if(initialLoading)
+@if (initialLoading)
 {
     <Loading />
 }
 else
 {
     <h2>@Param</h2>
-    
+
     <div class="mt-4 m-5">
         <div class="pb-3 pt-3">
-        Seleziona questionario: <RadzenDropDown @bind-Value=@CurrentSelection Data=@DocumentsList Change="@(() => OnDocumentSelected())" Style="width: 100%; max-width: 100px;" Name="DropDownDocumentValue"/>
+            Seleziona questionario:
+            <RadzenDropDown @bind-Value=@CurrentSelection Data=@DocumentsList Change="@(() => OnDocumentSelected())"
+                Style="width: 100%; max-width: 100px;" Name="DropDownDocumentValue" />
         </div>
+
         <RadzenFieldset Text="Questionario" class="shadow rounded" Style="font-weight:400;">
-        @foreach(var category in documentModel.Categories)
-        {
-            <h6>@category.Text</h6>
+            <div class="documentTitle">
 
-            @foreach(var question in category.Questions)
+                <RadzenText TextStyle="TextStyle.H3">@documentModel.Title</RadzenText>
+            </div>
+            @foreach (var category in documentModel.Categories)
             {
-                <div class="pb-3 ps-2">
-                    <p>@question.Text</p>
-                    <RadzenDropDown @bind-Value=@question.CurrentChoice  Data=@question.Choices  TextProperty="Value" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
-                </div>
-            }
-        }
+                <h6>@category.Text</h6>
 
-        <RadzenButton Icon="add" Text="Salva questionario" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>SaveForm())" />
- 
+                @foreach (var question in category.Questions)
+                {
+                    <div class="pb-3 ps-2">
+                        <p>@question.Text</p>
+                        <RadzenDropDown @bind-Value=@question.CurrentChoice Data=@question.Choices TextProperty="Value"
+                            Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
+                    </div>
+                    <div class="col-md-6 col-lg-4 p-3">
+                        <RadzenCard>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Note relative alla domanda</RadzenText>
+                        </RadzenCard>
+                    </div>
+                }
+            }
+
+            <RadzenButton Icon="add" Text="Salva questionario" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>SaveForm())" />
+
         </RadzenFieldset>
     </div>
 }
-
-
-

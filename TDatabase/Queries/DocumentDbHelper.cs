@@ -22,6 +22,7 @@ public class DocumentDbHelper
                     {
                         Id = d.Id,
                         Date = d.Date,
+                        Title = d.Title,
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
                                                  where qc.IdDocument == d.Id
