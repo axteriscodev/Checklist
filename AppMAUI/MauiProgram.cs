@@ -1,6 +1,7 @@
 ﻿using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.Extensions.Logging;
+using Radzen;
 
 namespace AppMAUI;
 
@@ -31,7 +32,8 @@ public static class MauiProgram
         builder.Services.AddScoped<QuestionRepository>();
         //repository per i documenti
         builder.Services.AddScoped<DocumentsRepository>();
-
+        //componenti radzen
+        builder.Services.AddRadzenComponents();
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
