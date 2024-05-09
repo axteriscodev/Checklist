@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDatabase", "TDatabase\TDatabase.csproj", "{8E011CE8-CCC4-44E6-8DF3-7F83E0050493}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppMAUI", "AppMAUI\AppMAUI.csproj", "{F5147D48-160A-4F32-8F16-3A24D9CC2634}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{8E011CE8-CCC4-44E6-8DF3-7F83E0050493}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E011CE8-CCC4-44E6-8DF3-7F83E0050493}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E011CE8-CCC4-44E6-8DF3-7F83E0050493}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5147D48-160A-4F32-8F16-3A24D9CC2634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5147D48-160A-4F32-8F16-3A24D9CC2634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5147D48-160A-4F32-8F16-3A24D9CC2634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5147D48-160A-4F32-8F16-3A24D9CC2634}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
