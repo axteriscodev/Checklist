@@ -1,4 +1,6 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using ConstructionSiteLibrary
+
+<Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="@LoadAssemblyPages()">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -10,3 +12,25 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code{
+
+
+
+    private List<System.Reflection.Assembly> LoadAssemblyPages()
+    {
+        List<System.Reflection.Assembly> pages = [];
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.Home).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.QuestionPage).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.FormCreationPage).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.FormCompilationPage).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.ChoicesPage).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.CategoriesPage).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.Counter).Assembly);
+
+        return pages;
+    }
+
+
+
+}

@@ -1,6 +1,6 @@
 using ClientWebApp;
-using ClientWebApp.Managers;
-using ClientWebApp.Repositories;
+using ConstructionSiteLibrary.Managers;
+using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
