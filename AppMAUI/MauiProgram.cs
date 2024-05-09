@@ -1,5 +1,5 @@
-﻿using AppMAUI.Managers;
-using AppMAUI.Repositories;
+﻿using ConstructionSiteLibrary.Managers;
+using ConstructionSiteLibrary.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace AppMAUI;
@@ -24,7 +24,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ScreenManager>();
         //notify manager per notificare all'utente il risultato delle operazioni compiute
-        builder.Services.AddScoped<AXT_NotificationManager>();
+        builder.Services.AddScoped<NotificationManager>();
         //repository per le categorie e argomenti
         builder.Services.AddScoped<CategoriesRepository>();
         //repository per le domande e le risposte

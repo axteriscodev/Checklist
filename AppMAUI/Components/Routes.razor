@@ -1,6 +1,29 @@
-﻿<Router AppAssembly="@typeof(MauiProgram).Assembly">
+﻿<Router AppAssembly="@typeof(MauiProgram).Assembly" AdditionalAssemblies="@LoadAssemblyPages()">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
 </Router>
+
+
+@code {
+
+
+
+    private List<System.Reflection.Assembly> LoadAssemblyPages()
+    {
+        List<System.Reflection.Assembly> pages = [];
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.Home).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.QuestionPage).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.FormCreationPage).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.FormCompilationPage).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.ChoicesPage).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.CategoriesPage).Assembly);
+        pages.Add(typeof(ConstructionSiteLibrary.Pages.Counter).Assembly);
+
+        return pages;
+    }
+
+
+
+}
