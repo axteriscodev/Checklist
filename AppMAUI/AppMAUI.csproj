@@ -68,8 +68,4 @@
       <ProjectReference Include="..\ConstructionSiteLibrary\ConstructionSiteLibrary.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Components\Pages\" />
-    </ItemGroup>
-
 </Project>
