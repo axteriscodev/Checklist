@@ -11,7 +11,10 @@
     /// Evento che comunica il cambiamento della grandezza dello schermo
     /// </summary>
     [Parameter]
-    public EventCallback<ScreenDimension?> OnScreenSizeChanged { get; set; }
+    public EventCallback<ScreenDimension?> OnScreenDimensionChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<ScreenSize?> OnScreenSizeChanged { get; set; }
     /// <summary>
     /// Valore minimo della larghezza dello schermo per considerarlo medium
     /// </summary>
@@ -26,7 +29,9 @@
     /// <summary>
     /// La dimensione attuale dello schermo
     /// </summary>
-    public ScreenDimension? Screen { get; set; }
+    public ScreenDimension? ScreenDimension { get; set; }
+
+    public ScreenSize? ScreenSize { get; set; }
 
 
     protected override Task OnInitializedAsync()
@@ -43,23 +48,26 @@
     private void ScreenSetup()
     {
         ScreenManager.Init(JS);
-        Screen = CalculateScreenDimension(ScreenManager.GetScreenSize());
+        ScreenSize = ScreenManager.GetScreenSize();
+        ScreenDimension = CalculateScreenDimension(ScreenSize);
         ScreenManager.Resize += ScreenDimensionChanged!;
-        CallEvent();
+        CallDimensionEvent();
     }
 
     /// <summary>
     /// Metodo registrato all'evento del ScreenManager Resize
     /// </summary>
     /// <param name="sender">oggetto che invoca l'evento</param>
-    /// <param name="dimension">le dimensioni dello schermo</param>
-    private void ScreenDimensionChanged(object sender, ScreenSize dimension)
+    /// <param name="size">le dimensioni dello schermo</param>
+    private void ScreenDimensionChanged(object sender, ScreenSize size)
     {
+        ScreenSize = size;
+        CallSizeEvent();
         var newDimension = CalculateScreenDimension(ScreenManager.GetScreenSize());
-        if (newDimension != Screen)
+        if (newDimension != ScreenDimension)
         {
-            Screen = newDimension;
-            CallEvent();
+            ScreenDimension = newDimension;
+            CallDimensionEvent();
         }
     }
 
@@ -74,15 +82,15 @@
         {
             if (size.Width < MediumWith)
             {
-                dim = ScreenDimension.Small;
+                dim = Model.ScreenDimension.Small;
             }
             else if (size.Width < BigWith)
             {
-                dim = ScreenDimension.Medium;
+                dim = Model.ScreenDimension.Medium;
             }
             else
             {
-                dim = ScreenDimension.Big;
+                dim = Model.ScreenDimension.Big;
             }
         }
         return dim;
@@ -92,5 +100,6 @@
     /// Metodo che fa scattare l'evento per comunicare a chi è in ascolto che la dimensione
     ///  dello schermo è cambiata
     /// </summary>
-    private void CallEvent() => OnScreenSizeChanged.InvokeAsync(Screen);
+    private void CallDimensionEvent() => OnScreenDimensionChanged.InvokeAsync(ScreenDimension);
+    private void CallSizeEvent() => OnScreenSizeChanged.InvokeAsync(ScreenSize);
 }
