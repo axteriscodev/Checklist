@@ -1,6 +1,6 @@
-namespace MauiApp1;
+namespace AppMAUI.Camera;
 
-public partial class PlatformCamera : ContentView
+public partial class PlatformCamera : ContentPage
 {
 	public PlatformCamera()
 	{

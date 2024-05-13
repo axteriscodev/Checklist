@@ -1,10 +1,11 @@
-﻿using ConstructionSiteLibrary.Components.Utilities;
+﻿using AppMAUI;
+using AppMAUI.Camera;
+using ConstructionSiteLibrary.Components.Utilities;
 using ConstructionSiteLibrary.Model;
-
 using Microsoft.AspNetCore.Components.Routing;
 using System.Drawing;
 
-namespace ConstructionSiteLibrary.Pages
+namespace AppMAUI.Components
 {
     public partial class Home
     {
@@ -31,7 +32,7 @@ namespace ConstructionSiteLibrary.Pages
         private async void OpenCameraPage()
         {
 
-            //await App.Current.MainPage.Navigation.PushModalAsync(new PlatformCamera());
+            await App.Current.MainPage.Navigation.PushModalAsync(new PlatformCamera());
         }
     }
 }
