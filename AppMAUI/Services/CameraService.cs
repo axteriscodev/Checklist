@@ -18,6 +18,8 @@ namespace AppMAUI.Services
 
                 if (photo != null)
                 {
+                    var temp = AppDomain.CurrentDomain.BaseDirectory;
+                    var temp2 = FileSystem.Current.AppDataDirectory; 
                     // save the file into local storage
                     string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
 
@@ -25,7 +27,6 @@ namespace AppMAUI.Services
                     using FileStream localFileStream = File.OpenWrite(localFilePath);
 
                     await sourceStream.CopyToAsync(localFileStream);
-
 
                     sourceStream.Dispose();
                     localFileStream.Dispose();

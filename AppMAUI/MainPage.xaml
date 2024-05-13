@@ -5,10 +5,13 @@
              x:Class="AppMAUI.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
+
+    <local:CustomBlazorWebView HostPage="wwwroot/index.html" x:Name="blazorWebView">
         <BlazorWebView.RootComponents>
             <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
         </BlazorWebView.RootComponents>
-    </BlazorWebView>
+    </local:CustomBlazorWebView>
+
+
 
 </ContentPage>
