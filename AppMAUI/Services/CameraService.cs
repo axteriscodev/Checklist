@@ -26,7 +26,14 @@ namespace AppMAUI.Services
 
                     await sourceStream.CopyToAsync(localFileStream);
 
-                    return localFilePath;
+
+                    sourceStream.Dispose();
+                    localFileStream.Dispose();
+                    var imageBytes = File.ReadAllBytes(localFilePath);
+                    var PhotoPath = Convert.ToBase64String(imageBytes);
+                    PhotoPath = string.Format("data:image/png;base64,{0}", PhotoPath);
+
+                    return PhotoPath;
                 }
             }
 

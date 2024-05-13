@@ -34,13 +34,7 @@ namespace ConstructionSiteLibrary.Pages
         private async void OpenCameraPage()
         {
 
-            var ImgPath = await CameraService.OpenCamera();
-
-            var imageBytes = File.ReadAllBytes(ImgPath);
-
-            var PhotoPath = Convert.ToBase64String(imageBytes);
-
-            PhotoPath = string.Format("data:image/png;base64,{0}", PhotoPath);
+            PhotoPath = await CameraService.OpenCamera();
 
 
             StateHasChanged();
