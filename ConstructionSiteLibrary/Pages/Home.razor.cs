@@ -1,5 +1,7 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
 using ConstructionSiteLibrary.Model;
+
+using Microsoft.AspNetCore.Components.Routing;
 using System.Drawing;
 
 namespace ConstructionSiteLibrary.Pages
@@ -24,6 +26,12 @@ namespace ConstructionSiteLibrary.Pages
         private void ScreenSizeChanged(ScreenSize? size)
         {
            Console.WriteLine("x: " + size.Width + " -  y: " + size.Height );
+        }
+
+        private async void OpenCameraPage()
+        {
+
+            await App.Current.MainPage.Navigation.PushModalAsync(new PlatformCamera());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ConstructionSiteLibrary.Managers;
+﻿using Camera.MAUI;
+using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.Extensions.Logging;
 using Radzen;
@@ -34,6 +35,10 @@ public static class MauiProgram
         builder.Services.AddScoped<DocumentsRepository>();
         //componenti radzen
         builder.Services.AddRadzenComponents();
+
+        //fotocamera        
+        builder.UseMauiApp<App>().UseMauiCameraView();
+
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
