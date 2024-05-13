@@ -8,6 +8,6 @@ namespace ConstructionSiteLibrary.Interfaces
 {
     public interface ICameraService
     {
-        public Task OpenCamera();
+        public Task<string> OpenCamera();
     }
 }

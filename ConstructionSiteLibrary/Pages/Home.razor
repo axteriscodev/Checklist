@@ -10,4 +10,10 @@
 
 <RadzenButton Icon="add" Text="Fotocamera" Click=@OpenCameraPage/>
 
+@if(!string.IsNullOrEmpty(PhotoPath))
+{
+    <img src="@PhotoPath" />
+    @*<RadzenImage Path="@PhotoPath" Style="width: 15rem;" AlternateText="url image" />*@
+}
+
 <Component1/>

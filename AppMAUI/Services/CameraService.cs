@@ -1,5 +1,4 @@
-﻿using AppMAUI.Camera;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +10,27 @@ namespace AppMAUI.Services
     public class CameraService : ICameraService
     {
 
-        public async Task OpenCamera()
+        public async Task<string> OpenCamera()
         {
-            await App.Current.MainPage.Navigation.PushModalAsync(new PlatformCamera());
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
+
+                if (photo != null)
+                {
+                    // save the file into local storage
+                    string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+
+                    using Stream sourceStream = await photo.OpenReadAsync();
+                    using FileStream localFileStream = File.OpenWrite(localFilePath);
+
+                    await sourceStream.CopyToAsync(localFileStream);
+
+                    return localFilePath;
+                }
+            }
+
+            return "";
         }
     }
 }

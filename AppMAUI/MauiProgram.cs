@@ -1,5 +1,4 @@
 ﻿using AppMAUI.Services;
-using Camera.MAUI;
 using ConstructionSiteLibrary.Interfaces;
 using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Repositories;
@@ -40,8 +39,6 @@ public static class MauiProgram
 
         builder.Services.AddScoped<ICameraService, CameraService>();
 
-        //fotocamera        
-        builder.UseMauiApp<App>().UseMauiCameraView();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
