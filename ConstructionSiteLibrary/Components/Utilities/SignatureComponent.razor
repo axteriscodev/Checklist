@@ -1,0 +1,50 @@
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime JS
+
+
+<RadzenStack>
+    <RadzenFieldset Text="Firma" class="shadow rounded">
+        <RadzenRow>
+            <canvas id="@canvasId" class="canvasBorder" width="500px" height="300px"></canvas>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenButton Icon="save" Text="Salva" Click="@Save" />
+        </RadzenRow>
+    </RadzenFieldset>
+</RadzenStack>
+
+
+
+@code {
+
+    [Parameter]
+    public EventCallback<string> OnSavedSignature { get; set; }
+    private string canvasId = "canvasFirma";
+    private string image = "";
+    private bool onSaving = false;
+    IJSObjectReference? module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/signature.js");
+            // module = await JS.InvokeAsync<IJSObjectReference>("import", "./signature.js");
+            await module.InvokeVoidAsync("loadCanvas", canvasId);
+        }
+    }
+
+    private async Task Save()
+    {
+        onSaving = true;
+        if (module is not null)
+        {
+            image = await module.InvokeAsync<string>("SaveCanvas", canvasId);
+            StateHasChanged();
+            await OnSavedSignature.InvokeAsync(image);
+        }
+        onSaving = false;
+    }
+
+}
