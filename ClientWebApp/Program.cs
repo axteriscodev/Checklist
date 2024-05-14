@@ -1,4 +1,6 @@
 using ClientWebApp;
+using ClientWebApp.Services;
+using ConstructionSiteLibrary.Interfaces;
 using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components.Web;
@@ -22,6 +24,8 @@ builder.Services.AddScoped<CategoriesRepository>();
 builder.Services.AddScoped<QuestionRepository>();
 //repository per i documenti
 builder.Services.AddScoped<DocumentsRepository>();
+
+builder.Services.AddScoped<ICameraService, CameraService>();
 
 
 //componenti radzen
