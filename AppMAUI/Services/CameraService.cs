@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ConstructionSiteLibrary.Interfaces;
+
+namespace AppMAUI.Services
+{
+    public class CameraService : ICameraService
+    {
+
+        public async Task<string> OpenCamera()
+        {
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
+
+                if (photo != null)
+                {
+                    var temp = AppDomain.CurrentDomain.BaseDirectory;
+                    var temp2 = FileSystem.Current.AppDataDirectory; 
+                    // save the file into local storage
+                    string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+
+                    using Stream sourceStream = await photo.OpenReadAsync();
+                    using FileStream localFileStream = File.OpenWrite(localFilePath);
+
+                    await sourceStream.CopyToAsync(localFileStream);
+
+                    sourceStream.Dispose();
+                    localFileStream.Dispose();
+                    var imageBytes = File.ReadAllBytes(localFilePath);
+                    var PhotoPath = Convert.ToBase64String(imageBytes);
+                    PhotoPath = string.Format("data:image/png;base64,{0}", PhotoPath);
+
+                    return PhotoPath;
+                }
+            }
+
+            return "";
+        }
+    }
+}

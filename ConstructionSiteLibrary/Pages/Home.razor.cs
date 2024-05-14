@@ -1,5 +1,8 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Interfaces;
 using ConstructionSiteLibrary.Model;
+
+using Microsoft.AspNetCore.Components.Routing;
 using System.Drawing;
 
 namespace ConstructionSiteLibrary.Pages
@@ -9,6 +12,8 @@ namespace ConstructionSiteLibrary.Pages
 
         ScreenDimension? dim;
         ScreenComponent? screen;
+
+        string PhotoPath = "";
 
         protected override async Task OnInitializedAsync()
         {
@@ -23,7 +28,16 @@ namespace ConstructionSiteLibrary.Pages
 
         private void ScreenSizeChanged(ScreenSize? size)
         {
-           Console.WriteLine("x: " + size.Width + " -  y: " + size.Height );
+            Console.WriteLine("x: " + size.Width + " -  y: " + size.Height);
+        }
+
+        private async void OpenCameraPage()
+        {
+
+            PhotoPath = await CameraService.OpenCamera();
+
+
+            StateHasChanged();
         }
     }
 }
