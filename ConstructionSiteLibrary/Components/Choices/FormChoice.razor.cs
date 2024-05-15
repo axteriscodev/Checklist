@@ -1,6 +1,4 @@
-﻿using System.Formats.Asn1;
-using AXT_WebComunication.WebResponse;
-using ConstructionSiteLibrary.Managers;
+﻿using AXT_WebComunication.WebResponse;
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -59,10 +57,10 @@ public partial class FormChoice
     private async Task Save()
     {
         onSaving = true;
-        AXT_WebResponse response;
+        bool response;
         if (CreationMode)
         {
-            response = await QuestionRepository.SaveChoice( new ChoiceModel
+            response = await QuestionRepository.SaveChoice(new ChoiceModel
             {
                 Tag = form.Tag ?? "",
                 Value = form.Value ?? "",
@@ -80,7 +78,7 @@ public partial class FormChoice
             response = await QuestionRepository.UpdateChoices(list);
         }
 
-        if (response.Code.Equals("0"))
+        if (response)
         {
             await OnSaveComplete!.InvokeAsync();
         }

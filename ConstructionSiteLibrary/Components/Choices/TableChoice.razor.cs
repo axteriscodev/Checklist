@@ -1,11 +1,9 @@
-﻿using System.Text.Json;
-using ConstructionSiteLibrary.Managers;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Radzen;
 using Shared;
-using ConstructionSiteLibrary.Components.Utilities;
 using ConstructionSiteLibrary.Repositories;
+using ConstructionSiteLibrary.Components.Utilities;
 
 namespace ConstructionSiteLibrary.Components.Choices
 {
@@ -94,7 +92,7 @@ namespace ConstructionSiteLibrary.Components.Choices
             if (confirmationResult == true)
             {
                 var response = await QuestionRepository.HideChoices([model]);
-                if (response.Code.Equals("0"))
+                if (response)
                 {
                     await ReloadTable();
                 }
@@ -116,11 +114,8 @@ namespace ConstructionSiteLibrary.Components.Choices
         }
         private async Task LoadData()
         {
-           
-                list = await QuestionRepository.GetChoices();
-                count = list.Count;
-
-            
+            list = await QuestionRepository.GetChoices();
+            count = list.Count;
         }
     }
 }
