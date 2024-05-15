@@ -17,6 +17,7 @@ public partial class FormCompilation
     private int CurrentSelection;
 
     IEnumerable<int> DocumentsList = [];
+    List<VisualCategory> visualCategories = [];
 
     [Parameter]
     public string Param { get; set; } = "";
@@ -39,16 +40,61 @@ public partial class FormCompilation
             CurrentSelection = docLists.First().Id;
 
             documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);
+            CreateVisualCategories();
         }
     }
 
     private async Task OnDocumentSelected()
     {
         documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);
+        CreateVisualCategories();
+    }
+
+    private void CreateVisualCategories()
+    {
+        visualCategories = [];
+        foreach (var cat in documentModel.Categories)
+        {
+            visualCategories.Add(new() { Category = cat });
+        }
     }
 
     private async Task SaveForm()
     {
-        DocumentsRepository.UpdateDocuments([documentModel]);
+       await DocumentsRepository.UpdateDocuments([documentModel]);
     }
+
+    #region Visualizzazione
+
+    private static string CategoryText(CategoryModel cat)
+    {
+        return cat.Order + ". " + cat.Text;
+    }
+
+    private static string QuestionText(CategoryModel cat, string questionText, int order)
+    {
+        return cat.Order + "." + order + " " + questionText;
+    }
+
+    private static void ShowQuestions(VisualCategory cat)
+    {
+        cat.ShowQuestion = !cat.ShowQuestion;
+    }
+
+    private static string AccordionIcon(VisualCategory cat)
+    {
+        return cat.ShowQuestion ? "remove" : "add";
+    }
+
+    #endregion
+
+    #region Classe interna 
+
+    class VisualCategory
+    {
+        public bool ShowQuestion = true;
+        public CategoryModel Category { get; set; } = new();
+    }
+
+    #endregion
 }

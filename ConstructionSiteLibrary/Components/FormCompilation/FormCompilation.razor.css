@@ -1,0 +1,42 @@
+﻿.bordoInferiore, ::deep .bordoInferiore {
+    border-bottom: 1px solid !important;
+}
+
+.margineQuestionario {
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.categoria{
+    margin: 0.5rem;
+    padding: 0.5rem;
+}
+
+.bordoDomanda {
+    margin-left: 3rem !important;
+}
+
+.titolo {
+    justify-content: center !important;
+}
+
+@media(max-width: 768px) {
+
+    .categoria {
+        margin: 0rem;
+        padding: 0rem;
+    }
+
+    .bordoDomanda {
+        margin-left: 0.2rem !important;
+    }
+
+    .margineQuestionario {
+        margin-top: 0.5rem;
+        margin-bottom: 2rem;
+        margin-left: 0rem;
+        margin-right: 0rem;
+    }
+}
