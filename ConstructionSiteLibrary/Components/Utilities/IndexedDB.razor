@@ -1,0 +1,48 @@
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime JS
+
+@if (dbSupport is not null)
+{
+    if (dbSupport.Value)
+    {
+        <p>IndexedDB è supportato</p>
+    }
+    else
+    {
+        <p>IndexedDB non è supportato</p>
+    }
+}
+
+<p>@testo</p>
+
+
+@code {
+
+    private string testo = "";
+    private bool? dbSupport;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await Init();
+    }
+
+    public async Task Init()
+    {
+        try
+        {
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/signature.js");
+            var jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/IndexedDB.js");
+            //setto la dimensione corrente dello schermo
+            dbSupport = await jsModule.InvokeAsync<bool>("CheckDBSupport");
+        }
+        catch (Exception e)
+        {
+            dbSupport = false;
+            testo = e.Message;
+        }
+        StateHasChanged();
+    }
+}
