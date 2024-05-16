@@ -20,6 +20,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <EnableDefaultCssItems>false</EnableDefaultCssItems>
         <Nullable>enable</Nullable>
+        <MtouchDebug>true</MtouchDebug>
 
         <!-- Display name -->
         <ApplicationTitle>AppMAUI</ApplicationTitle>
