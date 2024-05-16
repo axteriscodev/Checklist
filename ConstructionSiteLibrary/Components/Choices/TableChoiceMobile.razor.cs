@@ -15,10 +15,6 @@ public partial class TableChoiceMobile
     /// </summary>
     private bool initialLoading;
     /// <summary>
-    /// Booleano che è impostata durante una ricerca
-    /// </summary>
-    private bool isLoading = false;
-    /// <summary>
     /// Intero che ci dice quanti sono gli elementi
     /// </summary>
     private int count;
@@ -30,10 +26,6 @@ public partial class TableChoiceMobile
     /// Stringa indica la pagina e gli elementi
     /// </summary>
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} scelte)";
-    /// <summary>
-    /// Riferimento al componente tabella
-    /// </summary>
-    private RadzenDataGrid<ChoiceModel>? grid;
     /// <summary>
     /// Riferimento alla lista di choices
     /// </summary>
@@ -103,7 +95,6 @@ public partial class TableChoiceMobile
     {
         DialogService.Close();
         await LoadData();
-        await grid!.Reload();
     }
 
     protected override async Task OnInitializedAsync()

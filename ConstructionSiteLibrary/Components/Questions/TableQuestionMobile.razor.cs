@@ -13,10 +13,7 @@ public partial class TableQuestionMobile
         /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
         /// </summary>
         private bool initialLoading;
-        /// <summary>
-        /// Booleano che è impostata durante una ricerca
-        /// </summary>
-        private bool isLoading = false;
+
         /// <summary>
         /// Intero che ci dice quanti sono gli elementi
         /// </summary>
@@ -29,10 +26,6 @@ public partial class TableQuestionMobile
         /// Stringa indica la pagina e gli elementi
         /// </summary>
         private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} domande)";
-        /// <summary>
-        /// Riferimento al componente tabella
-        /// </summary>
-        private RadzenDataGrid<QuestionModel>? grid;
         /// <summary>
         /// Riferimento alla lista di questions
         /// </summary>
@@ -101,7 +94,6 @@ public partial class TableQuestionMobile
         {
             DialogService.Close();
             await LoadData();
-            await grid!.Reload();
         }
 
         protected override async Task OnInitializedAsync()
