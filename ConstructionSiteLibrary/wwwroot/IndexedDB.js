@@ -10,3 +10,7 @@ export function CheckDBSupport() {
     console.log(exist);
     return exist;
 }
+
+export function Test() {
+    return "ciaoooo";
+}
