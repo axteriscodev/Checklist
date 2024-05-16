@@ -1,5 +1,7 @@
 ﻿@using ConstructionSiteLibrary.Repositories
 @using Shared;
+@using ConstructionSiteLibrary.Interfaces
+@inject ICameraService CameraService
 
 @inject DocumentsRepository DocumentsRepository
 @inject DialogService DialogService
@@ -57,7 +59,9 @@ else
                 {
                     foreach(var all in ImgAllegati)
                     {
-                        <img src="@all"/>
+                        <div class="m-2">
+                            <img src="@all" width="300" height="300" style="object-fit:contain;" />
+                        </div>
                     }
                 }
 

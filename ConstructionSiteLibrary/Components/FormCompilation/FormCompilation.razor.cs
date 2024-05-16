@@ -60,6 +60,7 @@ public partial class FormCompilation
         documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);
         CreateVisualCategories();
         ImgFirma = "";
+        ImgAllegati = [];
     }
 
     private void CreateVisualCategories()
@@ -97,9 +98,11 @@ public partial class FormCompilation
         }
     }
 
-    private void TakePicture()
+    private async Task TakePicture()
     {
-
+        var img = await CameraService.OpenCamera();
+        ImgAllegati.Add(img);
+        StateHasChanged();
     }
 
     #region Visualizzazione

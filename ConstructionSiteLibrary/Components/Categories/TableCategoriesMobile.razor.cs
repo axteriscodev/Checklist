@@ -15,11 +15,6 @@ public partial class TableCategoriesMobile
     /// </summary>
     private bool initialLoading;
 
-    /// <summary>
-    /// Booleano che è impostata durante una ricerca
-    /// </summary>
-    private bool isLoading = false;
-
 
     /// <summary>
     /// Intero che ci dice quanti sono gli elementi
@@ -35,11 +30,6 @@ public partial class TableCategoriesMobile
     /// Stringa indica la pagina e gli elementi
     /// </summary>
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} categorie)";
-
-    /// <summary>
-    /// Riferimento al componente tabella
-    /// </summary>
-    private RadzenDataGrid<CategoryModel>? grid;
 
     [Parameter]
     public string Param { get; set; } = "";
@@ -147,6 +137,5 @@ public partial class TableCategoriesMobile
     {
         DialogService.Close();
         await LoadData();
-        await grid!.Reload();
     }
 }
