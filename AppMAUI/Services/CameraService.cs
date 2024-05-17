@@ -1,9 +1,7 @@
 ﻿using ConstructionSiteLibrary.Interfaces;
 using Microsoft.Maui.Graphics.Platform;
-using System.Reflection;
 using IImage = Microsoft.Maui.Graphics.IImage;
 using Microsoft.Maui.Graphics.Skia;
-using Font = Microsoft.Maui.Graphics.Font;
 namespace AppMAUI.Services
 {
     public class CameraService : ICameraService
@@ -20,67 +18,44 @@ namespace AppMAUI.Services
                     using Stream sourceStream = await photo.OpenReadAsync();
                     using FileStream localFileStream = File.OpenWrite(localFilePath);
 
-                    IImage image;
-                    Assembly assembly = GetType().GetTypeInfo().Assembly;
-                    image = PlatformImage.FromStream(sourceStream);
+                    var image = PlatformImage.FromStream(sourceStream);
+                    //var skiaImage = SkiaImage.FromStream(sourceStream, ImageFormat.Png);
                     sourceStream.Dispose();
                     localFileStream.Dispose();
 
                     if (image != null)
                     {
-                        IImage newImage = image.Downsize(1000, true); //TODO mettere 1000
-                        int height = (int)newImage.Height;
-                        int width = (int)newImage.Width;
+                        image = image.Downsize(1000, true);
+                        image.AsStream();
+                        var skiaImage = SkiaImage.FromStream(image.AsStream(), ImageFormat.Png);
 
                         //Aggiunta testo all'immagine
-                        SkiaBitmapExportContext bmp = new(width: width, height: height, 1.0f);
+                        SkiaBitmapExportContext bmp = new(width: (int)skiaImage.Width, height: (int)skiaImage.Height, 1.0f);
 
-                        // bmp.Image.Draw(bmp.Canvas.DrawImage(newImage, 0, 0, width: width, height, height));
+                        ICanvas canvas = bmp.Canvas;
+                        bmp.Canvas.DrawImage(skiaImage, 0, 0, skiaImage.Width, skiaImage.Height);
 
-                        // ICanvas imagecCanvas = bmp.Canvas;
-                        // imagecCanvas.DrawImage(newImage, x: 0, y: 0, width: width, height: height);
-
-                        // imagecCanvas.SetFillPaint(newImage.AsPaint(), RectF.Zero);
-                        // imagecCanvas.FillRectangle(0, 0, width, height);
-
-                        // imagecCanvas.FillRectangle(0, 0, width, height);
-
-                        // Rect myImageRectangle = new(x:0, y:0, width: width, height: height);
-                        // bmp.Image.Draw(imagecCanvas, myImageRectangle);
-
-                        // PathF path = new PathF();
-
-                        ICanvas writeCanvas = bmp.Canvas;
-
-                        // Measure a string
-                        string myText = "Hello, Maui.Graphics!";
-                        Font myFont = new("Impact");
-                        float myFontSize = 48;
-                        writeCanvas.Font = myFont;
-                        SizeF textSize = writeCanvas.GetStringSize(myText, myFont, myFontSize);
-
+                        string myText = "Hello, World!";
+                        Microsoft.Maui.Graphics.Font myFont = new("Impact");
+                        float myFontSize = 80;
+                        canvas.Font = myFont;
+                        SizeF textSize = canvas.GetStringSize(myText, myFont, myFontSize);
                         // Draw a rectangle to hold the string
                         Point point = new(
                             x: (bmp.Width - textSize.Width) / 2,
                             y: (bmp.Height - textSize.Height) / 2);
                         Rect myTextRectangle = new(point, textSize);
-
                         // Daw the string itself
-                        writeCanvas.FontSize = myFontSize * .9f; // smaller than the rectangle
-                        writeCanvas.FontColor = Colors.White;
-                        writeCanvas.DrawString(myText, myTextRectangle,
-                            HorizontalAlignment.Center, VerticalAlignment.Center, TextFlow.OverflowBounds);
+                        canvas.FontSize = myFontSize * .9f; // smaller than the rectangle
+                        canvas.FontColor = Colors.White;
+                        canvas.DrawString(myText, myTextRectangle,HorizontalAlignment.Center, VerticalAlignment.Center, TextFlow.OverflowBounds);
 
-                        // bmp.WriteToFile(localFilePath);
-                        // Stream bmpStream = Stream.Null;
-                        // bmp.WriteToStream(bmpStream);
-                        // bmp.Image.AsBase64
+                        bmp.Canvas.SaveState();
+                        var temp = bmp.Image;
 
-                        // IImage writtenImage;
-                        // writtenImage = PlatformImage.FromStream(bmpStream);
-                        // var PhotoPath = string.Format("data:image/png;base64,{0}", newImage.AsBase64());
 
-                        var PhotoPath = string.Format("data:image/png;base64,{0}", bmp.Image.AsBase64());
+
+                        var PhotoPath = string.Format("data:image/png;base64,{0}", temp.AsBase64());
 
                         return PhotoPath;
                     }
