@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\IndexedDB.js" />
+    <Content Remove="wwwroot\indexedDB.js" />
   </ItemGroup>
 
 
@@ -31,11 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\IndexedDB.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\IndexedDB.js" />
+    <None Include="wwwroot\indexedDB.js" />
   </ItemGroup>
 
 </Project>

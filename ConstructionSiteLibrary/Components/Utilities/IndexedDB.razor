@@ -1,4 +1,5 @@
 ﻿@using Microsoft.JSInterop
+@using Shared
 
 @inject IJSRuntime JS
 
@@ -7,20 +8,29 @@
     if (dbSupport.Value)
     {
         <p>IndexedDB è supportato</p>
+        <div>
+            <RadzenRow>
+                <RadzenButton Text="Crea" Click="CreateDB" />
+                <RadzenButton Text="ObjectStore" Click=@(()=>CreateObjectStore("Choices", "idChoice"))/>
+                <RadzenButton Text="Leggi" Click="@ReadObjectStore" />
+            </RadzenRow>
+        </div>
     }
     else
     {
         <p>IndexedDB non è supportato</p>
+        <p>@testo</p>
     }
 }
 
-<p>@testo</p>
+
 
 
 @code {
-
+    private int Versione = 1;
     private string testo = "";
     private bool? dbSupport;
+    private IJSObjectReference? jsModule;
 
 
     protected override async Task OnInitializedAsync()
@@ -32,9 +42,8 @@
     public async Task Init()
     {
         try
-        {
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/signature.js");
-            var jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/IndexedDB.js");
+        {       
+            jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/indexedDB.js");
             //setto la dimensione corrente dello schermo
             dbSupport = await jsModule.InvokeAsync<bool>("CheckDBSupport");
         }
@@ -44,5 +53,48 @@
             testo = e.Message;
         }
         StateHasChanged();
+    }
+
+    public async Task CreateDB()
+    {
+        if(jsModule is not null)
+        {
+            await jsModule.InvokeVoidAsync("CreateDB", DotNetObjectReference.Create(this));
+        }
+    }
+
+    public async Task CreateObjectStore(string osName, string key)
+    {
+        List<ChoiceModel> choices = [];
+        choices.Add(new ChoiceModel(){ Id=1, Value = "Vero", Tag ="v"});
+        choices.Add(new ChoiceModel(){ Id=2, Value = "Falso", Tag ="f"});
+        Console.WriteLine("osName: " + osName + " key: " + key);
+        if (jsModule is not null)
+        {
+            await jsModule.InvokeVoidAsync("InsertRecords", ["choices", choices.ToArray()]);
+        }
+    }
+
+    public async Task ReadObjectStore()
+    {
+        if (jsModule is not null)
+        {
+            await jsModule.InvokeVoidAsync("selectRecords", ["choices", DotNetObjectReference.Create(this)]);
+        }
+    }
+
+    [JSInvokable]
+    public void DbResultObservable(bool result)
+    {
+        Console.WriteLine("db result: " + result);
+    }
+
+    [JSInvokable]
+    public void DbObjectResultObservable(List<ChoiceModel> results)
+    {
+        foreach(var r in results)
+        {
+            Console.WriteLine(r.Id + " - " + r.Value);
+        }
     }
 }
