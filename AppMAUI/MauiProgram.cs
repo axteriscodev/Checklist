@@ -36,8 +36,10 @@ public static class MauiProgram
         builder.Services.AddScoped<DocumentsRepository>();
         //componenti radzen
         builder.Services.AddRadzenComponents();
-
+        //Componente fotocamera
         builder.Services.AddScoped<ICameraService, CameraService>();
+        ///Componente GPS
+        builder.Services.AddScoped<ILocationService, LocationService>();
 
 
 #if DEBUG

@@ -1,6 +1,7 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using ConstructionSiteLibrary.Interfaces
 @inject ICameraService CameraService;
+@inject ILocationService LocationService;
 
 @page "/"
 <ScreenComponent OnScreenSizeChanged="@ScreenSizeChanged" OnScreenDimensionChanged="@ScreenDimensionChanged" />
