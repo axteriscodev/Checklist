@@ -2,7 +2,7 @@
 
 namespace Shared;
 
-public class ConstructorSite
+public class ConstructorSiteModel
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }

@@ -17,7 +17,7 @@ public class DocumentModel
     public Client? Client { get; set;}
 
     [JsonPropertyName("constructorSite")]
-    public ConstructorSite? ConstructorSite { get; set;}
+    public ConstructorSiteModel? ConstructorSite { get; set;}
 
     [JsonPropertyName("version")]
     public int Version { get; set;}
