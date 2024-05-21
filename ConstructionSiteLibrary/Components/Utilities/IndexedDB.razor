@@ -58,24 +58,24 @@
 
     public async Task CreateObjectStore(string osName, string key)
     {
-        List<ChoiceModel> choices = [];
-        choices.Add(new ChoiceModel(){ Id=1, Value = "Vero", Tag ="v"});
-        choices.Add(new ChoiceModel(){ Id=2, Value = "Falso", Tag ="f"});
-        Console.WriteLine("osName: " + osName + " key: " + key);
-        var result = await dbService.Insert(choices.Cast<object>().ToArray());
-        testo = result.ToString();
+        // List<ChoiceModel> choices = [];
+        // choices.Add(new ChoiceModel(){ Id=1, Value = "Vero", Tag ="v"});
+        // choices.Add(new ChoiceModel(){ Id=2, Value = "Falso", Tag ="f"});
+        // Console.WriteLine("osName: " + osName + " key: " + key);
+        // var result = await dbService.Insert(choices.Cast<object>().ToArray());
+        // testo = result.ToString();
     }
 
     public async Task ReadObjectStore()
     {
-        var result = await dbService.ReadObjectStore();
-        testo = result.Count().ToString();
+        // var result = await dbService.ReadObjectStore();
+        // testo = result.Count().ToString();
     }
 
     public async Task Read()
     {
-        var result = await dbService.Read();
-        testo = result.ToString();
+        // var result = await dbService.Read();
+        // testo = result.ToString();
     }
 
     public async Task Delete()

@@ -63,7 +63,7 @@ public class HttpManager(HttpClient client)
         var watch = Stopwatch.StartNew();
         var response = await httpClient.PostAsJsonAsync(url, content);
         Console.WriteLine("tempo chiamata: " + watch.ElapsedMilliseconds + " ms");
-        if (response is not null)
+        if (response.StatusCode == HttpStatusCode.OK)
         {
             webResponse = await ProcessServerResponse(response);
         }

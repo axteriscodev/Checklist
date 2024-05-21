@@ -49,8 +49,7 @@ public partial class FormCompilation
         {
             DocumentsList = docLists.Select(x => x.Id);
             CurrentSelection = docLists.First().Id;
-
-            documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);
+            documentModel = docLists.Where(x => x.Id == CurrentSelection).FirstOrDefault() ?? new();
             CreateVisualCategories();
         }
     }

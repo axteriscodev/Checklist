@@ -1,5 +1,7 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Model;
 using Microsoft.JSInterop;
+using System.Text.Json;
 
 
 
@@ -36,42 +38,43 @@ namespace ConstructionSiteLibrary.Services
             bool result = false;
             if (DbSupport)
             {
-                result = await jsModule.InvokeAsync<bool>("openDB");
+                result = await jsModule!.InvokeAsync<bool>("openDB");
                 Console.WriteLine("CS: " + result);
             }
             return result;
         }
 
 
-        public async Task<int> Insert(object[] list)
+        public async Task<int> Insert(IndexedDBTables table,object[] list)
         {
+            var tableName = table.ToString();
             int result = 0;
             if (DbSupport)
             {
-                result = await jsModule.InvokeAsync<int>("inserts", ["choices", list]);
+                result = await jsModule!.InvokeAsync<int>("inserts", [tableName, list]);
             }
             return result;
         }
 
-        public async Task<List<object>> ReadObjectStore()
+        public async Task<string> ReadObjectStore(IndexedDBTables table)
         {
             List<object> result = [];
             if (DbSupport)
             {
-                result = await jsModule.InvokeAsync<List<object>>("selectMulti", ["choices"]);
+                result = await jsModule!.InvokeAsync<List<object>>("selectMulti", [table.ToString()]);
             }
-            return result;
+            return JsonSerializer.Serialize(result);
         }
 
-        public async Task<object?> Read()
+        public async Task<string> Read(IndexedDBTables table, int id)
         {
             object? result = null ;
             
             if (DbSupport)
             {
-               result = await jsModule.InvokeAsync<object>("selectByKey", ["choices", 1]);
+               result = await jsModule!.InvokeAsync<object>("selectByKey", [table.ToString(), id]);
             }
-            return result;
+            return JsonSerializer.Serialize(result);
         }
 
         public async Task<bool> Delete()
@@ -79,7 +82,7 @@ namespace ConstructionSiteLibrary.Services
             var result = false;
             if (DbSupport)
             {
-                result = await jsModule.InvokeAsync<bool>("deleteRecord", ["choices", 2]);
+                result = await jsModule!.InvokeAsync<bool>("deleteRecord", ["choices", 2]);
             }
             return result;
         }
