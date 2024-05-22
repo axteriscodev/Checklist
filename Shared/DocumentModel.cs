@@ -35,4 +35,8 @@ public class DocumentModel
     public List<Attachment> Attachments { get; set;} = [];
 
     public DateTime? LastModified { get; set;}
+    /// <summary>
+    /// campo utilizzato per mappare le modifiche offline
+    /// </summary>
+    public bool OfflineChange { get; set; } = false;
 }
