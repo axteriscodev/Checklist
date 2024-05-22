@@ -17,6 +17,7 @@ public partial class FormCompilation
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
     /// </summary>
     private bool initialLoading;
+    private bool onSaving = false;
 
     private int CurrentSelection;
     private string ImgFirma = "";
@@ -70,7 +71,11 @@ public partial class FormCompilation
 
     private async Task SaveForm()
     {
+        onSaving = true;
+        documentModel.LastModified = DateTime.Now;
        await DocumentsRepository.UpdateDocuments([documentModel]);
+       await LoadData();
+        onSaving = false;
     }
 
     private void SavedSignature(Signature signature)

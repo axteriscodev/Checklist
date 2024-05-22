@@ -3,23 +3,33 @@ using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Services;
 using ConstructionSiteLibrary.Model;
 using Shared;
+using ConstructionSiteLibrary.Components.Utilities;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace ConstructionSiteLibrary.Repositories;
 
 public class DocumentsRepository(HttpManager httpManager, IndexedDBService indexedDBService)
 {
     List<DocumentModel> Documents = [];
-
+    private bool online = true;
+    private const int TUTTI = 0;
     private readonly HttpManager _httpManager = httpManager;
     private readonly IndexedDBService _indexedDBService = indexedDBService;
 
     public async Task<List<DocumentModel>> GetDocuments()
     {
-        if (Documents.Count == 0)
+        try
         {
-            try
+            //se non sono online controllo di essere ritornato online
+            if (!online)
             {
-                var response = await _httpManager.SendHttpRequest("Document/DocumentsList", 0);
+                await CheckIfOnline();
+            }
+            //se sono online
+            if (online)
+            {
+                var response = await _httpManager.SendHttpRequest("Document/DocumentsList", TUTTI);
                 if (response.Code.Equals("0"))
                 {
 
@@ -28,31 +38,53 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 }
                 else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
                 {
+                    online = false;
                     var content = await _indexedDBService.ReadObjectStore(IndexedDBTables.documents);
                     Documents = content is not null ? JsonSerializer.Deserialize<List<DocumentModel>>(content) ?? [] : [];
                 }
+            } 
+            //altrimenti cerco in locale
+            else
+            {
+                var content = await _indexedDBService.ReadObjectStore(IndexedDBTables.documents);
+                Documents = content is not null ? JsonSerializer.Deserialize<List<DocumentModel>>(content) ?? [] : [];
             }
-            catch (Exception ex) { }
+
         }
+        catch (Exception ex) { }
         return Documents;
     }
 
-    public async Task<DocumentModel> GetDocumentById(int idDocument = 0)
+    public async Task<DocumentModel> GetDocumentById(int idDocument = TUTTI)
     {
         var document = new DocumentModel();
         try
         {
-            var response = await _httpManager.SendHttpRequest("Document/DocumentsList", idDocument);
-            if (response.Code.Equals("0"))
+            //se non sono online controllo di essere ritornato online
+            if (!online)
             {
-                var documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
-                document = documents.FirstOrDefault() ?? new();
+                await CheckIfOnline();
             }
-            else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
+            if (online)
+            {
+                var response = await _httpManager.SendHttpRequest("Document/DocumentsList", idDocument);
+                if (response.Code.Equals("0"))
+                {
+                    var documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
+                    document = documents.FirstOrDefault() ?? new();
+                }
+                else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
+                {
+                    online = false;
+                    var content = await _indexedDBService.Read(IndexedDBTables.documents, idDocument);
+                    document = content is not null ? JsonSerializer.Deserialize<DocumentModel>(content) ?? new() : new();
+                }
+            } else
             {
                 var content = await _indexedDBService.Read(IndexedDBTables.documents, idDocument);
                 document = content is not null ? JsonSerializer.Deserialize<DocumentModel>(content) ?? new() : new();
             }
+
         }
         catch (Exception ex) { }
 
@@ -70,7 +102,8 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 Documents.Clear();
                 result = true;
             }
-        }catch (Exception ex) { }
+        }
+        catch (Exception ex) { }
 
         return result;
     }
@@ -80,13 +113,36 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
         var result = false;
         try
         {
-            var response = await _httpManager.SendHttpRequest("Document/UpdateDocument", documents);
-            if (response.Code.Equals("0"))
+            //se non sono online controllo di essere ritornato online
+            if (!online)
             {
+                await CheckIfOnline();
+            }
+            if (online)
+            {
+                var response = await _httpManager.SendHttpRequest("Document/UpdateDocument", documents);
+                if (response.Code.Equals("0"))
+                {
+                    Documents.Clear();
+                    result = true;
+                }
+                else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
+                {
+                    online = false;
+                    SetOfflineChange(documents);
+                    var content = await _indexedDBService.Insert(IndexedDBTables.documents, documents.Cast<object>().ToArray());
+                    Documents.Clear();
+                    result = true;
+                }
+            } else
+            {
+                SetOfflineChange(documents);
+                var content = await _indexedDBService.Insert(IndexedDBTables.documents, documents.Cast<object>().ToArray());
                 Documents.Clear();
                 result = true;
             }
-        }catch(Exception ex) { }
+        }
+        catch (Exception ex) { }
 
         return result;
     }
@@ -102,8 +158,67 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 Documents.Clear();
                 result = true;
             }
-        }catch( Exception ex) { }
+        }
+        catch (Exception ex) { }
 
         return result;
     }
+
+    #region Metodi per effettuare la sincronizzazione con il server
+
+    public async Task<bool> DownloadDocuments()
+    {
+        var result = false;
+        var response = await _httpManager.SendHttpRequest("Document/DocumentsList", TUTTI);
+        if (response.Code.Equals("0"))
+        {
+            Documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
+            //carico i documenti del db locale
+            var count = await _indexedDBService.Insert(IndexedDBTables.documents, Documents.Cast<object>().ToArray());
+            result = count == Documents.Count;
+        }
+        return result;
+    }
+
+    public async Task<bool> UploadDocuments()
+    {
+        var result = true;
+        try
+        {
+            var content = await _indexedDBService.SelectByIndex(IndexedDBTables.documents, "offlineChange", 1);
+            var modifiedDocuments = content is not null ? JsonSerializer.Deserialize<List<DocumentModel>>(content) ?? [] : [];
+            if (modifiedDocuments.Count > 0)
+            {
+                var response = await _httpManager.SendHttpRequest("Document/UpdateDocument", modifiedDocuments);
+                result = response.Code.Equals("0");
+            }
+        }
+        catch (Exception ex) { result = false; }
+        return result;
+    }
+
+    #endregion
+
+    #region Metodi privati
+
+    private async Task CheckIfOnline()
+    {
+        var response = await _httpManager.SendHttpRequest("Fuctionality/Check", "");
+        if (response.Code.Equals("0"))
+        {
+            online = true;
+            //allora aggiorno sul server se ho fatto delle modifiche nel frattempo
+            await UploadDocuments();
+        }
+    }
+
+    private void SetOfflineChange(List<DocumentModel> list)
+    {
+        foreach (var doc in list)
+        {
+            doc.OfflineChange = 1;
+        }
+    }
+
+    #endregion
 }

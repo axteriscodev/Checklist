@@ -1,5 +1,6 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
 using ConstructionSiteLibrary.Model;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Text.Json;
 
@@ -7,10 +8,14 @@ using System.Text.Json;
 
 namespace ConstructionSiteLibrary.Services
 {
+
     public class IndexedDBService
     {
         private const string JS_FILE = "./_content/ConstructionSiteLibrary/IndexedDB.js";
         private IJSObjectReference? jsModule;
+
+        public delegate void DbSupportValidated(bool supported);
+        public event DbSupportValidated OnDbSupportValidated;
 
         public bool DbSupport { get; set; } = false;
 
@@ -30,6 +35,7 @@ namespace ConstructionSiteLibrary.Services
                 var ciao = e.Message;
                 dbSupport = false;
             }
+            OnDbSupportValidated.Invoke(dbSupport);
             return dbSupport;
         }
 
@@ -43,7 +49,6 @@ namespace ConstructionSiteLibrary.Services
             }
             return result;
         }
-
 
         public async Task<int> Insert(IndexedDBTables table,object[] list)
         {
@@ -73,6 +78,17 @@ namespace ConstructionSiteLibrary.Services
             if (DbSupport)
             {
               var result = await jsModule!.InvokeAsync<object>("selectByKey", [table.ToString(), id]);
+                jsonResponse = JsonSerializer.Serialize(result);
+            }
+            return jsonResponse;
+        }
+
+        public async Task<string?> SelectByIndex(IndexedDBTables table, string idx, object value)
+        {
+            string? jsonResponse = null;
+            if (DbSupport)
+            {
+                var result = await jsModule!.InvokeAsync<object>("selectByIndex", [table.ToString(), idx, value]);
                 jsonResponse = JsonSerializer.Serialize(result);
             }
             return jsonResponse;

@@ -2,13 +2,48 @@
 @using Shared
 
 @inject IndexedDBService dbService
-@inject IJSRuntime JS
+@inject DocumentsRepository DocumentRepository
 
-
-
+@if (dbSupport)
+{
+    <div>
+        <RadzenStack Orientation="Orientation.Vertical">
+            <RadzenText TextStyle="TextStyle.Body1">
+                Sincronizzazione documenti con il server: verranno scaricati i documenti e caricati online le ultime modifiche apportate
+            </RadzenText>
+            <RadzenButton Icon="sync" Text="Sincronizza" Click="Syncronize" BusyText="Sincronizza" IsBusy="onSyncronize" Style="width:200px;height:40px;" />
+        </RadzenStack>
+    </div>
+}
 
 
 @code {
+
+
+    private bool dbSupport = false;
+    private bool onSyncronize = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dbService.OnDbSupportValidated += DbSupportObserver;
+        await base.OnInitializedAsync();
+
+    }
+
+
+    private async Task Syncronize()
+    {
+        onSyncronize = true;
+        var uploadResult = await DocumentRepository.UploadDocuments();
+        var downloadResult = await DocumentRepository.DownloadDocuments();
+        onSyncronize = false;
+    } 
+
+    private void DbSupportObserver(bool support)
+    {
+        dbSupport = support;
+        StateHasChanged();
+    }
 
 
 }
