@@ -44,6 +44,8 @@ export function openDB() {
             console.log("objectStore: " + documentStore.name);
             //creo un indice sul campo OfflineChange
             documentStore.createIndex("offlineChange", "offlineChange", { unique: false });
+            documentStore.createIndex("contructionSite", "constructorSite.id", { unique: false });
+            documentStore.createIndex("client", "client.id", { unique: false });
         };
         // evento di errore 
         request.onerror = (event) => {
@@ -148,6 +150,18 @@ export function deleteRecord(storeName, key) {
             resolve(false);
         }
     })
+}
+
+export function DiskSpaceIDB() {
+    return new Promise((resolve) => {
+        navigator.storage.estimate().then((estimate) => {
+            let testo = "percentuale: " + ((estimate.usage / estimate.quota) * 100).toFixed(2) + "% - spazio utilizzato: "
+                                        + (estimate.usage / 1024 / 1024).toFixed(2) + " MB su "
+                                        + (estimate.quota / 1024 / 1024 / 1024).toFixed(2) + " GB";
+            console.log(testo);
+            resolve(testo);
+        })
+    });
 }
 
 //-------------------------------------------------//
