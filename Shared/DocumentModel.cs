@@ -33,4 +33,6 @@ public class DocumentModel
 
     [JsonPropertyName("attachments")]
     public List<Attachment> Attachments { get; set;} = [];
+
+    public DateTime? LastModified { get; set;}
 }

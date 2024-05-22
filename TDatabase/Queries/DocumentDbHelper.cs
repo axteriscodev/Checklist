@@ -23,6 +23,7 @@ public class DocumentDbHelper
                         Id = d.Id,
                         Date = d.Date,
                         Title = d.Title,
+                        LastModified = d.LastModified,
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
                                                  where qc.IdDocument == d.Id
@@ -134,6 +135,7 @@ public class DocumentDbHelper
                 var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
                 if (d is not null)
                 {
+                    d.LastModified = document.LastModified;
                     foreach (var c in document.Categories)
                     {
                         foreach(var q in c.Questions)
