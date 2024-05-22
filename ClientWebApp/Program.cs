@@ -27,6 +27,10 @@ builder.Services.AddScoped<QuestionRepository>();
 builder.Services.AddScoped<DocumentsRepository>();
 //repository per i cantieri
 builder.Services.AddScoped<ConstructorSitesRepository>();
+//repository per i clienti
+builder.Services.AddScoped<ClientsRepository>();
+//repository per le aziende
+builder.Services.AddScoped<CompaniesRepository>();
 
 builder.Services.AddScoped<ICameraService, CameraService>();
 builder.Services.AddScoped<IndexedDBService>();
