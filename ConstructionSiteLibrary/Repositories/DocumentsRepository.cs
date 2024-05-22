@@ -11,11 +11,18 @@ namespace ConstructionSiteLibrary.Repositories;
 
 public class DocumentsRepository(HttpManager httpManager, IndexedDBService indexedDBService)
 {
-    List<DocumentModel> Documents = [];
+
+    #region Campi
+
+    private List<DocumentModel> Documents = [];
     private bool online = true;
     private const int TUTTI = 0;
     private readonly HttpManager _httpManager = httpManager;
     private readonly IndexedDBService _indexedDBService = indexedDBService;
+
+    #endregion
+
+    #region Metodi per la compilazione di documenti (SI OFFLINE)
 
     public async Task<List<DocumentModel>> GetDocuments()
     {
@@ -39,19 +46,17 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
                 {
                     online = false;
-                    var content = await _indexedDBService.ReadObjectStore(IndexedDBTables.documents);
-                    Documents = content is not null ? JsonSerializer.Deserialize<List<DocumentModel>>(content) ?? [] : [];
                 }
             } 
             //altrimenti cerco in locale
-            else
+            if(!online)
             {
                 var content = await _indexedDBService.ReadObjectStore(IndexedDBTables.documents);
                 Documents = content is not null ? JsonSerializer.Deserialize<List<DocumentModel>>(content) ?? [] : [];
             }
 
         }
-        catch (Exception ex) { }
+        catch (Exception) { }
         return Documents;
     }
 
@@ -76,37 +81,20 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
                 {
                     online = false;
-                    var content = await _indexedDBService.Read(IndexedDBTables.documents, idDocument);
-                    document = content is not null ? JsonSerializer.Deserialize<DocumentModel>(content) ?? new() : new();
                 }
-            } else
+            }
+            if (!online)
             {
                 var content = await _indexedDBService.Read(IndexedDBTables.documents, idDocument);
                 document = content is not null ? JsonSerializer.Deserialize<DocumentModel>(content) ?? new() : new();
             }
 
         }
-        catch (Exception ex) { }
+        catch (Exception) { }
 
         return document;
     }
 
-    public async Task<bool> SaveDocument(DocumentModel document)
-    {
-        var result = false;
-        try
-        {
-            var response = await _httpManager.SendHttpRequest("Document/SaveDocument", document);
-            if (response.Code.Equals("0"))
-            {
-                Documents.Clear();
-                result = true;
-            }
-        }
-        catch (Exception ex) { }
-
-        return result;
-    }
 
     public async Task<bool> UpdateDocuments(List<DocumentModel> documents)
     {
@@ -129,12 +117,9 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
                 {
                     online = false;
-                    SetOfflineChange(documents);
-                    var content = await _indexedDBService.Insert(IndexedDBTables.documents, documents.Cast<object>().ToArray());
-                    Documents.Clear();
-                    result = true;
                 }
-            } else
+            }
+            if (!online)
             {
                 SetOfflineChange(documents);
                 var content = await _indexedDBService.Insert(IndexedDBTables.documents, documents.Cast<object>().ToArray());
@@ -142,10 +127,32 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 result = true;
             }
         }
-        catch (Exception ex) { }
+        catch (Exception) { }
 
         return result;
     }
+
+    #endregion
+
+    #region Metodi per la creazione e cancellazione (NO OFFLINE)
+
+    public async Task<bool> SaveDocument(DocumentModel document)
+    {
+        var result = false;
+        try
+        {
+            var response = await _httpManager.SendHttpRequest("Document/SaveDocument", document);
+            if (response.Code.Equals("0"))
+            {
+                Documents.Clear();
+                result = true;
+            }
+        }
+        catch (Exception) { }
+
+        return result;
+    }
+
 
     public async Task<bool> HideDocuments(List<DocumentModel> documents)
     {
@@ -159,23 +166,32 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 result = true;
             }
         }
-        catch (Exception ex) { }
+        catch (Exception) { }
 
         return result;
     }
+
+    #endregion
 
     #region Metodi per effettuare la sincronizzazione con il server
 
     public async Task<bool> DownloadDocuments()
     {
         var result = false;
-        var response = await _httpManager.SendHttpRequest("Document/DocumentsList", TUTTI);
-        if (response.Code.Equals("0"))
+        if (online)
         {
-            Documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
-            //carico i documenti del db locale
-            var count = await _indexedDBService.Insert(IndexedDBTables.documents, Documents.Cast<object>().ToArray());
-            result = count == Documents.Count;
+            try
+            {
+                var response = await _httpManager.SendHttpRequest("Document/DocumentsList", TUTTI);
+                if (response.Code.Equals("0"))
+                {
+                    Documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
+                    //carico i documenti del db locale
+                    var count = await _indexedDBService.Insert(IndexedDBTables.documents, Documents.Cast<object>().ToArray());
+                    result = count == Documents.Count;
+                }
+            }
+            catch (Exception) { }
         }
         return result;
     }
@@ -183,17 +199,24 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
     public async Task<bool> UploadDocuments()
     {
         var result = true;
-        try
+        if (online)
         {
-            var content = await _indexedDBService.SelectByIndex(IndexedDBTables.documents, "offlineChange", 1);
-            var modifiedDocuments = content is not null ? JsonSerializer.Deserialize<List<DocumentModel>>(content) ?? [] : [];
-            if (modifiedDocuments.Count > 0)
+            try
             {
-                var response = await _httpManager.SendHttpRequest("Document/UpdateDocument", modifiedDocuments);
-                result = response.Code.Equals("0");
+                var content = await _indexedDBService.SelectByIndex(IndexedDBTables.documents, "offlineChange", 1);
+                var modifiedDocuments = content is not null ? JsonSerializer.Deserialize<List<DocumentModel>>(content) ?? [] : [];
+                if (modifiedDocuments.Count > 0)
+                {
+                    var response = await _httpManager.SendHttpRequest("Document/UpdateDocument", modifiedDocuments);
+                    result = response.Code.Equals("0");
+                }
             }
+            catch (Exception) { result = false; }
         }
-        catch (Exception ex) { result = false; }
+        else
+        {
+            result = false;
+        }
         return result;
     }
 
