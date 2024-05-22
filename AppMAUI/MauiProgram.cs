@@ -35,11 +35,16 @@ public static class MauiProgram
         builder.Services.AddScoped<QuestionRepository>();
         //repository per i documenti
         builder.Services.AddScoped<DocumentsRepository>();
+        //repository per i cantieri
+        builder.Services.AddScoped<ConstructorSitesRepository>();
         //componenti radzen
         builder.Services.AddRadzenComponents();
-
+        //Componente fotocamera
         builder.Services.AddScoped<ICameraService, CameraService>();
         builder.Services.AddSingleton<IndexedDBService>();
+        ///Componente GPS
+        builder.Services.AddScoped<ILocationService, LocationService>();
+
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

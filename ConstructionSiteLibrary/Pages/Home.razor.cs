@@ -36,10 +36,8 @@ namespace ConstructionSiteLibrary.Pages
 
         private async void OpenCameraPage()
         {
-
-            PhotoPath = await CameraService.OpenCamera();
-
-
+           PhotoPath = await CameraService.OpenCamera();
+        
             StateHasChanged();
         }
     }
