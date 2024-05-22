@@ -1,13 +1,10 @@
-﻿using ConstructionSiteLibrary.Components.Choices;
-using ConstructionSiteLibrary.Components.Utilities;
+﻿using ConstructionSiteLibrary.Components.Utilities;
 using ConstructionSiteLibrary.Model;
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
 using Radzen;
 using Shared;
-using System.Reflection;
+
 
 namespace ConstructionSiteLibrary.Components.FormCompilation;
 
