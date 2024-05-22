@@ -46,7 +46,11 @@ public partial class FormCompilation
         if (docLists.Count != 0)
         {
             DocumentsList = docLists.Select(x => x.Id);
-            CurrentSelection = docLists.First().Id;
+            if(CurrentSelection == 0)
+            {
+                CurrentSelection = docLists.First().Id;
+            }
+
             documentModel = docLists.Where(x => x.Id == CurrentSelection).FirstOrDefault() ?? new();
             CreateVisualCategories();
         }

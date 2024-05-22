@@ -134,7 +134,7 @@ public class DocumentDbHelper
             foreach (var document in documents)
             {
                 var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
-                if (d is not null)
+                if (d is not null && CheckLastEdit(d.LastModified, document.LastModified!.Value))
                 {
                     d.LastModified = document.LastModified;
                     foreach (var c in document.Categories)
@@ -202,5 +202,10 @@ public class DocumentDbHelper
         catch (Exception) { }
 
         return hiddenItems;
+    }
+
+    private static bool CheckLastEdit(DateTime? oldEdit, DateTime newEdit)
+    {
+        return oldEdit is null || oldEdit < newEdit;
     }
 }
