@@ -10,8 +10,20 @@ public class DocumentModel
     [JsonPropertyName("title")]
     public string Title { get; set;} = "";
 
-    [JsonPropertyName("date")]
-    public DateTime Date { get; set;} = DateTime.Now;
+    [JsonPropertyName("creationDate")]
+    public DateTime CreationDate { get; set;} = DateTime.Now;
+
+    [JsonPropertyName("compilationDate")]
+    public DateTime CompilationDate { get; set;} = DateTime.Now;
+
+    [JsonPropertyName("lastEditDate")]
+    public DateTime LastEditDate { get; set;} = DateTime.Now;
+
+    [JsonPropertyName("readonly")]
+    public bool ReadOnly { get; set;}
+
+    [JsonPropertyName("ChangedOffline")]
+    public int ChangedOffline { get; set;}
 
     [JsonPropertyName("client")]
     public ClientModel? Client { get; set;}
@@ -19,32 +31,18 @@ public class DocumentModel
     [JsonPropertyName("constructorSite")]
     public ConstructorSiteModel? ConstructorSite { get; set;}
 
-    [JsonPropertyName("version")]
-    public int Version { get; set;}
-
-    [JsonPropertyName("revision")]
-    public int Revision { get; set;}
-
-    [JsonPropertyName("macroCategories")]
+    [JsonPropertyName("categories")]
     public List<CategoryModel> Categories { get; set;} = [];
 
     [JsonPropertyName("companies")]
     public List<CompanyModel> Companies { get; set;} = [];
 
+    [JsonPropertyName("signatures")]
+    public List<SignatureModel> Signature { get; set;} = [];
+
     [JsonPropertyName("attachments")]
-    public List<Attachment> Attachments { get; set;} = [];
-    [JsonPropertyName("lastModified")]
-    public DateTime? LastModified { get; set;}
-    /// <summary>
-    /// campo utilizzato per mappare le modifiche offline
-    /// </summary>
-    /// <remarks>
-    /// bisogna usare il campo ad int per poterlo usare come indice di recarca su indexedDB
-    /// 0 = false;
-    /// 1 = true;
-    /// </remarks>
-    [JsonPropertyName("offlineChange")]
-    public int OfflineChange { get; set; } = 0;
-    [JsonPropertyName("active")]
-    public bool Active { get; set; }
+    public List<AttachmentModel> Attachments { get; set;} = [];
+
+    [JsonPropertyName("notes")]
+    public List<NoteModel> Notes { get; set;} = [];
 }
