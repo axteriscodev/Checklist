@@ -2,17 +2,9 @@
 
 namespace Shared;
 
-public class DocumentChoiceModel : IQuestion
+public class DocumentChoiceModel : TemplateChoicesModel
 {
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-
-    [JsonPropertyName("value")]
-    public string Value { get; set; } = "";
-
-    [JsonPropertyName("reportable")]
-    public bool Reportable { get; set; }
-
+    
     [JsonPropertyName("reportedCompanyIds")]
     public List<int> ReportedCompanyIds { get; set; } = [];
 
