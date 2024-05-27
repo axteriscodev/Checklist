@@ -29,7 +29,7 @@ public class DocumentDbHelper
                                                  where qc.IdDocument == d.Id
                                                  && q.Id == qc.IdQuestion
                                                  group q by q.IdCategory into q2
-                                                 select new { IdCategory = q2.First().IdCategory })
+                                                 select new { q2.First().IdCategory })
 
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
@@ -72,7 +72,29 @@ public class DocumentDbHelper
                                                              }).ToList()
                                                        }).ToList()
                                       }).ToList(),
-
+                        ConstructorSite = (from cs in db.ConstructorSites
+                                          where cs.Id == d.IdConstructorSite
+                                          select new ConstructorSiteModel()
+                                          {
+                                              Id  = cs.Id,
+                                              JobDescription = cs.JobDescription,
+                                              StartDate = cs.StartDate,
+                                              Address = cs.Address,
+                                              Client = (from cl in db.Clients
+                                                        where cl.Id == cs.IdClient
+                                                        select new ClientModel()
+                                                        {
+                                                            Id = cl.Id,
+                                                            Name = cl.Name
+                                                        }).SingleOrDefault() ?? new(),
+                                          }).SingleOrDefault(),
+                        Client = (from cl in db.Clients
+                                  where cl.Id == d.IdClient
+                                  select new ClientModel()
+                                  {
+                                      Id = cl.Id,
+                                      Name = cl.Name
+                                  }).SingleOrDefault(),
                     }).ToList();
 
         return docs;

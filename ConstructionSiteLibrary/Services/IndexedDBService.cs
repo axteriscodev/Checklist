@@ -105,5 +105,15 @@ namespace ConstructionSiteLibrary.Services
             }
             return result;
         }
+
+        public async Task<string> DiskSpaceOccupied()
+        {
+            var result = "";
+            if (dbSupport)
+            {
+                result = await jsModule!.InvokeAsync<string>("DiskSpaceIDB");
+            }
+            return result;
+        }
     }
 }
