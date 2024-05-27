@@ -15,7 +15,7 @@ namespace ServerHost.Controllers
 
 
         [NonAction]
-        protected DbCsclAxteriscoContext GetDbConnection()
+        protected DbCsclDamicoV2Context GetDbConnection()
         {
             var connectionString = ConfigurationService.GetConnection() ?? "";
             return DatabaseContextFactory.Create(connectionString);
