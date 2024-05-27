@@ -17,6 +17,10 @@ public partial class ConstructorSite
 
     public DateTime StartDate { get; set; }
 
+    public bool Active { get; set; }
+
+    public virtual ICollection<CompanyConstructorSite> CompanyConstructorSites { get; set; } = new List<CompanyConstructorSite>();
+
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
     public virtual Client IdClientNavigation { get; set; } = null!;

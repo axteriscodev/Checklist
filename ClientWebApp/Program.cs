@@ -3,6 +3,7 @@ using ClientWebApp.Services;
 using ConstructionSiteLibrary.Interfaces;
 using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Repositories;
+using ConstructionSiteLibrary.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
@@ -24,8 +25,15 @@ builder.Services.AddScoped<CategoriesRepository>();
 builder.Services.AddScoped<QuestionRepository>();
 //repository per i documenti
 builder.Services.AddScoped<DocumentsRepository>();
+//repository per i cantieri
+builder.Services.AddScoped<ConstructorSitesRepository>();
+//repository per i clienti
+builder.Services.AddScoped<ClientsRepository>();
+//repository per le aziende
+builder.Services.AddScoped<CompaniesRepository>();
 
 builder.Services.AddScoped<ICameraService, CameraService>();
+builder.Services.AddScoped<IndexedDBService>();
 
 
 //componenti radzen
