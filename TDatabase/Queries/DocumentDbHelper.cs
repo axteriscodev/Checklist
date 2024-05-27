@@ -16,20 +16,20 @@ public class DocumentDbHelper
         {
             documents = documents.Where(d => d.Id == idDocument);
         }
-
-        var docs = (from d in documents
+        return [];
+        /*var docs = (from d in documents
                     select new DocumentModel()
                     {
                         Id = d.Id,
-                        Date = d.Date,
+                        //Date = d.Date,
                         Title = d.Title,
-                        LastModified = d.LastModified,
+                       // LastModified = d.LastModified,
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
-                                                 where qc.IdDocument == d.Id
+                                                 where qc. == d.Id
                                                  && q.Id == qc.IdQuestion
                                                  group q by q.IdCategory into q2
-                                                 select new { IdCategory = q2.First().IdCategory })
+                                                 select new { q2.First().IdCategory })
 
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
@@ -72,10 +72,32 @@ public class DocumentDbHelper
                                                              }).ToList()
                                                        }).ToList()
                                       }).ToList(),
-
+                        ConstructorSite = (from cs in db.ConstructorSites
+                                          where cs.Id == d.IdConstructorSite
+                                          select new ConstructorSiteModel()
+                                          {
+                                              Id  = cs.Id,
+                                              JobDescription = cs.JobDescription,
+                                              StartDate = cs.StartDate,
+                                              Address = cs.Address,
+                                              Client = (from cl in db.Clients
+                                                        where cl.Id == cs.IdClient
+                                                        select new ClientModel()
+                                                        {
+                                                            Id = cl.Id,
+                                                            Name = cl.Name
+                                                        }).SingleOrDefault() ?? new(),
+                                          }).SingleOrDefault(),
+                        Client = (from cl in db.Clients
+                                  where cl.Id == d.IdClient
+                                  select new ClientModel()
+                                  {
+                                      Id = cl.Id,
+                                      Name = cl.Name
+                                  }).SingleOrDefault(),
                     }).ToList();
 
-        return docs;
+        return docs;*/
     }
 
     public static async Task<int> Insert(DB db, DocumentModel document)
@@ -90,8 +112,8 @@ public class DocumentDbHelper
                 IdConstructorSite = document.ConstructorSite?.Id,
                 IdClient = document.Client?.Id,
                 Title = document.Title,
-                Date = document.Date,
-                Active = true,
+                //Date = document.Date,
+                //Active = true,
             };
 
             db.Documents.Add(newDocument);
@@ -105,11 +127,11 @@ public class DocumentDbHelper
                     QuestionChosen qc = new()
                     {
                         Id = nextQuestionChosenId,
-                        IdDocument = nextId,
+                      //  IdDocument = nextId,
                         IdQuestion = q.Id,
                         Order = q.Order,
-                        Printable = true,
-                        Hidden = false
+                       // Printable = true,
+                       // Hidden = false
                     };
                     db.QuestionChosens.Add(qc);
                     nextQuestionChosenId++;
@@ -134,9 +156,9 @@ public class DocumentDbHelper
             foreach (var document in documents)
             {
                 var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
-                if (d is not null && CheckLastEdit(d.LastModified, document.LastModified!.Value))
+           /*     if (d is not null && CheckLastEdit(d.LastModified, document.LastModified!.Value))
                 {
-                    d.LastModified = document.LastModified;
+                  //  d.LastModified = document.LastModified;
                     foreach (var c in document.Categories)
                     {
                         foreach(var q in c.Questions)
@@ -173,7 +195,7 @@ public class DocumentDbHelper
                     // {
                     //     modified.Add(elem.Id);
                     // }
-                }
+                } */
             }
         }
         catch (Exception) { }
@@ -191,7 +213,7 @@ public class DocumentDbHelper
                 var c = db.Documents.Where(x => x.Id == elem.Id).SingleOrDefault();
                 if (c is not null)
                 {
-                    c.Active = false;
+                   // c.Active = false;
                     if (await db.SaveChangesAsync() > 0)
                     {
                         hiddenItems.Add(elem.Id);

@@ -18,7 +18,6 @@ namespace TDatabase.Queries
                     Id = q.Id,
                     Text = q.Text,
                     IdCategory = q.IdCategory,
-                    IdSubject = q.IdSubject,
                     Choices = (from qc in db.QuestionChoices
                                join c in db.Choices on qc.IdChoice equals c.Id
                                where qc.IdQuestion == q.Id
