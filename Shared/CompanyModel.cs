@@ -15,4 +15,7 @@ public class CompanyModel
 
     [JsonPropertyName("vatCode")]
     public string VatCode { get; set; } = "";
+
+    [JsonPropertyName("presente")]
+    public bool? Present { get; set; }
 }

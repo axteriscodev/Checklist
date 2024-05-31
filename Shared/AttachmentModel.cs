@@ -2,7 +2,7 @@
 
 namespace Shared;
 
-public class Attachment
+public class AttachmentModel
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
@@ -12,9 +12,6 @@ public class Attachment
 
     [JsonPropertyName("date")]
     public DateTime Date { get; set; }
-
-    [JsonPropertyName("question")]
-    public QuestionModel question{ get; set; }= new QuestionModel();
 
     [JsonPropertyName("path")]
     public string Path { get; set; } = "";
