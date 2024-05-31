@@ -19,10 +19,17 @@ public class CategoriesRepository(HttpManager httpManager)
     {
         if (Categories.Count == 0)
         {
-            var response = await _httpManager.SendHttpRequest("Category/CategoriesList", "");
-            if (response.Code.Equals("0"))
+            try
             {
-                Categories = JsonSerializer.Deserialize<List<CategoryModel>>(response.Content.ToString() ?? "") ?? [];
+                var response = await _httpManager.SendHttpRequest("Category/CategoriesList", "");
+                if (response.Code.Equals("0"))
+                {
+                    Categories = JsonSerializer.Deserialize<List<CategoryModel>>(response.Content.ToString() ?? "") ?? [];
+                }
+            }
+            catch (Exception e) 
+            { 
+                var msg = e.Message;
             }
         }
 

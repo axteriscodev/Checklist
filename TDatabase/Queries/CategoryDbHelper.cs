@@ -27,30 +27,31 @@ namespace TDatabase.Queries
                                    Value = c.Value,
                                    Reportable = c.Reportable,
                                }).ToList(),
-                }).ToList().Cast<IQuestion>().ToList(),
+                }).Cast<object>().ToList(),
             }).OrderBy(x => x.Order).ToList();
         }
 
         public static async Task<int> Insert(DB db, CategoryModel category)
         {
-            var macroId = 0;
+            var id = 0;
             try
             {
                 var nextId = (db.Categories.Any() ? db.Categories.Max(x => x.Id) : 0) + 1;
+                var nextOrder = (db.Categories.Any() ? db.Categories.Max(x => x.Order) : 0) + 1;
                 Category newMacro = new()
                 {
                     Id = nextId,
                     Text = category.Text,
-                    Order = category.Order,
+                    Order = nextOrder,
                     Active = true
                 };
                 db.Categories.Add(newMacro);
                 await db.SaveChangesAsync();
-                macroId = nextId;
+                id = nextId;
             }
             catch (Exception) { }
 
-            return macroId;
+            return id;
         }
 
         public static async Task<List<int>> Update(DB db, List<CategoryModel> categories)

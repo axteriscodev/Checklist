@@ -60,7 +60,7 @@ public class TemplateDbHelper
                                                                  Value = ch.Value,
                                                                  Reportable = ch.Reportable,
                                                              }).ToList()
-                                                       }).Cast<IQuestion>().ToList()
+                                                       }).Cast<object>().ToList()
                                       }).ToList(),
 
                     }).ToList();

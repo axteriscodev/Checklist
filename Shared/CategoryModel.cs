@@ -14,5 +14,5 @@ public class CategoryModel
     public int Order { get; set; }
 
     [JsonPropertyName("questions")]
-    public List<IQuestion> Questions { get; set; } = [];
+    public List<object> Questions { get; set; } = [];
 }

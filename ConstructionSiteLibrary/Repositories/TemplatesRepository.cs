@@ -88,6 +88,7 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
         return template;
         
     }
+    #endregion
 
     #region Metodi per la creazione e cancellazione (NO OFFLINE)
 
@@ -196,7 +197,7 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
     {
         foreach (var doc in list)
         {
-            doc.ChangedOffline = 1;
+            //doc.ChangedOffline = 1;
         }
     }
 

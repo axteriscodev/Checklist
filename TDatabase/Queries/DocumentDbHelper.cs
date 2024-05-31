@@ -99,7 +99,7 @@ public class DocumentDbHelper
                                                                               Date = att.DateTime,
                                                                               //TODO manca il binding alla path
                                                                           }).ToList(),
-                                                       }).Cast<IQuestion>().ToList()
+                                                       }).Cast<object>().ToList()
                                       }).ToList(),
                         ConstructorSite = (from cs in db.ConstructorSites
                                            where cs.Id == d.IdConstructorSite
@@ -241,50 +241,49 @@ public class DocumentDbHelper
         List<int> modified = [];
         try
         {
-            foreach (var document in documents)
-            {
-                var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
-                     if (d is not null && CheckLastEdit(d.LastEditDate, document.LastEditDate))
-                     {
-                       //  d.LastModified = document.LastModified;
-                         foreach (var c in document.Categories)
-                         {
-                             foreach(var q in c.Questions)
-                             {
-                                 var qc = db.QuestionChosens.Where(x => x.IdDocument == document.Id && x.IdQuestion == q.Id).FirstOrDefault();
-                                 if(qc is not null)
-                                 {
-                                     qc.IdCurrentChoice = q.CurrentChoice?.Id;
-                                     qc.Order = q.Order;
-                                     qc.Printable = q.Printable;
-                                     qc.Hidden = q.Hidden;
-                                     await db.SaveChangesAsync();
-                                     modified.Add(qc.Id);
-                                 }
-                             }
-                         }
+            /*  foreach (var document in documents)
+              {
+                  var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
+                       if (d is not null && CheckLastEdit(d.LastEditDate, document.LastEditDate))
+                       {
+                         //  d.LastModified = document.LastModified;
+                           foreach (var c in document.Categories)
+                           {
+                               foreach(var q in c.Questions)
+                               {
+                                   var qc = db.QuestionChosens.Where(x => x.IdDocument == document.Id && x.IdQuestion == q.Id).FirstOrDefault();
+                                   if(qc is not null)
+                                   {
+                                       qc.IdCurrentChoice = q.CurrentChoice?.Id;
+                                       qc.Order = q.Order;
+                                       qc.Printable = q.Printable;
+                                       qc.Hidden = q.Hidden;
+                                       await db.SaveChangesAsync();
+                                       modified.Add(qc.Id);
+                                   }
+                               }
+                           }
 
-                         d.IdCategory = elem.IdCategory;
-                         d.IdSubject = elem.IdSubject;
-                         d.Text = elem.Text;
+                           //d.IdCategory = elem.IdCategory;
+                           //d.Text = elem.Text;
 
-                         db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));
-                         foreach(var choice in elem.Choices)
-                         {
-                             QuestionChoice newqc = new()
-                             {
-                                 IdChoice = choice.Id,
-                                 IdQuestion = elem.Id
-                             };
-                             db.Add(newqc);
-                         }
+                           db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));
+                           foreach(var choice in elem.Choices)
+                           {
+                               QuestionChoice newqc = new()
+                               {
+                                   IdChoice = choice.Id,
+                                   IdQuestion = elem.Id
+                               };
+                               db.Add(newqc);
+                           }
 
-                         if (await db.SaveChangesAsync() > 0)
-                         {
-                             modified.Add(elem.Id);
-                         }
-                     } 
-            }
+                           if (await db.SaveChangesAsync() > 0)
+                           {
+                               modified.Add(elem.Id);
+                           }
+                       } 
+              }*/
         }
         catch (Exception) { }
 
