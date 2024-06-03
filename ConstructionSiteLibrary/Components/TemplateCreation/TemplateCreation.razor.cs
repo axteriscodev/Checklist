@@ -5,9 +5,9 @@ using Radzen;
 using Shared.Defaults;
 using Shared.Documents;
 
-namespace ConstructionSiteLibrary.Components.FormCreation;
+namespace ConstructionSiteLibrary.Components.TemplateCreation;
 
-public partial class FormCreation
+public partial class TemplateCreation
 {
 
     private List<CategoryModel> categories = [];

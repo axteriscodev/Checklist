@@ -7,9 +7,9 @@ using Shared.Defaults;
 using Shared.Documents;
 
 
-namespace ConstructionSiteLibrary.Components.FormCompilation;
+namespace ConstructionSiteLibrary.Components.DocumentCompilation;
 
-public partial class FormCompilation
+public partial class DocumentCompilation
 {
 
     private DocumentModel documentModel = new();
