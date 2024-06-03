@@ -1,4 +1,5 @@
 ﻿using Shared.Defaults;
+using Shared.Templates;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
@@ -6,13 +7,20 @@ namespace TDatabase.Queries
 {
     public class CategoryDbHelper
     {
-        public static List<CategoryModel> Select(DB db)
+        public static List<TemplateCategoryModel> Select(DB db)
         {
-            return db.Categories.Where(x => x.Active == true).Select(x => new CategoryModel()
+            return db.Categories.Where(x => x.Active == true).Select(x => new TemplateCategoryModel()
             {
                 Id = x.Id,
                 Text = x.Text,
                 Order = x.Order,
+                Questions = (from q in db.Questions
+                             where q.IdCategory == x.Id
+                             select new TemplateQuestionModel()
+                             {
+                                 Id = q.Id,
+                                 Text = q.Text,                                  
+                             }).ToList()
             }).OrderBy(x => x.Order).ToList();
         }
 
