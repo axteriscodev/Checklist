@@ -148,6 +148,18 @@ public class DocumentDbHelper
                                      CompanyListIds = (from cn in db.CompanyNotes
                                                        where cn.IdNote == n.Id
                                                        select cn.IdCompany).ToList(),
+                                     Attachments = (from aq in db.AttachmentQuestions
+                                                    from att in db.Attachments
+                                                    where aq.IdQuestion == qc.Id
+                                                    && att.IdDocument == d.Id
+                                                    && att.Id == aq.IdAttachment
+                                                    select new AttachmentModel()
+                                                    {
+                                                        Id = att.Id,
+                                                        Name = att.Name,
+                                                        Date = att.DateTime,
+                                                        //TODO manca il binding alla path
+                                                    }).ToList(),
                                  }).ToList(),
                     }).ToList();
 

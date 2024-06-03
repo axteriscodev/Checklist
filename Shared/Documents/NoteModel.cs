@@ -12,4 +12,7 @@ public class NoteModel
 
     [JsonPropertyName("companyListIds")]
     public List<int> CompanyListIds { get; set; } = [];
+
+    [JsonPropertyName("attachments")]
+    public List<AttachmentModel> Attachments { get; set; } = [];
 }
