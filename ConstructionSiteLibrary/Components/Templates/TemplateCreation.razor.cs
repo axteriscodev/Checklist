@@ -7,7 +7,7 @@ using Shared.Defaults;
 using Shared.Documents;
 using Shared.Templates;
 
-namespace ConstructionSiteLibrary.Components.TemplateCreation;
+namespace ConstructionSiteLibrary.Components.Templates;
 
 public partial class TemplateCreation
 {

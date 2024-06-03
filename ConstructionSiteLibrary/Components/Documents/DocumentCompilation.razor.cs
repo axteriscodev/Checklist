@@ -7,7 +7,7 @@ using Shared.Defaults;
 using Shared.Documents;
 
 
-namespace ConstructionSiteLibrary.Components.DocumentCompilation;
+namespace ConstructionSiteLibrary.Components.Documents;
 
 public partial class DocumentCompilation
 {
