@@ -76,9 +76,9 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasColumnName("DATE_TIME");
             entity.Property(e => e.IdDocument).HasColumnName("ID_DOCUMENT");
             entity.Property(e => e.IdType).HasColumnName("ID_TYPE");
-            entity.Property(e => e.Location)
+            entity.Property(e => e.FilePath)
                 .IsUnicode(false)
-                .HasColumnName("LOCATION");
+                .HasColumnName("FILE_PATH");
             entity.Property(e => e.Name)
                 .HasMaxLength(200)
                 .IsUnicode(false)

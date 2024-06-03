@@ -15,7 +15,7 @@ public partial class Attachment
 
     public string Name { get; set; } = null!;
 
-    public string? Location { get; set; }
+    public string? FilePath { get; set; }
 
     public bool Active { get; set; }
 
