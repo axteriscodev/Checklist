@@ -35,6 +35,8 @@ public static class MauiProgram
         builder.Services.AddScoped<QuestionRepository>();
         //repository per i documenti
         builder.Services.AddScoped<DocumentsRepository>();
+        //repository per i template
+        builder.Services.AddScoped<TemplatesRepository>();
         //repository per i cantieri
         builder.Services.AddScoped<ConstructorSitesRepository>();
         //repository per i clienti

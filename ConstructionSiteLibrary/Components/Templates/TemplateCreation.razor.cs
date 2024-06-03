@@ -2,21 +2,23 @@
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using Radzen.Blazor;
 using Shared.Defaults;
 using Shared.Documents;
+using Shared.Templates;
 
-namespace ConstructionSiteLibrary.Components.TemplateCreation;
+namespace ConstructionSiteLibrary.Components.Templates;
 
 public partial class TemplateCreation
 {
 
-    private List<CategoryModel> categories = [];
+    private List<TemplateCategoryModel> categories = [];
 
     //private IEnumerable<int> selected = [1,3,6];
 
     private List<IdCategoryAndQuestions> groups = [];
     private string title = "";
-    
+
 
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -27,12 +29,19 @@ public partial class TemplateCreation
     /// Booleano che è impostata durante una ricerca
     /// </summary>
     private bool isLoading = false;
+
     private bool onSaving = false;
 
     /// <summary>
     /// Intero che ci dice quanti sono gli elementi
     /// </summary>
     private int count;
+
+    /// <summary>
+    /// Riferimento al componente tabella
+    /// </summary>
+    private RadzenDataGrid<TemplateCategoryModel>? grid;
+
 
     /// <summary>
     /// il design degli elementi della form
@@ -46,39 +55,52 @@ public partial class TemplateCreation
     {
         initialLoading = true;
         await base.OnInitializedAsync();
-        //await LoadData();
+        await LoadData();
+        InitData();
         initialLoading = false;
     }
 
-    // private async Task LoadData()
-    // {
-    //     categories = await CategoriesRepository.GetCategories();
-    //     count = categories.Count;
-    //     foreach (var category in categories)
-    //     {
+    private void InitData()
+    {
+        foreach (var group in groups)
+        {
+            group.State = true;
+            foreach (var question in group.Questions)
+            {
+                group.SelectedQuestionIds.Add(question.Id);
+            }
+        }
+    }
 
-    //         //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
-    //         groups.Add(new() { Id = category.Id, Order=category.Order, Text = category.Text, Questions = category.Questions });
-    //     }
-    // }
+    private async Task LoadData()
+    {
+        categories = await CategoriesRepository.GetCategories();
+        count = categories.Count;
+        foreach (var category in categories)
+        {
+
+            //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
+            groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, Questions = category.Questions });
+        }
+    }
 
     private async Task ReloadTable()
     {
-        //DialogService.Close();
-        //await LoadData();
-        //await grid!.Reload();
+        DialogService.Close();
+        await LoadData();
+        await grid!.Reload();
     }
 
     private async Task CreateForm()
     {
         onSaving = true;
-        List<DocumentCategoryModel> documentCategories = [];
+        List<TemplateCategoryModel> templateCategories = [];
 
         foreach (var group in groups)
         {
             if (group.SelectedQuestionIds.Any())
             {
-                var category = new DocumentCategoryModel()
+                var category = new TemplateCategoryModel()
                 {
                     Id = group.Id,
                     Text = group.Text,
@@ -87,19 +109,20 @@ public partial class TemplateCreation
                 foreach (var selectedQuestionId in group.SelectedQuestionIds)
                 {
                     var selectedQuestion = group.Questions.First(x => x.Id == selectedQuestionId);
-                    //category.Questions.Add(selectedQuestion);
+                    category.Questions.Add(selectedQuestion);
                 }
 
-                documentCategories.Add(category);
+                templateCategories.Add(category);
             }
         }
 
-        var document = new DocumentModel()
+        var document = new TemplateModel()
         {
-            Categories = documentCategories,
+            TitleTemplate = title,
+            Categories = templateCategories,
         };
 
-        await DocumentsRepository.SaveDocument(document);
+        await TemplatesRepository.SaveDocument(document);
         onSaving = false;
     }
 
@@ -112,7 +135,7 @@ public partial class TemplateCreation
 
     private static string QuestionText(IdCategoryAndQuestions group, string questionText, int order)
     {
-        return group.Order + "."  + order + " " + questionText;
+        return group.Order + "." + order + " " + questionText;
     }
 
     private void ShowQuestions(IdCategoryAndQuestions group)
@@ -201,7 +224,7 @@ public partial class TemplateCreation
         // spezzo la tupla
         var (oldIndex, newIndex, groupNumber) = indici;
 
-        var items = groups.Where(x=>x.Id == groupNumber).SingleOrDefault().Questions;
+        var items = groups.Where(x => x.Id == groupNumber).SingleOrDefault().Questions;
         var itemToMove = items[oldIndex];
         items.RemoveAt(oldIndex);
 
@@ -238,7 +261,7 @@ public partial class TemplateCreation
         public bool? State { get; set; } = false;
         public bool ShowQuestion = true;
         public List<int> SelectedQuestionIds { get; set; } = [];
-        public List<QuestionModel> Questions { get; set; } = [];
+        public List<TemplateQuestionModel> Questions { get; set; } = [];
     }
 
     #endregion
