@@ -2,7 +2,8 @@
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
-using Shared;
+using Shared.Defaults;
+using Shared.Documents;
 
 namespace ConstructionSiteLibrary.Components.FormCreation;
 
@@ -71,13 +72,13 @@ public partial class FormCreation
     private async Task CreateForm()
     {
         onSaving = true;
-        List<CategoryModel> documentCategories = [];
+        List<DocumentCategoryModel> documentCategories = [];
 
         foreach (var group in groups)
         {
             if (group.SelectedQuestionIds.Any())
             {
-                var category = new CategoryModel()
+                var category = new DocumentCategoryModel()
                 {
                     Id = group.Id,
                     Text = group.Text,

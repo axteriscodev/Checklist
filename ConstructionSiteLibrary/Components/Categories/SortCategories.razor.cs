@@ -1,6 +1,7 @@
 ﻿using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
-using Shared;
+using Shared.Defaults;
+using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Categories
 {
@@ -10,7 +11,7 @@ namespace ConstructionSiteLibrary.Components.Categories
         public EventCallback OnSaveComplete { get; set; }
 
         [Parameter]
-        public List<CategoryModel> Categories { get; set; } = [];
+        public List<TemplateCategoryModel> Categories { get; set; } = [];
 
         private bool onSaving = false;
 
@@ -38,7 +39,7 @@ namespace ConstructionSiteLibrary.Components.Categories
             StateHasChanged();
         }
 
-        private static void OrderElements(List<CategoryModel> lista)
+        private static void OrderElements(List<TemplateCategoryModel> lista)
         {
             for (int i = 0; i < lista.Count; i++)
             {

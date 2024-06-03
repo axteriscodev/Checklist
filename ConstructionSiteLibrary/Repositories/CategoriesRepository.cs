@@ -1,13 +1,15 @@
 ﻿using System.Text.Json;
 using ConstructionSiteLibrary.Managers;
 using Shared;
+using Shared.Defaults;
+using Shared.Templates;
 
 
 namespace ConstructionSiteLibrary.Repositories;
 
 public class CategoriesRepository(HttpManager httpManager)
 {
-    List<CategoryModel> Categories = [];
+    List<TemplateCategoryModel> Categories = [];
 
     List<SubjectModel> Subjects = [];
 
@@ -15,7 +17,7 @@ public class CategoriesRepository(HttpManager httpManager)
 
     #region  Categories
 
-    public async Task<List<CategoryModel>> GetCategories()
+    public async Task<List<TemplateCategoryModel>> GetCategories()
     {
         if (Categories.Count == 0)
         {
@@ -24,7 +26,7 @@ public class CategoriesRepository(HttpManager httpManager)
                 var response = await _httpManager.SendHttpRequest("Category/CategoriesList", "");
                 if (response.Code.Equals("0"))
                 {
-                    Categories = JsonSerializer.Deserialize<List<CategoryModel>>(response.Content.ToString() ?? "") ?? [];
+                    Categories = JsonSerializer.Deserialize<List<TemplateCategoryModel>>(response.Content.ToString() ?? "") ?? [];
                 }
             }
             catch (Exception e) 
@@ -36,7 +38,7 @@ public class CategoriesRepository(HttpManager httpManager)
         return Categories;
     }
 
-    public async Task<bool> SaveCategory(CategoryModel category)
+    public async Task<bool> SaveCategory(TemplateCategoryModel category)
     {
         var response = await _httpManager.SendHttpRequest("Category/SaveCategory", category);
 
@@ -50,7 +52,7 @@ public class CategoriesRepository(HttpManager httpManager)
         return false;
     }
 
-    public async Task<bool> UpdateCategories(List<CategoryModel> categories)
+    public async Task<bool> UpdateCategories(List<TemplateCategoryModel> categories)
     {
         var response = await _httpManager.SendHttpRequest("Category/UpdateCategories", categories);
         //NotificationService.Notify(response);
@@ -64,7 +66,7 @@ public class CategoriesRepository(HttpManager httpManager)
     }
 
     
-    public async Task<bool> HideCategories(List<CategoryModel> categories)
+    public async Task<bool> HideCategories(List<TemplateCategoryModel> categories)
     {
         var response = await _httpManager.SendHttpRequest("Category/HideCategories", categories);
         //NotificationService.Notify(response);

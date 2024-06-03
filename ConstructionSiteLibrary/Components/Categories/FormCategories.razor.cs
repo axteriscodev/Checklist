@@ -1,7 +1,8 @@
 ﻿using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
-using Shared;
+using Shared.Defaults;
+using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Categories;
 
@@ -77,11 +78,11 @@ public partial class FormCategories
         bool response;
         if (CreationMode)
         {
-            response = await CategoriesRepository.SaveCategory(new CategoryModel { Text = form.Nome ?? "" });
+            response = await CategoriesRepository.SaveCategory(new TemplateCategoryModel { Text = form.Nome ?? "" });
         }
         else
         {
-            response = await CategoriesRepository.UpdateCategories([new CategoryModel() { Id = form.Id, Text = form.Nome ?? "" }]);
+            response = await CategoriesRepository.UpdateCategories([new TemplateCategoryModel() { Id = form.Id, Text = form.Nome ?? "" }]);
         }
 
         //NotificationService.Notify(response);

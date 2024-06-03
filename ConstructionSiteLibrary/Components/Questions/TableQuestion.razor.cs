@@ -3,8 +3,9 @@ using ConstructionSiteLibrary.Managers;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Radzen;
-using Shared;
 using ConstructionSiteLibrary.Components.Utilities;
+using Shared.Defaults;
+using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Questions
 {
@@ -33,11 +34,11 @@ namespace ConstructionSiteLibrary.Components.Questions
         /// <summary>
         /// Riferimento al componente tabella
         /// </summary>
-        private RadzenDataGrid<QuestionModel>? grid;
+        private RadzenDataGrid<TemplateQuestionModel>? grid;
         /// <summary>
         /// Riferimento alla lista di questions
         /// </summary>
-        private List<QuestionModel> questions = [];
+        private List<TemplateQuestionModel> questions = [];
 
         ScreenComponent? screenComponent;
 

@@ -3,7 +3,7 @@ using System.Text.Json;
 using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Model;
 using ConstructionSiteLibrary.Services;
-using Shared;
+using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Repositories;
 

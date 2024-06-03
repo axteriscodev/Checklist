@@ -3,7 +3,8 @@ using ConstructionSiteLibrary.Model;
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
-using Shared;
+using Shared.Defaults;
+using Shared.Documents;
 
 
 namespace ConstructionSiteLibrary.Components.FormCompilation;
@@ -139,7 +140,7 @@ public partial class FormCompilation
     class VisualCategory
     {
         public bool ShowQuestion = true;
-        public CategoryModel Category { get; set; } = new();
+        public DocumentCategoryModel Category { get; set; } = new();
     }
 
     #endregion

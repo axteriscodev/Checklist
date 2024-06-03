@@ -1,7 +1,7 @@
 ﻿namespace TDatabase.Queries;
 
 using System.Diagnostics;
-using Shared;
+using Shared.Documents;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
 

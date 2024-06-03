@@ -1,7 +1,7 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
-using Shared;
+using Shared.Defaults;
 using TDatabase.Queries;
 
 namespace ServerHost.Controllers;

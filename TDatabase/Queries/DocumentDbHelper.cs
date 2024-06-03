@@ -1,8 +1,9 @@
 ﻿using System.Data.Common;
 using Shared;
+using Shared.Documents;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
-using DocumentModel = Shared.DocumentModel;
+using DocumentModel = Shared.Documents.DocumentModel;
 
 namespace TDatabase.Queries;
 
@@ -36,7 +37,7 @@ public class DocumentDbHelper
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
                                       orderby c.Order
-                                      select new CategoryModel()
+                                      select new DocumentCategoryModel()
                                       {
                                           Id = c.Id,
                                           Text = c.Text,
@@ -99,7 +100,7 @@ public class DocumentDbHelper
                                                                               Date = att.DateTime,
                                                                               //TODO manca il binding alla path
                                                                           }).ToList(),
-                                                       }).Cast<object>().ToList()
+                                                       }).ToList()
                                       }).ToList(),
                         ConstructorSite = (from cs in db.ConstructorSites
                                            where cs.Id == d.IdConstructorSite

@@ -3,7 +3,7 @@ using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
-using Shared;
+using Shared.Documents;
 
 namespace ConstructionSiteLibrary.Components.ConstructorSites;
 

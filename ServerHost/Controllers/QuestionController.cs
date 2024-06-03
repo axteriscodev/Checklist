@@ -1,7 +1,7 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
-using Shared;
+using Shared.Templates;
 using TDatabase.Queries;
 
 namespace ServerHost.Controllers
@@ -39,7 +39,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public async Task<AXT_WebResponse> SaveQuestion(QuestionModel newQuestion)
+        public async Task<AXT_WebResponse> SaveQuestion(TemplateQuestionModel newQuestion)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -62,7 +62,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public async Task<AXT_WebResponse> UpdateQuestions(List<QuestionModel> questions)
+        public async Task<AXT_WebResponse> UpdateQuestions(List<TemplateQuestionModel> questions)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -85,7 +85,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public async Task<AXT_WebResponse> HideQuestions(List<QuestionModel> questions)
+        public async Task<AXT_WebResponse> HideQuestions(List<TemplateQuestionModel> questions)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -136,7 +136,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public async Task<AXT_WebResponse> SaveChoice(ChoiceModel newChoice)
+        public async Task<AXT_WebResponse> SaveChoice(TemplateChoiceModel newChoice)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -159,7 +159,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public async Task<AXT_WebResponse> UpdateChoices(List<ChoiceModel> choices)
+        public async Task<AXT_WebResponse> UpdateChoices(List<TemplateChoiceModel> choices)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -182,7 +182,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public async Task<AXT_WebResponse> HideChoices(List<ChoiceModel> choices)
+        public async Task<AXT_WebResponse> HideChoices(List<TemplateChoiceModel> choices)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();

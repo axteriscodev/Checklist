@@ -1,27 +1,28 @@
 ﻿using ConstructionSiteLibrary.Managers;
-using Shared;
+using Shared.Defaults;
+using Shared.Templates;
 using System.Text.Json;
 
 namespace ConstructionSiteLibrary.Repositories;
 
 public class QuestionRepository(HttpManager httpManager)
 {
-    public List<QuestionModel> Questions { get; set; } = [];
-    public List<ChoiceModel> Choices { get; set; } = [];
+    public List<TemplateQuestionModel> Questions { get; set; } = [];
+    public List<TemplateChoiceModel> Choices { get; set; } = [];
 
     private HttpManager _httpManager = httpManager;
 
 
     #region Questions
 
-    public async Task<List<QuestionModel>> GetQuestions()
+    public async Task<List<TemplateQuestionModel>> GetQuestions()
     {
         if(Questions.Count == 0)
         {
             var response = await _httpManager.SendHttpRequest("Question/QuestionsList", "");
             if (response.Code.Equals("0"))
             {
-                Questions = JsonSerializer.Deserialize<List<QuestionModel>>(response.Content.ToString() ?? "") ?? [];
+                Questions = JsonSerializer.Deserialize<List<TemplateQuestionModel>>(response.Content.ToString() ?? "") ?? [];
             }
         }
         return Questions;
@@ -72,14 +73,14 @@ public class QuestionRepository(HttpManager httpManager)
 
     #region Choices
 
-    public async Task<List<ChoiceModel>> GetChoices()
+    public async Task<List<TemplateChoiceModel>> GetChoices()
     {
         if (Choices.Count == 0)
         {
             var response = await _httpManager.SendHttpRequest("Question/ChoicesList", "");
             if (response.Code.Equals("0"))
             {
-                Choices = JsonSerializer.Deserialize<List<ChoiceModel>>(response.Content.ToString() ?? "") ?? [];
+                Choices = JsonSerializer.Deserialize<List<TemplateChoiceModel>>(response.Content.ToString() ?? "") ?? [];
             }
         }
         return Choices;
@@ -112,7 +113,7 @@ public class QuestionRepository(HttpManager httpManager)
         return false;
     }
 
-    public async Task<bool> HideChoices(List<ChoiceModel> choices)
+    public async Task<bool> HideChoices(List<TemplateChoiceModel> choices)
     {
         var response = await _httpManager.SendHttpRequest("Question/HideChoices", choices);
         //NotificationService.Notify(response);

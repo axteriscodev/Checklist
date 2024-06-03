@@ -1,5 +1,6 @@
 ﻿@using ConstructionSiteLibrary.Repositories
 @using Shared;
+@using Shared.Templates;
 
 @inject CategoriesRepository CategoriesRepository
 @inject DialogService DialogService
@@ -21,15 +22,15 @@ else
                           Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
             <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
                           Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" />
-            <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@categories" TItem="CategoryModel"
+            <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@categories" TItem="TemplateCategoryModel"
                             AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
                             AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left">
 
                 <Columns>
                     @*<RadzenDataGridColumn TItem="CategoryModel" Property="Id" Title="Id" Width="40px" />*@
-                    <RadzenDataGridColumn TItem="CategoryModel" Property="Order" Title="N." Width="40px" />
-                    <RadzenDataGridColumn TItem="CategoryModel" Property="Text" Title="Nome" Width="120px" />
-                    <RadzenDataGridColumn TItem="CategoryModel" Title="Azioni" Width="60px" Sortable="false">
+                    <RadzenDataGridColumn TItem="TemplateCategoryModel" Property="Order" Title="N." Width="40px" />
+                    <RadzenDataGridColumn TItem="TemplateCategoryModel" Property="Text" Title="Nome" Width="120px" />
+                    <RadzenDataGridColumn TItem="TemplateCategoryModel" Title="Azioni" Width="60px" Sortable="false">
                         <Template Context="data">
                             <RadzenRow JustifyContent="JustifyContent.SpaceAround">
                                 @* Mostro i bottoni solo se ho i permessi di modifica *@

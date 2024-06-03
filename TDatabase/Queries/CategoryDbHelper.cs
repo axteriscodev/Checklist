@@ -1,4 +1,4 @@
-﻿using Shared;
+﻿using Shared.Defaults;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
@@ -13,21 +13,6 @@ namespace TDatabase.Queries
                 Id = x.Id,
                 Text = x.Text,
                 Order = x.Order,
-                Questions = db.Questions.Where(q => q.IdCategory == x.Id).Select(q => new DocumentQuestionModel()
-                {
-                    Id = q.Id,
-                    Text = q.Text,
-                    Choices = (from qc in db.QuestionChoices
-                               join c in db.Choices on qc.IdChoice equals c.Id
-                               where qc.IdQuestion == q.Id
-                               select new DocumentChoiceModel()
-                               {
-                                   Id = c.Id,
-                                   //Tag = c.Tag,
-                                   Value = c.Value,
-                                   Reportable = c.Reportable,
-                               }).ToList(),
-                }).Cast<object>().ToList(),
             }).OrderBy(x => x.Order).ToList();
         }
 
@@ -38,14 +23,14 @@ namespace TDatabase.Queries
             {
                 var nextId = (db.Categories.Any() ? db.Categories.Max(x => x.Id) : 0) + 1;
                 var nextOrder = (db.Categories.Any() ? db.Categories.Max(x => x.Order) : 0) + 1;
-                Category newMacro = new()
+                Category newCat = new()
                 {
                     Id = nextId,
                     Text = category.Text,
                     Order = nextOrder,
                     Active = true
                 };
-                db.Categories.Add(newMacro);
+                db.Categories.Add(newCat);
                 await db.SaveChangesAsync();
                 id = nextId;
             }

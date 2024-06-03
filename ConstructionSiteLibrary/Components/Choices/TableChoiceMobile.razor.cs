@@ -4,7 +4,8 @@ using ConstructionSiteLibrary.Managers;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
-using Shared;
+using Shared.Defaults;
+using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Choices;
 
@@ -29,7 +30,7 @@ public partial class TableChoiceMobile
     /// <summary>
     /// Riferimento alla lista di choices
     /// </summary>
-    private List<ChoiceModel> list = [];
+    private List<TemplateChoiceModel> list = [];
 
 
     ScreenComponent screenComponent;
@@ -54,7 +55,7 @@ public partial class TableChoiceMobile
         await DialogService.OpenAsync<FormChoice>("Aggiorna argomento", parameters: param, options: newOptions);
     }
 
-    private async Task OpenUpdateForm(ChoiceModel model)
+    private async Task OpenUpdateForm(TemplateChoiceModel model)
     {
         var width = screenComponent.ScreenSize.Width;
 
@@ -75,7 +76,7 @@ public partial class TableChoiceMobile
         await DialogService.OpenAsync<FormChoice>("Aggiorna scelta", parameters: param, options: newOptions);
     }
 
-    private async Task Disable(ChoiceModel model)
+    private async Task Disable(TemplateChoiceModel model)
     {
         var titolo = "Disattivazione scelta";
         var text = "Vuoi disattivare la scelta: " + model.Value + "?";

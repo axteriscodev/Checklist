@@ -3,7 +3,8 @@ using ConstructionSiteLibrary.Managers;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
-using Shared;
+using Shared.Defaults;
+using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Questions;
 
@@ -29,7 +30,7 @@ public partial class TableQuestionMobile
         /// <summary>
         /// Riferimento alla lista di questions
         /// </summary>
-        private List<QuestionModel> questions = [];
+        private List<TemplateQuestionModel> questions = [];
 
         ScreenComponent? screenComponent;
 

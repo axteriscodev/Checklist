@@ -33,13 +33,7 @@ else
                     <Helper>
                         <RadzenRequiredValidator Component="Categoria" Popup=false Text="Il campo Categoria è obbligatorio" />
                     </Helper>
-                </RadzenFormField>
-                <RadzenFormField Text="Argomento" Variant="@variant">
-                    <ChildContent>
-                        <RadzenDropDown Data="@subjects" TextProperty="Text" ValueProperty="Id" @bind-Value="@form.IdSubject"
-                            AllowClear="true" AllowFiltering="true"/>
-                    </ChildContent>
-                </RadzenFormField>             
+                </RadzenFormField>           
                 <RadzenFormField Text="Note" Variant="@variant">
                     <ChildContent>
                         <RadzenTextBox Name="Note" @bind-Value="@form.Note" />

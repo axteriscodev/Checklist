@@ -2,7 +2,7 @@
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
-using Shared;
+using Shared.Defaults;
 
 namespace ConstructionSiteLibrary.Components.Choices;
 

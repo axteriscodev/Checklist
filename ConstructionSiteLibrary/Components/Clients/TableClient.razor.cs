@@ -1,7 +1,7 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
-using Shared;
+using Shared.Documents;
 
 namespace ConstructionSiteLibrary.Components.Clients;
 

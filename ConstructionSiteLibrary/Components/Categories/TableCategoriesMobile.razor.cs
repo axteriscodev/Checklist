@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
-using Shared;
+using Shared.Defaults;
+using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Categories;
 
 public partial class TableCategoriesMobile
 {
-     private List<CategoryModel> categories = [];
+     private List<TemplateCategoryModel> categories = [];
 
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -116,7 +117,7 @@ public partial class TableCategoriesMobile
         await DialogService.OpenAsync<FormCategories>("Aggiorna categoria", parameters: param, options: newOptions);
     }
 
-    private async Task Hide(CategoryModel category)
+    private async Task Hide(TemplateCategoryModel category)
     {
         var titolo = "Disattivazione sezione";
         var text = "Vuoi disattivare la sezione: " + category.Text + "?";

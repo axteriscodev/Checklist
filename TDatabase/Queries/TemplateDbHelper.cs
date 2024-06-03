@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using Shared;
+using Shared.Templates;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
@@ -33,7 +34,7 @@ public class TemplateDbHelper
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
                                       orderby c.Order
-                                      select new CategoryModel()
+                                      select new TemplateCategoryModel()
                                       {
                                           Id = c.Id,
                                           Text = c.Text,
@@ -54,13 +55,13 @@ public class TemplateDbHelper
                                                              where qch.IdQuestion == q.Id
                                                              && ch.Id == qch.IdChoice
                                                              && ch.Active == true
-                                                             select new TemplateChoicesModel()
+                                                             select new TemplateChoiceModel()
                                                              {
                                                                  Id = ch.Id,
                                                                  Value = ch.Value,
                                                                  Reportable = ch.Reportable,
                                                              }).ToList()
-                                                       }).Cast<object>().ToList()
+                                                       }).ToList()
                                       }).ToList(),
 
                     }).ToList();
@@ -97,8 +98,6 @@ public class TemplateDbHelper
                         IdTemplate = template.IdTemplate,
                         IdQuestion = tq.Id,
                         Order = tq.Order,
-                        // Printable = true,
-                        // Hidden = false
                     };
                     db.QuestionChosens.Add(qc);
                     nextQuestionChosenId++;

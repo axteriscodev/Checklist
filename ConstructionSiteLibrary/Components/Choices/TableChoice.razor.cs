@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Radzen;
-using Shared;
 using ConstructionSiteLibrary.Repositories;
 using ConstructionSiteLibrary.Components.Utilities;
+using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Choices
 {
@@ -32,11 +32,11 @@ namespace ConstructionSiteLibrary.Components.Choices
         /// <summary>
         /// Riferimento al componente tabella
         /// </summary>
-        private RadzenDataGrid<ChoiceModel>? grid;
+        private RadzenDataGrid<TemplateChoiceModel>? grid;
         /// <summary>
         /// Riferimento alla lista di choices
         /// </summary>
-        private List<ChoiceModel> list = [];
+        private List<TemplateChoiceModel> list = [];
 
 
         ScreenComponent screenComponent;
@@ -61,7 +61,7 @@ namespace ConstructionSiteLibrary.Components.Choices
             await DialogService.OpenAsync<FormChoice>("Aggiorna argomento", parameters: param, options: newOptions);
         }
 
-        private async Task OpenUpdateForm(ChoiceModel model)
+        private async Task OpenUpdateForm(TemplateChoiceModel model)
         {
             var width = screenComponent.ScreenSize.Width;
 
@@ -82,7 +82,7 @@ namespace ConstructionSiteLibrary.Components.Choices
             await DialogService.OpenAsync<FormChoice>("Aggiorna scelta", parameters: param, options: newOptions);
         }
 
-        private async Task Disable(ChoiceModel model)
+        private async Task Disable(TemplateChoiceModel model)
         {
             var titolo = "Disattivazione scelta";
             var text = "Vuoi disattivare la scelta: " + model.Value + "?";

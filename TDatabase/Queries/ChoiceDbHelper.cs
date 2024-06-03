@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Shared.Defaults;
+using Shared.Templates;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
@@ -7,17 +8,19 @@ namespace TDatabase.Queries
     public class ChoiceDbHelper
     {
 
-        public static List<ChoiceModel> Select(DB db)
+        public static List<TemplateChoiceModel> Select(DB db)
         {
-            return [.. db.Choices.Where(x=>x.Active == true).Select(c => new ChoiceModel
+            return [.. db.Choices.Where(x=>x.Active == true).Select(c => new TemplateChoiceModel
             {
                 Id = c.Id,
                 Value = c.Value,
                 Tag = c.Tag,
+                Reportable = c.Reportable,
+                Color = c.Color,
             })];
         }
 
-        public static async Task<int> Insert(DB db, ChoiceModel choice)
+        public static async Task<int> Insert(DB db, TemplateChoiceModel choice)
         {
             var choiseId = 0;
             try
@@ -28,6 +31,7 @@ namespace TDatabase.Queries
                     Id = nextId,
                     Value = choice.Value,
                     Tag = choice.Tag,
+                    Reportable = choice.Reportable,
                     Active = true
                 };
                 db.Choices.Add(newChoice);
@@ -38,7 +42,7 @@ namespace TDatabase.Queries
             return choiseId;
         }
 
-        public static async Task<List<int>> Update(DB db, List<ChoiceModel> choices)
+        public static async Task<List<int>> Update(DB db, List<TemplateChoiceModel> choices)
         {
             List<int> modified = [];
             try
@@ -50,6 +54,7 @@ namespace TDatabase.Queries
                     {
                         c.Value = elem.Value;
                         c.Tag = elem.Tag;
+                        c.Reportable = elem.Reportable;
                         if( await db.SaveChangesAsync() > 0)
                         {
                             modified.Add(elem.Id);
@@ -62,7 +67,7 @@ namespace TDatabase.Queries
             return modified;
         }
 
-        public static async Task<List<int>> Hide(DB db, List<ChoiceModel> choices)
+        public static async Task<List<int>> Hide(DB db, List<TemplateChoiceModel> choices)
         {
             List<int> hiddenItems = [];
             try
