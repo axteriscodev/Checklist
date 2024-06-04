@@ -23,6 +23,7 @@ public class ConstructorSiteDbHelper
             JobDescription = x.JobDescription,
             Address = x.Address,
             StartDate = x.StartDate,
+            EndDate = x.EndDate,
             Client = db.Clients.Where(c => c.Id == x.IdClient).Select(nc => new ClientModel()
             {
                 Id = nc.Id,
@@ -43,6 +44,7 @@ public class ConstructorSiteDbHelper
                 JobDescription = constructorSite.JobDescription,
                 Address = constructorSite.Address,
                 StartDate = constructorSite.StartDate,
+                EndDate = constructorSite.EndDate,
                 IdClient = constructorSite.Client.Id
             };
             db.ConstructorSites.Add(newConstructorSite);
@@ -67,6 +69,7 @@ public class ConstructorSiteDbHelper
                     m.Id = elem.Id;
                     m.Address = elem.Address;
                     m.StartDate = elem.StartDate;
+                    m.EndDate = elem.EndDate;
                     m.IdClient = elem.Client.Id;
                     m.JobDescription = elem.JobDescription;
                     if (await db.SaveChangesAsync() > 0)

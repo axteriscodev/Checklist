@@ -333,6 +333,9 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.StartDate)
                 .HasColumnType("datetime")
                 .HasColumnName("START_DATE");
+            entity.Property(e => e.EndDate)
+                .HasColumnType("datetime")
+                .HasColumnName("END_DATE");
 
             entity.HasOne(d => d.IdClientNavigation).WithMany(p => p.ConstructorSites)
                 .HasForeignKey(d => d.IdClient)

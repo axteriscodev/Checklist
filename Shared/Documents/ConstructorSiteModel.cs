@@ -18,4 +18,7 @@ public class ConstructorSiteModel
 
     [JsonPropertyName("startDate")]
     public DateTime StartDate { get; set; } = DateTime.Now;
+
+    [JsonPropertyName("endDate")]
+    public DateTime? EndDate { get; set; }
 }

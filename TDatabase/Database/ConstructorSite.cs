@@ -16,6 +16,7 @@ public partial class ConstructorSite
     public string Address { get; set; } = null!;
 
     public DateTime StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
 
     public bool Active { get; set; }
 
