@@ -23,15 +23,16 @@ else
                           Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" /> *@
             <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@templates" TItem="TemplateModel"
                             AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
-                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left">
+                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left"
+                            RowClick="@((data) => OnTemplateSelected(data.Data))">
 
                 <Columns>
                     @*<RadzenDataGridColumn TItem="CategoryModel" Property="Id" Title="Id" Width="40px" />*@
                     <RadzenDataGridColumn TItem="TemplateModel" Property="TitleTemplate" Title="Titolo" Width="120px" />
                     <RadzenDataGridColumn TItem="TemplateModel" Property="CreationDate" Title="Date" Width="40px" />
-                    <RadzenDataGridColumn TItem="TemplateModel" Title="Azioni" Width="60px" Sortable="false">
+                    <RadzenDataGridColumn TItem="TemplateModel" Title="Azioni" Width="40px" Sortable="false">
                         <Template Context="data">
-                            <RadzenRow JustifyContent="JustifyContent.SpaceAround">
+                            <RadzenRow JustifyContent="JustifyContent.SpaceAround" >
                                 @* Mostro i bottoni solo se ho i permessi di modifica *@
                                 @*<RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
                                               Click="@(()=>OpenUpdateForm(data))" class="buttonEdit" Style="width: 45%;" /> *@

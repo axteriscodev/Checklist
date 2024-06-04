@@ -1,6 +1,7 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using Radzen.Blazor;
 using Shared.Templates;
@@ -45,6 +46,9 @@ public partial class TableTemplates
     [Parameter]
     public string Param { get; set; } = "";
 
+    [Parameter] 
+    public EventCallback<TemplateModel> GetTemplate { get; set; }
+
     ScreenComponent screenComponent;
 
     protected override async Task OnInitializedAsync()
@@ -76,6 +80,11 @@ public partial class TableTemplates
                 await ReloadTable();
             }
         }
+    }
+
+    private void OnTemplateSelected(TemplateModel selectedTemplate)
+    {
+        GetTemplate.InvokeAsync(selectedTemplate);
     }
 
     private async Task ReloadTable()

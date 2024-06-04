@@ -1,9 +1,22 @@
 ﻿@using ConstructionSiteLibrary.Components.Templates;
+@using Shared.Templates;
 
 @attribute [Route(PageRouting.TemplateCreationPage)]
 
 <h3>Creazione Documenti</h3>
 
-<TableTemplates />
+<TableTemplates GetTemplate="(tm) => TemplateSelected(tm)"/>
 
-<TemplateCreation />
+<TemplateCreation SelectedTemplate=@selectedTemplate/>
+
+@code
+{
+    TemplateModel? selectedTemplate;
+
+    public void TemplateSelected(TemplateModel tm)
+    {
+        selectedTemplate = tm;
+
+        StateHasChanged();
+    }
+}

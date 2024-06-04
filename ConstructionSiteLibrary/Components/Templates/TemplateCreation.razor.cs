@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Runtime.Serialization.Formatters;
+using System.Security.Cryptography.X509Certificates;
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -17,6 +18,7 @@ public partial class TemplateCreation
     //private IEnumerable<int> selected = [1,3,6];
 
     private List<IdCategoryAndQuestions> groups = [];
+
     private string title = "";
 
 
@@ -51,6 +53,9 @@ public partial class TemplateCreation
     [Parameter]
     public string Param { get; set; } = "";
 
+    [Parameter]
+    public TemplateModel? SelectedTemplate { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         initialLoading = true;
@@ -58,6 +63,16 @@ public partial class TemplateCreation
         await LoadData();
         InitData();
         initialLoading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (SelectedTemplate is not null)
+        {
+            initialLoading = true;
+            await LoadData(SelectedTemplate);
+            initialLoading = false;
+        }
     }
 
     private void InitData()
@@ -72,16 +87,54 @@ public partial class TemplateCreation
         }
     }
 
-    private async Task LoadData()
+    private async Task LoadData(TemplateModel? selectedTemplate = null)
     {
+        groups = [];
         categories = await CategoriesRepository.GetCategories();
         count = categories.Count;
+
+        title = selectedTemplate?.TitleTemplate ?? "";
+
         foreach (var category in categories)
         {
+            List<int> templateSelectedId = [];
+
+            if (selectedTemplate is not null)
+            {
+                var tempCat = selectedTemplate.Categories.Where(c => c.Id == category.Id).FirstOrDefault();
+
+                if (tempCat is not null)
+                {
+                    foreach (var question in tempCat.Questions)
+                    {
+                        templateSelectedId.Add(question.Id);
+                    }
+                }
+
+
+            }
+
+            bool? groupState = null;
+
+            if (templateSelectedId.Count == 0)
+            {
+                groupState = false;
+            }
+            else if (templateSelectedId.Count == category.Questions.Count)
+            {
+                groupState = true;
+            }
 
             //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
-            groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, Questions = category.Questions });
+            groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, State = groupState, Questions = category.Questions, SelectedQuestionIds = templateSelectedId });
         }
+
+
+    }
+
+    private async void OnTemplateSelected(int templateId)
+    {
+        var template = await TemplatesRepository.GetTemplateById(templateId);
     }
 
     private async Task ReloadTable()
