@@ -4,7 +4,9 @@
 @inject ICameraService CameraService;
 
 
-@page "/"
+@attribute [Route(GlobalVariables.HomePage)]
+
+
 <ScreenComponent OnScreenSizeChanged="@ScreenSizeChanged" OnScreenDimensionChanged="@ScreenDimensionChanged" />
 <PageTitle>Construction Site Report</PageTitle>
 

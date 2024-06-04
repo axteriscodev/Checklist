@@ -3,14 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
 using Shared.Documents;
 using TDatabase.Queries;
+using Shared.ApiRouting;
 
 namespace ServerHost.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
+//[Route("[controller]/[action]")]
 public class DocumentController : DefaultController
 {
     [LogAction]
+    [Route(ApiRouting.SiteDocumentsList)]
     [HttpPost()]
     public AXT_WebResponse DocumentsList([FromBody]int idDocument)
     {
@@ -34,6 +36,7 @@ public class DocumentController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.SiteDocumentsList)]
     [HttpPost()]
     public AXT_WebResponse SiteDocumentsList([FromBody] int idSite)
     {
@@ -57,6 +60,7 @@ public class DocumentController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.SaveDocument)]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveDocument(DocumentModel newDocument)
     {
@@ -80,6 +84,7 @@ public class DocumentController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.UpdateDocument)]
     [HttpPost]
     public async Task<AXT_WebResponse> UpdateDocument(List<DocumentModel> documents)
     {
@@ -103,6 +108,7 @@ public class DocumentController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.HideDocuments)]
     [HttpPost]
     public async Task<AXT_WebResponse> HideDocuments(List<DocumentModel> documents)
     {

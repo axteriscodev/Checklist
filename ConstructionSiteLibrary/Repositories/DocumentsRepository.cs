@@ -3,6 +3,7 @@ using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Services;
 using ConstructionSiteLibrary.Model;
 using Shared.Documents;
+using Shared.ApiRouting;
 
 namespace ConstructionSiteLibrary.Repositories;
 
@@ -33,7 +34,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
             //se sono online
             if (online)
             {
-                var response = await _httpManager.SendHttpRequest("Document/DocumentsList", TUTTI);
+                var response = await _httpManager.SendHttpRequest(ApiRouting.DocumentsList, TUTTI);
                 if (response.Code.Equals("0"))
                 {
 
@@ -65,7 +66,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
     public async Task<List<DocumentModel>> GetSiteDocuments(int siteId)
     {
         List<DocumentModel> docs = [];
-        var response = await _httpManager.SendHttpRequest("Document/SiteDocumentsList", siteId);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.SiteDocumentsList, siteId);
         if (response.Code.Equals("0"))
         {
             docs = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
@@ -85,7 +86,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
             }
             if (online)
             {
-                var response = await _httpManager.SendHttpRequest("Document/DocumentsList", idDocument);
+                var response = await _httpManager.SendHttpRequest(ApiRouting.DocumentsList, idDocument);
                 if (response.Code.Equals("0"))
                 {
                     var documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
@@ -121,7 +122,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
             }
             if (online)
             {
-                var response = await _httpManager.SendHttpRequest("Document/UpdateDocument", documents);
+                var response = await _httpManager.SendHttpRequest(ApiRouting.UpdateDocument, documents);
                 if (response.Code.Equals("0"))
                 {
                     Documents.Clear();
@@ -154,7 +155,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
         var result = false;
         try
         {
-            var response = await _httpManager.SendHttpRequest("Document/SaveDocument", document);
+            var response = await _httpManager.SendHttpRequest(ApiRouting.SaveDocument, document);
             if (response.Code.Equals("0"))
             {
                 Documents.Clear();
@@ -172,7 +173,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
         var result = false;
         try
         {
-            var response = await _httpManager.SendHttpRequest("Document/HideQuestion", documents);
+            var response = await _httpManager.SendHttpRequest(ApiRouting.HideDocuments, documents);
             if (response.Code.Equals("0"))
             {
                 Documents.Clear();
@@ -195,7 +196,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
         {
             try
             {
-                var response = await _httpManager.SendHttpRequest("Document/DocumentsList", TUTTI);
+                var response = await _httpManager.SendHttpRequest(ApiRouting.DocumentsList, TUTTI);
                 if (response.Code.Equals("0"))
                 {
                     Documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
@@ -220,7 +221,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 var modifiedDocuments = content is not null ? JsonSerializer.Deserialize<List<DocumentModel>>(content) ?? [] : [];
                 if (modifiedDocuments.Count > 0)
                 {
-                    var response = await _httpManager.SendHttpRequest("Document/UpdateDocument", modifiedDocuments);
+                    var response = await _httpManager.SendHttpRequest(ApiRouting.UpdateDocument, modifiedDocuments);
                     result = response.Code.Equals("0");
                 }
             }
@@ -239,7 +240,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
 
     private async Task CheckIfOnline()
     {
-        var response = await _httpManager.SendHttpRequest("Fuctionality/Check", "");
+        var response = await _httpManager.SendHttpRequest(ApiRouting.CheckOnline, "");
         if (response.Code.Equals("0"))
         {
             online = true;

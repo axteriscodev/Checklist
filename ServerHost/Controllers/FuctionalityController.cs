@@ -1,6 +1,7 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
+using Shared.ApiRouting;
 using System.Collections.Generic;
 using TDatabase.Queries;
 
@@ -8,10 +9,10 @@ namespace ServerHost.Controllers
 {
 
     [ApiController]
-    [Route("[controller]/[action]")]
     public class FuctionalityController : Controller
     {
         [LogAction]
+        [Route(ApiRouting.CheckOnline)]
         [HttpPost]
         public AXT_WebResponse Check()
         {

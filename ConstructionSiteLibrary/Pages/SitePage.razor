@@ -1,8 +1,11 @@
-﻿
+﻿@using ConstructionSiteLibrary.Components.Documents
 @inject ConstructorSitesRepository SiteRepository
 
+@attribute [Route(GlobalVariables.SitePage + "{SiteId:int}")]
 
-@page "/site/{SiteId:int}"
+
+
+<CardListDocuments  SiteId="SiteId"/>
 
 
 @code{
