@@ -13,6 +13,9 @@ public class ConstructorSiteModel
     [JsonPropertyName("client")]
     public ClientModel? Client { get; set; }
 
+    [JsonPropertyName("companies")]
+    public List<CompanyModel> Companies { get; set; } = [];
+
     [JsonPropertyName("jobDescription")]
     public string JobDescription { get; set; } = "";
 

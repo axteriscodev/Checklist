@@ -1,6 +1,8 @@
 ﻿@using Shared.Documents
 
 @inject ConstructorSitesRepository SiteRepository
+@inject CompaniesRepository CompaniesRepository
+@inject ClientsRepository ClientsRepository
 
 @if (onLoading)
 {
@@ -39,6 +41,28 @@ else
                     <Helper>
                         <RadzenRequiredValidator Component="Indirizzo" Popup=false Text="Il campo Indirizzo è obbligatorio" />
                     </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Cliente" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenDropDownDataGrid Data="@clients" @bind-Value="@form.Client" TextProperty="Name"
+                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="Cliente">
+                            <Columns>
+                                <RadzenDropDownDataGridColumn Property="Id" Title="N." Width="40px" />
+                                <RadzenDropDownDataGridColumn Property="Name" Title="Nome" Width="200px" />
+                            </Columns>
+                        </RadzenDropDownDataGrid>
+                    </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Aziende" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenDropDownDataGrid Data="@companies" @bind-Value="@form.Companies" TextProperty="CompanyName" Multiple="true"
+                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="companies">
+                            <Columns>
+                                <RadzenDropDownDataGridColumn Property="Id" Title="N." Width="40px" />
+                                <RadzenDropDownDataGridColumn Property="CompanyName" Title="Nome" Width="200px" />
+                            </Columns>
+                        </RadzenDropDownDataGrid>
+                    </ChildContent>
                 </RadzenFormField>
                 <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
                               BusyText="Salvataggio in corso" />

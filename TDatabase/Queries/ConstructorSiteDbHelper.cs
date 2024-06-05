@@ -73,7 +73,7 @@ public class ConstructorSiteDbHelper
                     m.Address = elem.Address;
                     m.StartDate = elem.StartDate;
                     m.EndDate = elem.EndDate;
-                    m.IdClient = elem.Client.Id;
+                    m.IdClient = elem.Client?.Id;
                     m.JobDescription = elem.JobDescription;
                     if (await db.SaveChangesAsync() > 0)
                     {

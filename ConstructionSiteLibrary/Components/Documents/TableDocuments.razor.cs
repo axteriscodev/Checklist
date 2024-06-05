@@ -121,6 +121,10 @@ namespace ConstructionSiteLibrary.Components.Documents
              await DialogService.OpenAsync<FormConstructorSite>("Cantiere", parameters: param, options: newOptions);
         }
 
+        private void Back()
+        {
+            NavigationService.Back();
+        }
         private async Task Reload()
         {
             DialogService.Close();
