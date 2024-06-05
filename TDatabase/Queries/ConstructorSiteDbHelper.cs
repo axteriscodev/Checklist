@@ -23,7 +23,7 @@ public class ConstructorSiteDbHelper
             Name = x.Name,
             JobDescription = x.JobDescription,
             Address = x.Address,
-            StartDate = x.StartDate,
+            StartDate = x.StartDate ?? DateTime.Now,
             EndDate = x.EndDate,
             Client = db.Clients.Where(c => c.Id == x.IdClient).Select(nc => new ClientModel()
             {
