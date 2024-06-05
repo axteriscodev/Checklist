@@ -11,7 +11,10 @@ public class ConstructorSiteModel
     public string Name { get; set; } = "";
 
     [JsonPropertyName("client")]
-    public ClientModel Client { get; set; } = new ClientModel();
+    public ClientModel? Client { get; set; }
+
+    [JsonPropertyName("companies")]
+    public List<CompanyModel> Companies { get; set; } = [];
 
     [JsonPropertyName("jobDescription")]
     public string JobDescription { get; set; } = "";
@@ -20,7 +23,7 @@ public class ConstructorSiteModel
     public string Address { get; set; } = "";
 
     [JsonPropertyName("startDate")]
-    public DateTime StartDate { get; set; } = DateTime.Now;
+    public DateTime? StartDate { get; set; } = DateTime.Now;
 
     [JsonPropertyName("endDate")]
     public DateTime? EndDate { get; set; }
