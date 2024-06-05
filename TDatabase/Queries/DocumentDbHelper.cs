@@ -105,7 +105,7 @@ public class DocumentDbHelper
                                            {
                                                Id = cs.Id,
                                                JobDescription = cs.JobDescription,
-                                               StartDate = cs.StartDate,
+                                               StartDate = cs.StartDate ?? DateTime.Now,
                                                Address = cs.Address,
                                                Client = (from cl in db.Clients
                                                          where cl.Id == cs.IdClient
@@ -130,9 +130,9 @@ public class DocumentDbHelper
                                      select new CompanyModel()
                                      {
                                          Id = comp.Id,
-                                         Name = comp.Name,
+                                         CompanyName = comp.CompanyName ?? "",
                                          Address = comp.Address ?? "",
-                                         VatCode = comp.Vatcode,
+                                         VatCode = comp.Vatcode ?? "",
                                          Present = compDoc.Present
                                      }).ToList(),
                         Notes = (from n in db.Notes
@@ -179,7 +179,7 @@ public class DocumentDbHelper
                         {
                             Id = cs.Id,
                             JobDescription = cs.JobDescription,
-                            StartDate = cs.StartDate,
+                            StartDate = cs.StartDate ?? DateTime.Now,
                             Address = cs.Address,
                             Client = (from cl in db.Clients
                                       where cl.Id == cs.IdClient
