@@ -23,6 +23,7 @@ namespace Shared.ApiRouting
         public const string SaveDocument = "SaveDocument";
         public const string UpdateDocument = "UpdateDocument";
         public const string HideDocuments = "HideDocuments";
+        public const string MeteoConditionsList = "MeteoConditionsList";
 
         #endregion
 
