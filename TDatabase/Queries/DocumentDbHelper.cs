@@ -222,7 +222,7 @@ public class DocumentDbHelper
             Document newDocument = new()
             {
                 Id = nextId,
-                IdConstructorSite = document.ConstructorSite?.Id ?? 0,
+                IdConstructorSite = document.ConstructorSite.Id,
                 IdClient = document.Client?.Id,
                 IdTemplate = document.IdTemplate,
                 CreationDate = document.CreationDate,

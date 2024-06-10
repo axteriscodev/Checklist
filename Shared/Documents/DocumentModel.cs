@@ -35,7 +35,7 @@ public class DocumentModel
     public ClientModel? Client { get; set; }
 
     [JsonPropertyName("constructorSite")]
-    public ConstructorSiteModel? ConstructorSite { get; set; }
+    public ConstructorSiteModel ConstructorSite { get; set; } = new();
 
     [JsonPropertyName("categories")]
     public List<DocumentCategoryModel> Categories { get; set; } = [];
