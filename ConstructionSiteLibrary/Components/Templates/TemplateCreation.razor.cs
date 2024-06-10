@@ -175,7 +175,7 @@ public partial class TemplateCreation
             Categories = templateCategories,
         };
 
-        await TemplatesRepository.SaveDocument(document);
+        //await TemplatesRepository.SaveDocument(document);
         onSaving = false;
     }
 
