@@ -10,6 +10,9 @@ public class DocumentModel
     [JsonPropertyName("idTemplate")]
     public int IdTemplate { get; set; }
 
+    [JsonPropertyName("meteoCondition")]
+    public MeteoConditionModel? MeteoCondition { get; set; }
+
     [JsonPropertyName("title")]
     public string Title { get; set; } = "";
 
