@@ -1,4 +1,7 @@
-﻿namespace ConstructionSiteLibrary.Components.Templates.Wizard;
+﻿using ConstructionSiteLibrary.Components.Utilities;
+
+namespace ConstructionSiteLibrary.Components.Templates.Wizard;
+
 
 public partial class WizardTemplateCreation
 {

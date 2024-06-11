@@ -1,4 +1,6 @@
-﻿
+﻿@using ConstructionSiteLibrary.Repositories
+
+@inject TemplatesRepository TemplatesRepository
 
 <ScreenComponent @ref="screenComponent" />
 @if (initialLoading)
@@ -7,5 +9,7 @@
 }
 else
 {
-    <RadzenDropDown @bind-Value=@CurrentSelection Data=@Templates TextProperty="TitleTemplate" AllowClear=true Placeholder="-"/>
+    <RadzenText>Clicca "Successivo" per creare un nuovo template o selezionane uno da usare come base</RadzenText>
+    <RadzenDropDown @bind-Value=@CurrentSelection Data=@Templates TextProperty="TitleTemplate" AllowClear=true
+        Placeholder="-" />
 }

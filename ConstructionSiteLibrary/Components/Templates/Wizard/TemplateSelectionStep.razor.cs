@@ -1,4 +1,6 @@
-﻿using Shared.Templates;
+﻿using ConstructionSiteLibrary.Components.Utilities;
+
+using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Templates.Wizard;
 
@@ -14,5 +16,18 @@ public partial class TemplateSelectionStep
     private bool initialLoading;
 
     ScreenComponent screenComponent;
+
+    protected override async Task OnInitializedAsync()
+    {
+        initialLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        initialLoading = false;
+    }
+
+    private async Task LoadData()
+    {
+        Templates = await TemplatesRepository.GetTemplates();
+    }
 
 }
