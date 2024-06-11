@@ -1,0 +1,14 @@
+﻿@using ConstructionSiteLibrary.Repositories
+
+@inject TemplatesRepository TemplatesRepository
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <RadzenText>Seleziona una descrizione</RadzenText>
+    <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Description" />
+}
