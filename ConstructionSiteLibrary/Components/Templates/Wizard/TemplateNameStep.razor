@@ -1,0 +1,20 @@
+﻿<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+     <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant" class="my-4 formFieldTitolo">
+            <ChildContent>
+                <RadzenTextBox Name="Nome" @bind-Value="@title" />
+            </ChildContent>
+            <Helper>
+                <RadzenRequiredValidator Component="Nome" Popup=false Text="Il titolo è obbligatorio" />
+            </Helper>
+        </RadzenFormField>
+
+        <RadzenButton Icon="add" Text="Salva" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                      Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>SaveTemplate())"
+                      IsBusy="@onSaving" BusyText="Salvataggio in corso" />
+}
