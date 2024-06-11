@@ -13,6 +13,7 @@ namespace ConstructionSiteLibrary.Utility
         public const string DocumentCompilationPage = "/document-compilation";
         public const string DocumentCreationPage = "/document-creation";
         public const string TemplateCreationPage = "/template-creation";
+        public const string TemplateWizardPage = "/template-wizard";
         public const string CategoriesPage = "/categories";
         public const string QuestionPage = "/questions";
         public const string ChoicesPage= "/choices";

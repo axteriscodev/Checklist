@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
+using Shared.Documents;
 using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Templates.Wizard;
