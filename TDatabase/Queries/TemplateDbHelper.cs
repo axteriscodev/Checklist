@@ -18,13 +18,19 @@ public class TemplateDbHelper
         }
 
         var docs = (from t in templateSelect
-                    join desc in db.TemplateDescriptions on t.IdDescription equals desc.Id
                     where t.Active == true
                     select new TemplateModel()
                     {
                         IdTemplate = t.Id,
                         TitleTemplate = t.Title,
-                        Description = new() { Id = desc.Id, Title = desc.Title, Description = desc.Description ?? "" },
+                        Description = (from d in db.TemplateDescriptions
+                                       where d.Id == t.IdDescription
+                                       select new TemplateDescriptionModel()
+                                       {
+                                           Id = d.Id,
+                                           Title = d.Title,
+                                           Description = d.Description ?? ""
+                                       }).SingleOrDefault() ?? new(),
                         Note = t.Note ?? "",
                         CreationDate = t.Date,
                         Categories = (from r in (from qc in db.QuestionChosens

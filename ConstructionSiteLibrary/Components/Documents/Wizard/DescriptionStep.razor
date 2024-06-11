@@ -1,0 +1,82 @@
+﻿@using Shared.Templates
+@using ConstructionSiteLibrary.Model.DocumentWizard
+@inject TemplatesRepository TemplateRepository
+
+
+<div>
+    @if (onloading)
+    {
+        <Loading />
+    }
+    else
+    {
+        <RadzenFormField Text="Scelta template <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
+            <ChildContent>
+                <RadzenDropDown Name="TemplateChoice" @bind-Value="@SelectedTemplate" Data="@templates" />
+            </ChildContent>
+            <Helper>
+                <RadzenRequiredValidator Component="TemplateChoice" Popup=false Text="La scelta di un template è obbligatoria" />
+            </Helper>
+        </RadzenFormField>
+        <div class="row">
+            <div class="col">
+                <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
+            </div>
+            <div class="col">
+                <RadzenButton Icon="arrow_forward" Text="Avanti" Click="@Forward" />
+            </div>
+
+
+        </div>
+    }
+</div>
+
+
+
+@code {
+    [Parameter]
+    public EventCallback<DocumentStepArgs> OnForward { get; set; }
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+    [Parameter] 
+    public TemplateModel? SelectedTemplate { get; set; }
+
+    private List<TemplateModel> templates = [];
+    private bool onloading = false;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        onloading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onloading = false;
+    }
+
+    public async Task LoadData()
+    {
+        templates = await TemplateRepository.GetTemplates();
+    }
+
+
+    public void Forward()
+    {
+        if (SelectedTemplate is not null)
+        {
+            DocumentStepArgs args = new()
+                {
+                    Object = SelectedTemplate,
+                    Step = DocumentStep.ChoiceTemplate
+                };
+
+            OnForward.InvokeAsync(args);
+        }
+    }
+
+    public void Back()
+    {
+        
+    }
+
+}
