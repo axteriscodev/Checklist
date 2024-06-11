@@ -8,7 +8,6 @@ using TDatabase.Queries;
 namespace ServerHost.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
 public class TemplateController : DefaultController
 {
     [LogAction]

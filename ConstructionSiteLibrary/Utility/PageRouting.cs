@@ -11,6 +11,7 @@ namespace ConstructionSiteLibrary.Utility
         public const string HomePage = "/";
         public const string ConstructorSitePage = "/constructor-sites/";
         public const string DocumentCompilationPage = "/document-compilation";
+        public const string DocumentCreationPage = "/document-creation";
         public const string TemplateCreationPage = "/template-creation";
         public const string CategoriesPage = "/categories";
         public const string QuestionPage = "/questions";
