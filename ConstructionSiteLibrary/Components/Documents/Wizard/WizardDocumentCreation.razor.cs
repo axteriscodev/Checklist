@@ -37,6 +37,12 @@ namespace ConstructionSiteLibrary.Components.Documents.Wizard
                         _document = (args.Object as DocumentModel)!;
                     }
                     break;
+                case DocumentStep.Companies:
+                    if(args.Object is not null)
+                    {
+                        _document.Companies = (args.Object as List<CompanyModel>)!;
+                    }
+                    break;
                 default:
                     break;
             }
