@@ -1,4 +1,6 @@
-﻿@using ConstructionSiteLibrary.Repositories
+﻿@using ConstructionSiteLibrary.Model.TemplateWizard
+@using ConstructionSiteLibrary.Repositories
+@using Shared.Templates
 
 @inject TemplatesRepository TemplatesRepository
 
@@ -11,4 +13,53 @@ else
 {
     <RadzenText>Seleziona una descrizione</RadzenText>
     <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Description" />
+}
+
+@code
+{
+    List<TemplateDescriptionModel> TemplatesDescriptions = [];
+
+    TemplateDescriptionModel? CurrentSelection;
+
+    [Parameter]
+    public EventCallback<TemplateStepArgs> OnForward { get; set; }
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+
+    /// <summary>
+    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+    /// </summary>
+    private bool initialLoading;
+
+    ScreenComponent screenComponent;
+
+    protected override async Task OnInitializedAsync()
+    {
+        initialLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        initialLoading = false;
+    }
+
+    private async Task LoadData()
+    {
+        TemplatesDescriptions = await TemplatesRepository.GetTemplatesDescriptions();
+    }
+
+
+    public void Forward()
+    {
+        TemplateStepArgs args = new()
+            {
+                Object = CurrentSelection,
+                Step = TemplateStep.Description
+            };
+
+        OnForward.InvokeAsync(args);
+    }
+
+    public void Back()
+    {
+        OnBack.InvokeAsync();
+    }
 }

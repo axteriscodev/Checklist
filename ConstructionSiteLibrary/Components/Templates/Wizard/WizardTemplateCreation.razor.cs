@@ -38,12 +38,11 @@ public partial class WizardTemplateCreation
                     {
                         _template = (args.Object as TemplateModel)!;
                     }
-                    //_selectedTemplate = args.Object as TemplateModel;
                     break;
                 case TemplateStep.Description:
                     if(args.Object is not null)
                     {
-                        //_ = (args.Object as string)!;
+                        _template.Description = (args.Object as TemplateDescriptionModel)!;
                     }
                     break;
                 case TemplateStep.Questions:
