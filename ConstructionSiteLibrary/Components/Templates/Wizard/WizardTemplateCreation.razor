@@ -23,7 +23,7 @@ else
                 <TemplateQuestionsSelectionStep CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
             </RadzenStepsItem>
             <RadzenStepsItem>
-                <TemplateNameStep OnBack="@Back" />
+                <TemplateNameStep CurrentTemplate="@_template" OnBack="@Back" />
             </RadzenStepsItem>
         </Steps>
     </RadzenSteps>

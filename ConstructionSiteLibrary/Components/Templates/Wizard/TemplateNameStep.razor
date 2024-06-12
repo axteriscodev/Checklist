@@ -1,4 +1,6 @@
-﻿<ScreenComponent @ref="screenComponent" />
+﻿@using Shared.Templates
+
+<ScreenComponent @ref="screenComponent" />
 @if (initialLoading)
 {
     <Loading />
@@ -7,7 +9,7 @@ else
 {
      <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant" class="my-4 formFieldTitolo">
             <ChildContent>
-                <RadzenTextBox Name="Nome" @bind-Value="@title" />
+                <RadzenTextBox Name="Nome" @bind-Value="@Title" />
             </ChildContent>
             <Helper>
                 <RadzenRequiredValidator Component="Nome" Popup=false Text="Il titolo è obbligatorio" />
@@ -17,4 +19,33 @@ else
         <RadzenButton Icon="add" Text="Salva" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
                       Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>SaveTemplate())"
                       IsBusy="@onSaving" BusyText="Salvataggio in corso" />
+}
+
+@code
+{
+     /// <summary>
+    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+    /// </summary>
+    private bool initialLoading;
+
+    private bool onSaving = false;
+
+    /// <summary>
+    /// il design degli elementi della form
+    /// </summary>
+    readonly Variant variant = Variant.Outlined;
+    ScreenComponent screenComponent;
+
+    string Title = "";
+
+    [Parameter]
+    required public TemplateModel CurrentTemplate { get; set; }
+
+
+    public async Task SaveTemplate()
+    {
+        CurrentTemplate.NameTemplate = Title;
+
+        await TemplatesRepository.SaveTemplate(CurrentTemplate);
+    }
 }
