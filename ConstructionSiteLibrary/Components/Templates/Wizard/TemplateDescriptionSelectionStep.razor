@@ -11,8 +11,21 @@
 }
 else
 {
-    <RadzenText>Seleziona una descrizione</RadzenText>
-    <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Description" />
+    <RadzenTemplateForm TItem="TemplateDescriptionModel" Data="@CurrentSelection" Submit="@Forward">
+    <div class="card shadow mb-3 divCard">
+        <RadzenText>Seleziona una descrizione</RadzenText>
+        <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Description" />
+    </div>
+    <div class="row">
+        <div class="col">
+            <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
+        </div>
+        <div class="col divForward">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+        </div>
+    </div>
+    </RadzenTemplateForm>
+
 }
 
 @code
@@ -20,6 +33,9 @@ else
     List<TemplateDescriptionModel> TemplatesDescriptions = [];
 
     TemplateDescriptionModel? CurrentSelection;
+
+    [Parameter]
+    TemplateModel CurrentTemplate;
 
     [Parameter]
     public EventCallback<TemplateStepArgs> OnForward { get; set; }
@@ -44,6 +60,15 @@ else
     private async Task LoadData()
     {
         TemplatesDescriptions = await TemplatesRepository.GetTemplatesDescriptions();
+
+        if(CurrentTemplate.IdTemplate != 0)
+        {
+            CurrentSelection = CurrentTemplate.Description;
+        }
+        else
+        {
+            CurrentSelection = TemplatesDescriptions.First();
+        }
     }
 
 

@@ -11,16 +11,30 @@
 }
 else
 {
-    <RadzenText>Clicca "Successivo" per creare un nuovo template o selezionane uno da usare come base</RadzenText>
-    <RadzenDropDown @bind-Value=@CurrentSelection Data=@Templates TextProperty="TitleTemplate" AllowClear=true
-        Placeholder="-" />
+    <RadzenTemplateForm TItem="FormData" Data="@Data" Submit="@Forward">
+    <div class="card shadow mb-3 divCard">
+        <RadzenText>Clicca "Successivo" per creare un nuovo template o selezionane uno da usare come base</RadzenText>
+        <RadzenDropDown @bind-Value=@Data.SelectedTemplate Data=@Templates TextProperty="TitleTemplate" AllowClear=true
+            Placeholder="-" />
+    </div>
+
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col divForward">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+        </div>
+    </div>
+
+</RadzenTemplateForm>
 }
 
 @code
 {
     List<TemplateModel> Templates = [];
 
-    TemplateModel? CurrentSelection;
+    FormData Data = new();
+
 
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -49,11 +63,16 @@ else
     public void Forward()
     {
         TemplateStepArgs args = new()
-        {
-            Object = CurrentSelection != null ? CurrentSelection : new TemplateModel(),
-            Step = TemplateStep.TemplateSelection
-        };
+            {
+                Object = Data.SelectedTemplate != null ? Data.SelectedTemplate : new TemplateModel(),
+                Step = TemplateStep.TemplateSelection
+            };
 
         OnForward.InvokeAsync(args);
+    }
+
+    class FormData
+    {
+        public TemplateModel? SelectedTemplate;
     }
 }

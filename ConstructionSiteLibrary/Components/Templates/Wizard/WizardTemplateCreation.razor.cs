@@ -23,40 +23,40 @@ public partial class WizardTemplateCreation
     private RadzenSteps? _stepsComponent;
 
 
-     private void Back()
+    private void Back()
+    {
+        _stepsComponent?.PrevStep();
+    }
+
+    private void Forward(TemplateStepArgs args)
+    {
+
+        switch (args.Step)
         {
-            _stepsComponent?.PrevStep();
+            case TemplateStep.TemplateSelection:
+                if (args.Object is not null)
+                {
+                    _template = (args.Object as TemplateModel)!;
+                }
+                break;
+            case TemplateStep.Description:
+                if (args.Object is not null)
+                {
+                    _template.Description = (args.Object as TemplateDescriptionModel)!;
+                }
+                break;
+            case TemplateStep.Questions:
+                if (args.Object is not null)
+                {
+
+                }
+                break;
+            case TemplateStep.Title:
+                break;
+            default:
+                break;
         }
+        _stepsComponent?.NextStep();
 
-        private void Forward(TemplateStepArgs args)
-        {
-
-            switch (args.Step)
-            {
-                case TemplateStep.TemplateSelection:
-                    if(args.Object is not null)
-                    {
-                        _template = (args.Object as TemplateModel)!;
-                    }
-                    break;
-                case TemplateStep.Description:
-                    if(args.Object is not null)
-                    {
-                        _template.Description = (args.Object as TemplateDescriptionModel)!;
-                    }
-                    break;
-                case TemplateStep.Questions:
-                    if(args.Object is not null)
-                    {
-                        
-                    }
-                    break;
-                case TemplateStep.Title:
-                    break;
-                default:
-                    break;
-            }
-            _stepsComponent?.NextStep();
-
-        }
+    }
 }
