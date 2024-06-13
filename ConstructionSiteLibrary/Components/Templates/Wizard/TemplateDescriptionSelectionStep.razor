@@ -62,7 +62,7 @@ else
     {
         TemplatesDescriptions = await TemplatesRepository.GetTemplatesDescriptions();
 
-        if (CurrentTemplate.IdTemplate != 0)
+        if (CurrentTemplate.IdTemplate != 0 && CurrentTemplate.Description.Id != 0)
         {
             CurrentSelection = CurrentTemplate.Description;
         }

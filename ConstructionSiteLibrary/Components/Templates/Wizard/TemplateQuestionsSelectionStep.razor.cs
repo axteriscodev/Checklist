@@ -25,7 +25,7 @@ public partial class TemplateQuestionsSelectionStep
     [Parameter]
     public EventCallback OnBack { get; set; }
 
-    private string title = "";
+    //private string title = "";
 
 
     /// <summary>
@@ -66,19 +66,19 @@ public partial class TemplateQuestionsSelectionStep
     {
         initialLoading = true;
         await base.OnInitializedAsync();
-        await LoadData();
-        InitData();
+        await LoadData(CurrentTemplate);
+        //InitData();
         initialLoading = false;
     }
 
-    protected override async Task OnParametersSetAsync()
-    {
+    // protected override async Task OnParametersSetAsync()
+    // {
         
-            initialLoading = true;
-            await LoadData(CurrentTemplate);
-            initialLoading = false;
+    //         initialLoading = true;
+    //         await LoadData(CurrentTemplate);
+    //         initialLoading = false;
         
-    }
+    // }
 
     private void InitData()
     {
@@ -92,19 +92,19 @@ public partial class TemplateQuestionsSelectionStep
         }
     }
 
-    private async Task LoadData(TemplateModel? selectedTemplate = null)
+    private async Task LoadData(TemplateModel selectedTemplate)
     {
         groups = [];
         categories = await CategoriesRepository.GetCategories();
         count = categories.Count;
 
-        title = selectedTemplate?.TitleTemplate ?? "";
+        //title = selectedTemplate?.TitleTemplate ?? "";
 
         foreach (var category in categories)
         {
             List<int> templateSelectedId = [];
 
-            if (selectedTemplate is not null)
+            if (selectedTemplate.IdTemplate != 0)
             {
                 var tempCat = selectedTemplate.Categories.Where(c => c.Id == category.Id).FirstOrDefault();
 
@@ -132,20 +132,25 @@ public partial class TemplateQuestionsSelectionStep
 
             //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
             groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, State = groupState, Questions = category.Questions, SelectedQuestionIds = templateSelectedId });
+        
+            if(selectedTemplate.IdTemplate == 0)
+            {
+                InitData(); //il template non ha preset, li metto tutti selezionati
+            }
         }
 
 
     }
 
-    private async void OnTemplateSelected(int templateId)
-    {
-        var template = await TemplatesRepository.GetTemplateById(templateId);
-    }
+    // private async void OnTemplateSelected(int templateId)
+    // {
+    //     var template = await TemplatesRepository.GetTemplateById(templateId);
+    // }
 
     private async Task ReloadTable()
     {
         DialogService.Close();
-        await LoadData();
+        await LoadData(CurrentTemplate);
         await grid!.Reload();
     }
 

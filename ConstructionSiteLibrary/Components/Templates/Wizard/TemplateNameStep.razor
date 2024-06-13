@@ -61,6 +61,7 @@ else
     public async Task SaveTemplate()
     {
         CurrentTemplate.NameTemplate = Title;
+        CurrentTemplate.TitleTemplate = Title;
 
         await TemplatesRepository.SaveTemplate(CurrentTemplate);
     }
