@@ -1,6 +1,7 @@
 ﻿@using Shared.Templates
 @using ConstructionSiteLibrary.Model.DocumentWizard
 @using ConstructionSiteLibrary.Model
+@using ConstructionSiteLibrary.Components.Templates
 @inject TemplatesRepository TemplateRepository
 
 
@@ -20,7 +21,7 @@
                     Variant="@GlobalVariables.ComponentVariant" class="selectTemplate">
                     <ChildContent>
                         <RadzenDropDown TValue="TemplateModel" Name="TemplateChoice" @bind-Value="@SelectedTemplate"
-                            Data="@templates" Change="@OnTemplateSelected" TextProperty="NameTemplate" AllowClear="true" />
+                            Data="@templates" TextProperty="NameTemplate" AllowClear="true" />
                     </ChildContent>
                     <Helper>
                         <RadzenRequiredValidator Component="TemplateChoice" Popup=false
@@ -28,40 +29,8 @@
                     </Helper>
                 </RadzenFormField>
 
-                <RadzenFieldset Text="Riepilogo" class="selezioneDomande mt-3">
-                    @foreach (var g in groups)
-                    {
-                        <div class="m-2 p-2 pt-3">
-                            <RadzenRow class="bordoInferiore" Style="justify-content:space-between !important;">
-                                <RadzenColumn Size="11" Style="display:flex">
+                <RecapTemplateQuestions SelectedTemplate="@SelectedTemplate" />
 
-                                    <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;">
-                                        <strong>@CategoryText(g)</strong>
-                                    </RadzenText>
-                                </RadzenColumn>
-                                <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                                    <RadzenButton Icon="@AccordionIcon(g)" Variant="Variant.Text"
-                                        Click="@(()=>ShowQuestions(g))" />
-                                </RadzenColumn>
-                            </RadzenRow>
-                        </div>
-                        @if (g.ShowQuestion)
-                        {
-                            <div style="margin-bottom:2rem;">
-                                <SortableList Id="sortable" GroupNumber="@g.Id" Items="@g.Questions" OnGroupUpdate="@OrderList"
-                                    Context="item">
-                                    <SortableItemTemplate>
-                                        <div class="card shadow margineQuestionario p-2 pt-3 bordoDomanda">
-                                            <RadzenRow Style="flex-wrap:nowrap !important">
-                                                <RadzenText>@QuestionText(g, item.Text, item.Order)</RadzenText>
-                                            </RadzenRow>
-                                        </div>
-                                    </SortableItemTemplate>
-                                </SortableList>
-                            </div>
-                        }
-                    }
-                </RadzenFieldset>
             </div>
             <div class="row">
                 <div class="col">
@@ -108,16 +77,7 @@
         CanForward();
     }
 
-    public void OnTemplateSelected()
-    {
-        groups = [];
-
-        foreach (var category in SelectedTemplate!.Categories)
-        {
-            //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
-            groups.Add(new() { Id = category.Id, Text = category.Text, Order = category.Order, Questions = category.Questions });
-        }
-    }
+    
 
     public async Task LoadData()
     {
@@ -145,25 +105,7 @@
         OnForward.InvokeAsync(args);
     }
 
-    private static string CategoryText(CategoryQuestionsGroup group)
-    {
-        return group.Order + ". " + group.Text;
-    }
-
-    private static string QuestionText(CategoryQuestionsGroup group, string questionText, int order)
-    {
-        return group.Order + "." + order + " " + questionText;
-    }
-
-    private void ShowQuestions(CategoryQuestionsGroup group)
-    {
-        group.ShowQuestion = !group.ShowQuestion;
-    }
-
-    private string AccordionIcon(CategoryQuestionsGroup group)
-    {
-        return group.ShowQuestion ? "remove" : "add";
-    }
+    
 
     private void OrderList(ChangeObjectIndex indici)
     {

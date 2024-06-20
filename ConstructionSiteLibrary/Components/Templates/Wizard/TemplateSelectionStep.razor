@@ -18,6 +18,12 @@ else
             Placeholder="-" />
     </div>
 
+
+    @if(Data.SelectedTemplate is not null)
+    {
+        <RecapTemplateQuestions SelectedTemplate="@Data.SelectedTemplate" />
+    }
+
     <div class="row">
         <div class="col">
         </div>
