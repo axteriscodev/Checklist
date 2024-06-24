@@ -20,43 +20,13 @@ else
                 <RadzenTextBox Name="Nome" @bind-Value="@Title" />
             </ChildContent>
             <Helper>
-                <RadzenRequiredValidator Component="Nome" Popup=false Text="Il titolo è obbligatorio" />
+                <RadzenRequiredValidator @ref="@validator" Component="Nome" Popup=false Text="Il titolo è obbligatorio"  />
             </Helper>
         </RadzenFormField>
 
-        <RadzenFieldset Text="Riepilogo" class="selezioneDomande mt-3">
-        @foreach (var g in groups)
-            {
-                <div class="m-2 p-2 pt-3">
-                    <RadzenRow class="bordoInferiore" Style="justify-content:space-between !important;">
-                        <RadzenColumn Size="11" Style="display:flex">
-                        
-                            <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;">
-                                <strong>@CategoryText(g)</strong></RadzenText>
-                        </RadzenColumn>
-                        <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                            <RadzenButton Icon="@AccordionIcon(g)" Variant="Variant.Text" Click="@(()=>ShowQuestions(g))" />
-                        </RadzenColumn>
-                    </RadzenRow>
-                </div>
-                @if (g.ShowQuestion)
-                {
-                    <div style="margin-bottom:2rem;">
-                        <SortableList Id="sortable" GroupNumber="@g.Id" Items="@g.Questions" OnGroupUpdate="@OrderList"
-                            Context="item">
-                            <SortableItemTemplate>
-                                <div class="card shadow margineQuestionario p-2 pt-3 bordoDomanda">
-                                    <RadzenRow Style="flex-wrap:nowrap !important">
-                                        <RadzenText>@QuestionText(g, item.Text, item.Order)</RadzenText>
-                                    </RadzenRow>
-                                </div>
-                            </SortableItemTemplate>
-                        </SortableList>
-                    </div>
-                }
-            }
+        <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" />
 
-        </RadzenFieldset>
+  
     </div>
 
     <div class="row">
@@ -65,7 +35,7 @@ else
         </div>
         <div class="col divForward">
             <RadzenButton Click="@SaveTemplate" Icon="save" Text="Salva" class="buttonForward" IsBusy=@onSaving
-                BusyText="Salvataggio in corso" />
+                              BusyText="Salva" />
         </div>
     </div>
 </RadzenTemplateForm>
@@ -86,9 +56,11 @@ else
     /// il design degli elementi della form
     /// </summary>
     readonly Variant variant = Variant.Outlined;
-    ScreenComponent screenComponent;
 
-    string Title = "";
+    ScreenComponent screenComponent;
+    RadzenRequiredValidator validator;
+
+    string? Title;
 
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
@@ -100,76 +72,31 @@ else
     {
         initialLoading = true;
         await base.OnInitializedAsync();
-        LoadData();
+        //LoadData();
         //InitData();
         initialLoading = false;
     }
 
-    private void LoadData()
-    {
-        groups = [];
-
-        foreach (var category in CurrentTemplate.Categories)
-        {
-            //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
-            groups.Add(new() { Id = category.Id, Text = category.Text, Order = category.Order, Questions = category.Questions });
-        }
-    }
-
-    private static string CategoryText(CategoryQuestionsGroup group)
-    {
-        return group.Order + ". " + group.Text;
-    }
-
-    private static string QuestionText(CategoryQuestionsGroup group, string questionText, int order)
-    {
-        return group.Order + "." + order + " " + questionText;
-    }
-
-    private void ShowQuestions(CategoryQuestionsGroup group)
-    {
-        group.ShowQuestion = !group.ShowQuestion;
-    }
-
-    private string AccordionIcon(CategoryQuestionsGroup group)
-    {
-        return group.ShowQuestion ? "remove" : "add";
-    }
-
-    private void OrderList(ChangeObjectIndex indice)
-    {
-
-        var items = groups.Where(x => x.Id == indice.GroupNumber).SingleOrDefault().Questions;
-        var itemToMove = items[indice.OldIndex];
-        items.RemoveAt(indice.OldIndex);
-
-        if (indice.NewIndex < items.Count)
-        {
-            items.Insert(indice.NewIndex, itemToMove);
-        }
-        else
-        {
-            items.Add(itemToMove);
-        }
-
-        //OrderElements(items);
-        StateHasChanged();
-    }
-
-
 
     public async Task SaveTemplate()
     {
-        onSaving = true;
+        if (Title is not null && !string.IsNullOrEmpty(Title.Trim()))
+        {
+            onSaving = true;
 
-        CurrentTemplate.NameTemplate = Title;
-        CurrentTemplate.TitleTemplate = Title;
+            CurrentTemplate.NameTemplate = Title;
+            CurrentTemplate.TitleTemplate = Title;
 
-        await TemplatesRepository.SaveTemplate(CurrentTemplate);
+            await TemplatesRepository.SaveTemplate(CurrentTemplate);
 
-        onSaving = false;
+            onSaving = false;
 
-        NavigationService.ChangePage(PageRouting.TemplateWizardPage);
+            NavigationService.ChangePage(PageRouting.TemplatePage);
+        }
+        else
+        {
+            Title = null;
+        }
     }
 
     public void Back()
