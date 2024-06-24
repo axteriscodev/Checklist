@@ -27,4 +27,30 @@ public class ConstructorSiteModel
 
     [JsonPropertyName("endDate")]
     public DateTime? EndDate { get; set; }
+
+    [JsonPropertyName("idSico")]
+    public string? IdSico { get; set; }
+
+    [JsonPropertyName("idSicoInProgress")]
+    public string? IdSicoInProgress { get; set; }
+
+    [JsonPropertyName("preliminaryNotificationStartDate")]
+    public string? PreliminaryNotificationStartDate { get; set; }
+
+    [JsonPropertyName("preliminaryNotificationInProgress")]
+    public string? PreliminaryNotificationInProgress { get; set; }
+
+    [JsonPropertyName("note")]
+    public string? Note { get; set; }
+
+    [JsonPropertyName("rl")]
+    public string? RL { get; set; }
+
+     [JsonPropertyName("dl")]
+    public string? DL { get; set; }
+
+     [JsonPropertyName("cse")]
+    public string? CSE { get; set; }
+
+
 }

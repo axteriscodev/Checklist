@@ -1,4 +1,5 @@
 ﻿using Shared.Documents;
+using System.Reflection.Emit;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
@@ -23,6 +24,16 @@ public class DocumentDbHelper
                         CreationDate = d.CreationDate ?? DateTime.Now,
                         CompilationDate = d.CompilationDate,
                         LastEditDate = d.LastEditDate ?? DateTime.Now,
+                        CSE = d.Cse,
+                        DraftedIn = d.DraftedIn,
+                        CompletedIn = d.CompletedIn,
+                        MeteoCondition = (from m in db.MeteoConditions
+                                          where d.IdMeteo == m.Id
+                                          select new MeteoConditionModel()
+                                          {
+                                              Id = m.Id,
+                                              Description = m.Description,
+                                          }).SingleOrDefault(),
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
                                                  where qc.Id == d.Id
@@ -104,7 +115,7 @@ public class DocumentDbHelper
                                            {
                                                Id = cs.Id,
                                                JobDescription = cs.JobDescription,
-                                               StartDate = cs.StartDate,
+                                               StartDate = cs.StartDate ?? DateTime.Now,
                                                Address = cs.Address,
                                                Client = (from cl in db.Clients
                                                          where cl.Id == cs.IdClient
@@ -121,6 +132,7 @@ public class DocumentDbHelper
                                       Id = cl.Id,
                                       Name = cl.Name
                                   }).SingleOrDefault(),
+
                         Companies = (from compDoc in db.CompanyDocuments
                                      from comp in db.Companies
                                      where compDoc.IdDocument == d.Id
@@ -128,9 +140,9 @@ public class DocumentDbHelper
                                      select new CompanyModel()
                                      {
                                          Id = comp.Id,
-                                         //Name = comp.Name,
+                                         CompanyName = comp.CompanyName ?? "",
                                          Address = comp.Address ?? "",
-                                         VatCode = comp.Vatcode,
+                                         VatCode = comp.Vatcode ?? "",
                                          Present = compDoc.Present
                                      }).ToList(),
                         Notes = (from n in db.Notes
@@ -177,7 +189,7 @@ public class DocumentDbHelper
                         {
                             Id = cs.Id,
                             JobDescription = cs.JobDescription,
-                            StartDate = cs.StartDate,
+                            StartDate = cs.StartDate ?? DateTime.Now,
                             Address = cs.Address,
                             Client = (from cl in db.Clients
                                       where cl.Id == cs.IdClient
@@ -210,7 +222,7 @@ public class DocumentDbHelper
             Document newDocument = new()
             {
                 Id = nextId,
-                IdConstructorSite = document.ConstructorSite?.Id,
+                IdConstructorSite = document.ConstructorSite.Id,
                 IdClient = document.Client?.Id,
                 IdTemplate = document.IdTemplate,
                 CreationDate = document.CreationDate,
@@ -218,6 +230,10 @@ public class DocumentDbHelper
                 CompilationDate = document.CompilationDate,
                 Title = document.Title,
                 ReadOnly = document.ReadOnly,
+                Cse = document.CSE,
+                DraftedIn = document.DraftedIn,
+                CompletedIn = document.CompletedIn,
+                IdMeteo = document.MeteoCondition.Id,
             };
 
             db.Documents.Add(newDocument);
@@ -382,6 +398,20 @@ public class DocumentDbHelper
         catch (Exception) { }
 
         return hiddenItems;
+    }
+
+    public static List<MeteoConditionModel> SelectMeteo(DB db, int idMeteo = 0)
+    {
+        var meteoConditions = db.MeteoConditions.AsQueryable();
+
+        var meteoConditionsList = (from m in meteoConditions
+                                   select new MeteoConditionModel()
+                                   {
+                                       Id = m.Id,
+                                       Description = m.Description,
+                                   }).ToList();
+
+        return meteoConditionsList;
     }
 
     private static bool CheckLastEdit(DateTime? oldEdit, DateTime newEdit)
