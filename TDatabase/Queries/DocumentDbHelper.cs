@@ -224,7 +224,7 @@ public class DocumentDbHelper
             {
                 Id = nextId,
                 IdConstructorSite = document.ConstructorSite.Id,
-                IdClient = document.Client?.Id,
+                IdClient = document.Client?.Id > 0 ? document.Client?.Id : null,
                 IdTemplate = document.IdTemplate,
                 CreationDate = document.CreationDate,
                 LastEditDate = document.LastEditDate,
@@ -234,7 +234,7 @@ public class DocumentDbHelper
                 Cse = document.CSE,
                 DraftedIn = document.DraftedIn,
                 CompletedIn = document.CompletedIn,
-                IdMeteo = document.MeteoCondition.Id,
+                IdMeteo = document.MeteoCondition?.Id,
             };
 
             db.Documents.Add(newDocument);
@@ -245,7 +245,7 @@ public class DocumentDbHelper
                 CompanyDocument cd = new()
                 {
                     IdCompany = companyDoc.Id,
-                    IdDocument = document.Id,
+                    IdDocument = nextId,
                     Present = companyDoc.Present ?? false,
                 };
 
@@ -263,7 +263,7 @@ public class DocumentDbHelper
                     {
                         QuestionAnswered qc = new()
                         {
-                            IdDocument = document.Id,
+                            IdDocument = nextId,
                             IdCurrentChoice = cc.Id,
                             IdQuestionChosen = q.Id
                         };
@@ -274,7 +274,7 @@ public class DocumentDbHelper
                             ReportedCompany rc = new()
                             {
                                 IdCompany = rci,
-                                IdDocument = document.Id,
+                                IdDocument = nextId,
                                 IdCurrentChoice = cc.Id,
                                 IdQuestionChosen = q.Id
                             };
@@ -287,7 +287,7 @@ public class DocumentDbHelper
                         Attachment attachment = new()
                         {
                             Id = nextAttachId,
-                            IdDocument = document.Id,
+                            IdDocument = nextId,
                             DateTime = attach.Date,
                         };
                         db.Attachments.Add(attachment);
@@ -309,7 +309,7 @@ public class DocumentDbHelper
                 var note = new Note()
                 {
                     Id = nextNoteId,
-                    IdDocument = document.Id,
+                    IdDocument = nextId,
                     Text = n.Text,
                 };
                 //inserisco gli allegati della nota se presenti
@@ -318,7 +318,7 @@ public class DocumentDbHelper
                     Attachment attachment = new()
                     {
                         Id = nextAttachId,
-                        IdDocument = document.Id,
+                        IdDocument = nextId,
                         DateTime = a.Date,
                     };
                     db.Attachments.Add(attachment);
