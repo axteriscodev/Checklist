@@ -148,6 +148,7 @@
         var choice = args as DocumentChoiceModel;
         if (choice is not null)
         {
+            question.CurrentChoices[choice.ChoiceIndex] = choice;
             RemoveReportedCompany(choice, question);
             if (choice.Reportable)
             {
