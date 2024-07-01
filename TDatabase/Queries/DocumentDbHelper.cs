@@ -178,6 +178,7 @@ public class DocumentDbHelper
     public static List<DocumentModel> SelectFromSite(DB db, int siteId)
     {
         var docs = (from d in db.Documents
+                    where d.IdConstructorSite == siteId    
                     join cs in db.ConstructorSites on d.IdConstructorSite equals cs.Id
                     select new DocumentModel()
                     {
