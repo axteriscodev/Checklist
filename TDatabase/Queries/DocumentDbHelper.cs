@@ -1,4 +1,5 @@
-﻿using Shared.Documents;
+﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+using Shared.Documents;
 using System.Reflection.Emit;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
@@ -35,18 +36,16 @@ public class DocumentDbHelper
                                               Description = m.Description,
                                           }).SingleOrDefault(),
                         Categories = (from r in (from qc in db.QuestionChosens
-                                                 from q in db.Questions
-                                                 where qc.Id == d.Id
-                                                 && q.Id == qc.IdQuestion
-                                                 group q by q.IdCategory into q2
-                                                 select new { q2.First().IdCategory })
+                                                 where qc.IdTemplate == d.IdTemplate
+                                                 join q in db.Questions on qc.IdQuestion equals q.Id
+                                                 select new { q.IdCategory }).Distinct()
 
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
                                       orderby c.Order
                                       select new DocumentCategoryModel()
                                       {
-                                          Id = c.Id,
+                                          Id = r.IdCategory,
                                           Text = c.Text,
                                           Order = c.Order,
                                           Questions = (from tc in db.Templates
@@ -115,9 +114,9 @@ public class DocumentDbHelper
                                            select new ConstructorSiteModel()
                                            {
                                                Id = cs.Id,
-                                               JobDescription = cs.JobDescription,
+                                               JobDescription = cs.JobDescription??"",
                                                StartDate = cs.StartDate ?? DateTime.Now,
-                                               Address = cs.Address,
+                                               Address = cs.Address ??"",
                                                Client = (from cl in db.Clients
                                                          where cl.Id == cs.IdClient
                                                          select new ClientModel()
@@ -125,7 +124,7 @@ public class DocumentDbHelper
                                                              Id = cl.Id,
                                                              Name = cl.Name
                                                          }).SingleOrDefault() ?? new(),
-                                           }).SingleOrDefault(),
+                                           }).SingleOrDefault()?? new(),
                         Client = (from cl in db.Clients
                                   where cl.Id == d.IdClient
                                   select new ClientModel()
