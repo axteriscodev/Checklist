@@ -9,7 +9,7 @@ using Shared.Documents;
 
 namespace ConstructionSiteLibrary.Components.Documents;
 
-public partial class DocumentCompilation
+public partial class DocumentCompilationOLD
 {
 
     public DocumentModel documentModel = new();
