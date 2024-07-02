@@ -26,7 +26,7 @@ public class ConstructorSitesRepository(HttpManager httpManager)
     public async Task<ConstructorSiteModel> GetConstructorSiteInfo(int idConstructorSite)
     {
         ConstructorSiteModel site = new();
-        var response = await _httpManager.SendHttpRequest(ApiRouting.ConstructorSitesList, idConstructorSite);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.ConstructorSiteInfo, idConstructorSite);
         if (response.Code.Equals("0"))
         {
             var list = JsonSerializer.Deserialize<List<ConstructorSiteModel>>(response.Content.ToString() ?? "") ?? [];
