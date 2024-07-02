@@ -15,10 +15,7 @@ public partial class FormChoice
     public bool CreationMode { get; set; }
     [Parameter]
     public TemplateChoiceModel? Choice { get; set; }
-    [Parameter]
-
-    public object? Object { get; set; }
-
+    
     /// <summary>
     /// Classe utilizzata per incapsulare le informazioni relative alla scelta dell'utente
     /// </summary>
@@ -41,17 +38,13 @@ public partial class FormChoice
     {
         onLoading = true;
         await base.OnInitializedAsync();
-        Setup();
         onLoading = false;
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        if (!CreationMode && Object is not null)
-        {
-            Setup();
-        }
+        Setup();
     }
     /// <summary>
     /// Metodo che inizializza le impostazioni iniziali del componente sia in caso di creazione 
@@ -66,6 +59,7 @@ public partial class FormChoice
                 Id = Choice.Id,
                 Tag = Choice.Tag,
                 Value = Choice.Value,
+                Reportable = Choice.Reportable,
             };
         }
     }
@@ -79,6 +73,7 @@ public partial class FormChoice
             Id = CreationMode ? 0 : form.Id,
             Tag = form.Tag,
             Value = form.Value,
+            Reportable = form.Reportable,
         };
 
         bool success = CreationMode ? await QuestionRepository.SaveChoice(newChoice)
@@ -95,5 +90,6 @@ public partial class FormChoice
         public int Id { get; set; }
         public string? Tag { get; set; }
         public string? Value { get; set; }
+        public bool Reportable { get; set; }
     }
 }
