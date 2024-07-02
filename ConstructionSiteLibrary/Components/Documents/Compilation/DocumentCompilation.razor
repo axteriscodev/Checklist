@@ -11,6 +11,7 @@ else
 {
    <ReportConstructorSiteDataSection Document="@document" />
    <CompaniesPresentSection Companies="@document.Companies" /> 
+    <QuestionsSection Categories="document.Categories" Companies="document.Companies"/>
 }
 
 
@@ -22,7 +23,6 @@ else
 
     private DocumentModel document = new();
     private bool onLoading = false;
-
 
 
     protected override async Task OnInitializedAsync()
