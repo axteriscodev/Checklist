@@ -14,6 +14,9 @@ public partial class FormChoice
     [Parameter]
     public bool CreationMode { get; set; }
     [Parameter]
+    public TemplateChoiceModel? Choice { get; set; }
+    [Parameter]
+
     public object? Object { get; set; }
 
     /// <summary>
@@ -28,20 +31,24 @@ public partial class FormChoice
     /// 
     /// </summary>
     private bool onSaving = false;
+    private bool onLoading = false;
+
 
     /// <summary>
     /// Metodo invocato quando il componente è pronto per essere avviato
     /// </summary>
     protected override async Task OnInitializedAsync()
     {
+        onLoading = true;
         await base.OnInitializedAsync();
-      
+        Setup();
+        onLoading = false;
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        if(!CreationMode && Object is not null)
+        if (!CreationMode && Object is not null)
         {
             Setup();
         }
@@ -52,40 +59,31 @@ public partial class FormChoice
     /// </summary>
     private void Setup()
     {
-        var choice = (TemplateChoiceModel)Object!;
-        form = new FormChoiceData()
+        if (!CreationMode && Choice is not null)
         {
-            Id = choice.Id,
-            Tag = choice.Tag,
-            Value = choice.Value,
-        };
+            form = new FormChoiceData()
+            {
+                Id = Choice.Id,
+                Tag = Choice.Tag,
+                Value = Choice.Value,
+            };
+        }
     }
 
     private async Task Save()
     {
         onSaving = true;
-        bool response;
-        if (CreationMode)
-        {
-            response = await QuestionRepository.SaveChoice(new ChoiceModel
-            {
-                Tag = form.Tag ?? "",
-                Value = form.Value ?? "",
-            });
-        }
-        else
-        {
-            List<ChoiceModel> list = [];
-            list.Add(new()
-            {
-                Tag = form.Tag ?? "",
-                Value = form.Value ?? "",
-                Id = form.Id,
-            });
-            response = await QuestionRepository.UpdateChoices(list);
-        }
+        var newChoice = new TemplateChoiceModel()
 
-        if (response)
+        {
+            Id = CreationMode ? 0 : form.Id,
+            Tag = form.Tag,
+            Value = form.Value,
+        };
+
+        bool success = CreationMode ? await QuestionRepository.SaveChoice(newChoice)
+                                    : await QuestionRepository.UpdateChoices([newChoice]);
+        if (success)
         {
             await OnSaveComplete!.InvokeAsync();
         }
