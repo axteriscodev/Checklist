@@ -9,9 +9,10 @@
 }
 else
 {
-    <QuestionsSection Categories="document.Categories" Companies="document.Companies"/>
+   <ReportConstructorSiteDataSection Document="@document" />
+   <CompaniesPresentSection Companies="@document.Companies" /> 
+   <QuestionsSection Categories="document.Categories" Companies="document.Companies"/>
 }
-
 
 
 @code {
