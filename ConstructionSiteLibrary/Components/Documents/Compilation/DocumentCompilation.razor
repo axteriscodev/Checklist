@@ -9,9 +9,12 @@
 }
 else
 {
-   <ReportConstructorSiteDataSection Document="@document" />
-   <CompaniesPresentSection Companies="@document.Companies" /> 
-   <QuestionsSection Categories="document.Categories" Companies="document.Companies"/>
+    <div class="card shadow p-3">
+        <ReportConstructorSiteDataSection Document="@document" />
+        <CompaniesPresentSection Companies="@document.Companies" />
+        <QuestionsSection Categories="document.Categories" Companies="document.Companies" />
+    </div>
+
 }
 
 
