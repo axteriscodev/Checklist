@@ -13,8 +13,8 @@ else
     <div class="vstack p-3">
     @foreach (var reportedCompany in CompaniesQuestionsReported)
         {
-            @*if (reportedCompany.ReportedQuestions.Any())
-            {*@
+            if (reportedCompany.ReportedQuestions.Any())
+            {
                 <RadzenText>Per: <strong>@reportedCompany.Company.CompanyName</strong></RadzenText>
                 @if (string.IsNullOrEmpty(reportedCompany.Sign))
                 {
@@ -28,7 +28,7 @@ else
                         <RadzenText>@questionIds.MarkByOrder()</RadzenText>
                     }
                 </RadzenRow>
-           @* } *@
+           } 
         }
     </div>
 }
@@ -49,12 +49,19 @@ else
     {
         onLoading = true;
         await base.OnInitializedAsync();
+
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
         LoadData();
         onLoading = false;
     }
 
     private void LoadData()
     {
+        CompaniesQuestionsReported = [];
         foreach (var company in Document.Companies)
         {
             CompaniesQuestionsReported.Add(new CompanyQuestionsReported()

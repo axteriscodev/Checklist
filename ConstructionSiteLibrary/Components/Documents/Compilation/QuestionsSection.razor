@@ -72,6 +72,7 @@
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
 
+
     private List<VisualCategory> visualCategories { get; set; } = [];
 
     ScreenComponent? screenComponent;
@@ -109,6 +110,7 @@
         if (question.CurrentChoices.Count == 0)
         {
             AddAnswer(question);
+
         }
     }
 
