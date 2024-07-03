@@ -12,6 +12,7 @@ else
    <ReportConstructorSiteDataSection Document="@document" />
    <CompaniesPresentSection Companies="@document.Companies" /> 
    <QuestionsSection Categories="document.Categories" Companies="document.Companies"/>
+   <CompaniesSignsSection Document="@document" />
 }
 
 
@@ -39,5 +40,5 @@ else
         document = await DocumentsRepository.GetDocumentById(DocumentId);
     }
 
-
+    
 }

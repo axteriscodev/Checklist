@@ -1,0 +1,96 @@
+﻿@using Shared.Documents;
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="vstack p-8">
+        @foreach(var reportedCompany in CompaniesQuestionsReported)
+        {
+            <RadzenText>Per: <strong>@reportedCompany.Company.CompanyName</strong></RadzenText>
+            <SignatureComponent />
+            <RadzenText>Quesiti contestati</RadzenText>
+            <RadzenRow>
+            @foreach(var questionIds in reportedCompany.ReportedQuestions)
+            {
+                <RadzenText>@questionIds.MarkByOrder()</RadzenText>
+            }
+            </RadzenRow>
+        }
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public DocumentModel Document { get; set; } = new();
+
+    private List<CompanyQuestionsReported> CompaniesQuestionsReported = [];
+
+    private bool onLoading = false;
+
+
+    private void LoadData()
+    {
+        foreach (var company in Document.Companies)
+        {
+            CompaniesQuestionsReported.Add(new CompanyQuestionsReported()
+                {
+                    Company = company,
+                });
+        }
+
+        foreach (var category in Document.Categories)
+        {
+            foreach (var question in category.Questions)
+            {
+                foreach (var currentChoice in question.CurrentChoices)
+                {
+                    foreach (var companyId in currentChoice.ReportedCompanyIds)
+                    {
+                        var reportedCompany = CompaniesQuestionsReported.Where(x => x.Company.Id == companyId).First();
+                        reportedCompany.ReportedQuestions.Add(new CateogoryQuestionIds()
+                            {
+                                CategoryId = category.Id,
+                                CategoryOrder = category.Order,
+                                QuestionId = question.Id,
+                                QuestionOrder = question.Order,
+                            });
+                    }
+                }
+            }
+        }
+    }
+
+
+    class CompanyQuestionsReported
+    {
+        public CompanyModel Company = new();
+
+        public List<CateogoryQuestionIds> ReportedQuestions = [];
+
+
+    }
+
+    class CateogoryQuestionIds
+    {
+        public int CategoryId;
+        public int CategoryOrder;
+        public int QuestionId;
+        public int QuestionOrder;
+
+        public string MarkById()
+        {
+            return $"{CategoryId}.{QuestionId}";
+        }
+
+        public string MarkByOrder()
+        {
+            return $"{CategoryOrder}.{QuestionOrder}";
+        }
+    }
+
+}
