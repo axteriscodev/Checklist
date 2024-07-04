@@ -1,0 +1,76 @@
+﻿@using Shared.Documents
+@* NOTE AGGIUNTIVE *@
+<div class="vstack px-4">
+
+    <div class="my-4 ">
+        <div class="row SectionTitleDiv">
+            <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
+                <strong>
+                    ULTERIORI PRECISAZIONI ED EVENTUALI PRESCRIZIONI
+                </strong>
+            </RadzenText>
+        </div>
+        <div class="border my-4">
+            @foreach (string elem in NoteList)
+            {
+                <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="@gap"
+                    class="rz-border-info-light">
+                    <RadzenColumn Size="2"
+                        class="rz-background-color-info-lighter rz-color-on-info-lighter rz-text-align-center rz-p-2">
+                        <RadzenText TextStyle="TextStyle.H3">@elem</RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="2"
+                        class="rz-background-color-danger-lighter rz-color-on-danger-lighter rz-text-align-center rz-p-2"
+                        style="height: 180px;">
+                        <div class="p-4">
+                            <RadzenTextArea Rows="3" Style="width:100%" Value="@elem" />
+                            <div class="row justify-content-center">
+                            </div>
+                        </div>
+                    </RadzenColumn>
+                </RadzenRow>
+            }
+        </div>
+    </div>
+</div>
+
+
+@code {
+    AlignItems alignItems = AlignItems.Normal;
+    JustifyContent justifyContent = JustifyContent.Normal;
+    string gap = "1rem";
+
+
+    [Parameter]
+    public EventCallback OnQuestionNoteChanged { get; set; }
+
+    [Parameter]
+    public DocumentModel Document { get; set; } = new();
+
+    private List<string> NoteList { get; set; } = [];
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        NoteList = [];
+
+        ///Da caricare per ogni question
+        if (Document is not null)
+        {
+            foreach (var cat in Document.Categories)
+            {
+                foreach (var question in cat.Questions)
+                {
+                    if (!string.IsNullOrEmpty(question.Note))
+                    {
+                        NoteList.Add(question.Note);
+                    }
+                }
+            }
+        }
+    }
+}

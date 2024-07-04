@@ -76,6 +76,8 @@
     public List<DocumentCategoryModel> Categories { get; set; } = [];
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
+    [Parameter]
+    public EventCallback OnNoteUpdated {get; set;}
 
     private List<VisualCategory> visualCategories { get; set; } = [];
 
@@ -89,6 +91,9 @@
         CreateVisualCategories();
     }
 
+    private async Task NoteUpdated(){
+            await OnNoteUpdated!.InvokeAsync();
+    }
 
     private void CreateVisualCategories()
     {
@@ -227,6 +232,7 @@
     {
         StateHasChanged();
         DialogService.Close();
+        NoteUpdated();
     }
 
     #endregion
