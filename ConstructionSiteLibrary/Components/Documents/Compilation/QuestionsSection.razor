@@ -6,25 +6,30 @@
 <ScreenComponent @ref="screenComponent" />
 
 @* Questionario *@
-<RadzenFieldset Text="Questionario" class="questionario">
+<div class="vstack documentSection">
     @foreach (var visual in visualCategories)
     {
-        <div class="categoria pt-3">
-            <RadzenRow class="bordoInferiore" Style="justify-content:space-between !important;">
-                <RadzenColumn Size="11" Style="display:flex">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(visual.Category)</strong></RadzenText>
+        <div class="marginYResponsive2">
+            <div class="SectionTitleDiv">
+            <RadzenRow Style="justify-content:space-between !important;">
+                <RadzenColumn Size="1" Style="display:flex">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryNumber(visual.Category)</strong></RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(visual.Category)</strong></RadzenText>
                 </RadzenColumn>
                 <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
                     <RadzenButton Icon="@AccordionIcon(visual)" Variant="Variant.Text" Click="@(()=>ShowQuestions(visual))" />
                 </RadzenColumn>
             </RadzenRow>
         </div>
-        if (visual.ShowQuestion)
+        @if (visual.ShowQuestion)
         {
             @foreach (var question in visual.Category.Questions)
             {
+                    <div class="border paddingSezione">
                 <div class="margineDomande bordoDomanda">
-                    <div class="hstack">
+                    <div class="hstack ">
                         <RadzenButton Icon="photo_camera" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />
                         <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
                     </div>
@@ -58,11 +63,13 @@
                     <div class="row align-content-center">
                         <RadzenButton Text="Aggiungi note" Variant="Variant.Text" Click="@(()=>OpenNoteDialog(question))" Style="width: 170px;" />
                     </div>
+                    </div>
                 </div>
             }
         }
+        </div>
     }
-</RadzenFieldset>
+</div>
 
 @code {
 
@@ -71,6 +78,9 @@
     public List<DocumentCategoryModel> Categories { get; set; } = [];
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
+    [Parameter]
+    public EventCallback OnStateChangeNotification {get; set;}
+
 
     private List<VisualCategory> visualCategories { get; set; } = [];
 
@@ -84,6 +94,9 @@
         CreateVisualCategories();
     }
 
+    private async Task StateChangeNotification(){
+            await OnStateChangeNotification!.InvokeAsync();
+    }
 
     private void CreateVisualCategories()
     {
@@ -109,6 +122,7 @@
         if (question.CurrentChoices.Count == 0)
         {
             AddAnswer(question);
+
         }
     }
 
@@ -212,23 +226,33 @@
     }
 
 
-    private void SelectedCompanies()
+    private async Task SelectedCompanies()
     {
         DialogService.Close();
-        StateHasChanged();
+        await StateChangeNotification();
     }
 
-    private void QuestionNotesChanged()
+    private async Task QuestionNotesChanged()
     {
-        StateHasChanged();
         DialogService.Close();
+        await StateChangeNotification();
     }
 
     #endregion
 
     #region Visualizzazione
 
+        private static string CategoryNumber(DocumentCategoryModel cat)
+    {
+        return cat.Order + ".";
+    }
+
     private static string CategoryText(DocumentCategoryModel cat)
+    {
+        return cat.Text;
+    }
+
+    private static string CategoryNumberText(DocumentCategoryModel cat)
     {
         return cat.Order + ". " + cat.Text;
     }
