@@ -10,7 +10,7 @@ else
     <div class="card shadow p-3 m-5">
         <ReportConstructorSiteDataSection Document="@document" />
         <CompaniesPresentSection Companies="@document.Companies" />
-        <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnNoteUpdated="@QuestionNoteUpdated" />
+        <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@QuestionNoteUpdated" />
 	    <FormQuestionAdditionalNotesList Document="@document" />
         <CompaniesSignsSection Document="@document" />
     </div>

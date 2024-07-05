@@ -6,18 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Components/Documents/Compilation/FormQuestionAdditionalNotesList.razor.css" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\css\rootDefault.css" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Components/Documents/Compilation/FormQuestionAdditionalNotesList.razor.css" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />

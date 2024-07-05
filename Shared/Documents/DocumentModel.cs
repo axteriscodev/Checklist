@@ -28,6 +28,9 @@ public class DocumentModel
     [JsonPropertyName("lastEditDate")]
     public DateTime? LastEditDate { get; set; }
 
+    [JsonPropertyName("signDate")]
+    public DateTime? SignDate { get; set; }
+
     [JsonPropertyName("readonly")]
     public bool ReadOnly { get; set; }
 
@@ -47,7 +50,10 @@ public class DocumentModel
     public List<CompanyModel> Companies { get; set; } = [];
 
     [JsonPropertyName("signatures")]
-    public List<SignatureModel> Signature { get; set; } = [];
+    public List<SignatureModel> Signatures { get; set; } = [];
+
+    [JsonPropertyName("cseSign")]
+    public SignatureModel? CseSignature { get; set; }
 
     [JsonPropertyName("attachments")]
     public List<AttachmentModel> Attachments { get; set; } = [];
