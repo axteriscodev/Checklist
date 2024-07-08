@@ -1,5 +1,8 @@
 ﻿@using Shared.Documents
+@using Microsoft.JSInterop
+
 @inject DocumentsRepository DocumentsRepository
+@inject IJSRuntime JS
 
 @if (onLoading)
 {
@@ -8,12 +11,15 @@
 else
 {
     <div class="card shadow DocumentCard">
-        <ReportConstructorSiteDataSection Document="@document" />
-        <CompaniesPresentSection Companies="@document.Companies" />
-        <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@QuestionNoteUpdated" />
-	    <FormQuestionAdditionalNotesList Document="@document" />
-        <CompaniesSignsSection Document="@document" />
+        <div id="stampaPDF">
+            <ReportConstructorSiteDataSection Document="@document" />
+            <CompaniesPresentSection Companies="@document.Companies" />
+            <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@QuestionNoteUpdated" />
+            <FormQuestionAdditionalNotesList Document="@document" />
+            <CompaniesSignsSection Document="@document" />
+        </div>
     </div>
+    <RadzenButton Text="Stampa" Click="StampaDocumento" />
 }
 
 @code {
@@ -34,7 +40,18 @@ else
         document = await DocumentsRepository.GetDocumentById(DocumentId);
     }
 
-    private void QuestionNoteUpdated(){
+    private void QuestionNoteUpdated()
+    {
         StateHasChanged();
     }
+
+    private async Task StampaDocumento()
+    {
+        var fileName = "documento-" + document.Title + ".pdf";
+        var jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/pdfManager.js");
+        // Generate and download the PDF
+        await jsModule.InvokeVoidAsync("generaPDFDocumento2", fileName);
+        //await jsModule.InvokeVoidAsync("CreateDocumentPages");
+    }
+
 }
