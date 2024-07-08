@@ -13,6 +13,8 @@ public partial class FormCompanies
     [Parameter]
     public int CompanyId { get; set; }
 
+    private string title = "Aggiungi azienda/libero professionista";
+
     /// <summary>
     /// il design degli elementi della form
     /// </summary>
@@ -23,6 +25,7 @@ public partial class FormCompanies
         await base.OnParametersSetAsync();
         if(CompanyId != 0)
         {
+            title = "Modifica azienda/libero professionista";
             await Setup(); 
         }
        
