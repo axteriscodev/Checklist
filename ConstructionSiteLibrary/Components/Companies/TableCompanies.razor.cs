@@ -67,6 +67,11 @@ public partial class TableCompanies
         }
     }
 
+    private string GetName(CompanyModel company)
+    {
+        return string.IsNullOrEmpty(company.CompanyName) ? company.SelfEmployedName : company.CompanyName;
+    }
+
     private async Task ReloadTable()
     {
         DialogService.Close();

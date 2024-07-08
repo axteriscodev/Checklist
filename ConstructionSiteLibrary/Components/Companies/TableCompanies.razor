@@ -29,7 +29,11 @@ else
                             AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left">
 
                 <Columns>
-                    <RadzenDataGridColumn TItem="CompanyModel" Property="CompanyName" Title="Nome" Width="60px" />
+                    <RadzenDataGridColumn TItem="CompanyModel"  Title="Nome" Width="60px" >
+                        <Template Context="data">
+                            @GetName(data)
+                        </Template>
+                    </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="CompanyModel" Property="Address" Title="Indirizzo" Width="120px" />
                     <RadzenDataGridColumn TItem="CompanyModel" Property="Phone" Title="Telefono" Width="60px" />
                     <RadzenDataGridColumn TItem="CompanyModel" Property="Email" Title="Email" Width="60px" />
