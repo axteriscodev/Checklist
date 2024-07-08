@@ -1,0 +1,7 @@
+﻿.page {
+    width: 210mm; /* Same width as A4 */
+    height: 297mm; /* Same height as A4 */
+    padding: 20mm;
+    box-sizing: border-box;
+    page-break-after: always;
+}
