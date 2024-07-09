@@ -19,22 +19,22 @@ else
             @* INTRO DOCUMENTO *@
             <div class="pdfElement">
                 <div class="row SectionTitleDiv">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle"><strong>@Document.Title</strong> </RadzenText>
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle"><strong>@StampaCampoDocumento(Document.Title)</strong> </RadzenText>
                 </div>
                 <div class="border paddingSezione">
                     <div class="row my-2">
-                        <RadzenText>@Document.Description</RadzenText>
+                        <RadzenText>@StampaCampoDocumento(Document.Description)</RadzenText>
                     </div>
                 </div>
                 <div class="border paddingSezione">
                     <div class=" row my-2">
                         <div class="col">
-                            <RadzenText>Il C.S.E.: <strong>@Document.CSE</strong></RadzenText>
+                            <RadzenText>Il C.S.E.: <strong>@StampaCampoDocumento(Document.CSE)</strong></RadzenText>
                         </div>
                         <div class="col">
                             <div class="row">
                                 <div class="col">
-                                    <RadzenText>Data sopralluogo: <strong>@StampaData()</strong></RadzenText>
+                                    <RadzenText>Data sopralluogo: <strong>@StampaData(Document.CompilationDate)</strong></RadzenText>
                                 </div>
                                 <div class="col">
                                     <RadzenText>Ora: <strong>@StampaOra()</strong></RadzenText>
@@ -43,7 +43,7 @@ else
                         </div>
                     </div>
                     <RadzenRow class="my-2">
-                        <RadzenText>Condizioni meteo: <strong>@Document.MeteoCondition.Description</strong></RadzenText>
+                        <RadzenText>Condizioni meteo: <strong>@StampaCampoDocumento(Document.MeteoCondition.Description)</strong></RadzenText>
                     </RadzenRow>
                 </div>
             </div>
@@ -59,34 +59,34 @@ else
                 <div class="border my-4 paddingSezione">
                     <div class="row my-2">
                         <div class="col">
-                            <RadzenText>Committente: <strong>@Document.Client?.Name</strong></RadzenText>
+                            <RadzenText>Committente: <strong>@StampaCampoDocumento("")</strong></RadzenText>
                         </div>
                         <div class="col">
-                            <RadzenText>Lavori di: <strong>@Document.ConstructorSite.JobDescription</strong></RadzenText>
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col">
-                            <RadzenText>Indirizzo cantiere: @Document.ConstructorSite.Address</RadzenText>
-                        </div>
-                        <div class="col">
-                            <RadzenText>Inizio lavori: @Document.ConstructorSite.StartDate</RadzenText>
+                            <RadzenText>Lavori di: <strong>@StampaCampoDocumento(Document.ConstructorSite.JobDescription)</strong></RadzenText>
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col">
-                            <RadzenText>Notifica preliminare inizio cantiere del:@Document.ConstructorSite.PreliminaryNotificationStartDate</RadzenText>
+                            <RadzenText>Indirizzo cantiere: @StampaCampoDocumento(Document.ConstructorSite.Address)</RadzenText>
                         </div>
                         <div class="col">
-                            <RadzenText>Id. SICO: @Document.ConstructorSite.IdSico</RadzenText>
+                            <RadzenText>Inizio lavori: @StampaData(Document.ConstructorSite.StartDate)</RadzenText>
+                        </div
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Notifica preliminare inizio cantiere del:@StampaCampoDocumento(Document.ConstructorSite.PreliminaryNotificationStartDate)</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Id. SICO: @StampaCampoDocumento(Document.ConstructorSite.IdSico)</RadzenText>
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col">
-                            <RadzenText> Notifica preliminare in corso: @Document.ConstructorSite.PreliminaryNotificationInProgress</RadzenText>
+                            <RadzenText> Notifica preliminare in corso: @StampaCampoDocumento(Document.ConstructorSite.PreliminaryNotificationInProgress)</RadzenText>
                         </div>
                         <div class="col">
-                            <RadzenText>Id. SICO: @Document.ConstructorSite.IdSicoInProgress</RadzenText>
+                            <RadzenText>Id. SICO: @StampaCampoDocumento(Document.ConstructorSite.IdSicoInProgress)</RadzenText>
                         </div>
                     </div>
                 </div>
@@ -230,9 +230,15 @@ else
 
     #region Visualizzazione
 
-    public string StampaData()
+    private string StampaCampoDocumento(string? campo)
     {
-        return Document.CompilationDate.HasValue ? Document.CompilationDate.Value.ToString("dd/MM/yyyy") : "";
+        return string.IsNullOrEmpty(campo) ? "" : campo;
+    }
+
+
+    public string StampaData(DateTime? data)
+    {
+        return data.HasValue ? data.Value.ToString("dd/MM/yyyy") : "";
     }
 
     public string StampaOra()
