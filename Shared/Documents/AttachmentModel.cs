@@ -15,4 +15,7 @@ public class AttachmentModel
 
     [JsonPropertyName("path")]
     public string Path { get; set; } = "";
+    [JsonPropertyName("image")]
+    public string Image { get; set; } = "";
+
 }

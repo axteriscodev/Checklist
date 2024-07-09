@@ -107,6 +107,7 @@ public class DocumentDbHelper
                                                                               Name = att.Name,
                                                                               Date = att.DateTime,
                                                                               Path = att.FilePath ?? "",
+                                                                              Image = att.Image ?? ""
                                                                           }).ToList(),
                                                        }).ToList()
                                       }).ToList(),
@@ -167,6 +168,7 @@ public class DocumentDbHelper
                                                         Name = att.Name,
                                                         Date = att.DateTime,
                                                         Path = att.FilePath ?? "",
+                                                        Image = att.Image
                                                     }).ToList(),
                                  }).ToList(),
                     }).ToList();
@@ -292,6 +294,8 @@ public class DocumentDbHelper
                             Id = nextAttachId,
                             IdDocument = nextId,
                             DateTime = attach.Date,
+                            Image = attach.Image,
+                            
                         };
                         db.Attachments.Add(attachment);
 
@@ -323,6 +327,7 @@ public class DocumentDbHelper
                         Id = nextAttachId,
                         IdDocument = nextId,
                         DateTime = a.Date,
+                        Image = a.Image,
                     };
                     db.Attachments.Add(attachment);
 

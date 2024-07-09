@@ -65,7 +65,7 @@ public partial class DbCsclDamicoV2Context : DbContext
     {
         modelBuilder.Entity<Attachment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC273090C9D4");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27B85F2862");
 
             entity.ToTable("ATTACHMENT");
 
@@ -83,6 +83,9 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasColumnName("FILE_PATH");
             entity.Property(e => e.IdDocument).HasColumnName("ID_DOCUMENT");
             entity.Property(e => e.IdType).HasColumnName("ID_TYPE");
+            entity.Property(e => e.Image)
+                .IsUnicode(false)
+                .HasColumnName("IMAGE");
             entity.Property(e => e.Name)
                 .HasMaxLength(200)
                 .IsUnicode(false)
@@ -91,11 +94,11 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.IdDocument)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ATTACHMEN__ID_DO__236943A5");
+                .HasConstraintName("FK__ATTACHMEN__ID_DO__65370702");
 
             entity.HasOne(d => d.IdTypeNavigation).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.IdType)
-                .HasConstraintName("FK__ATTACHMEN__ID_TY__41EDCAC5");
+                .HasConstraintName("FK__ATTACHMEN__ID_TY__662B2B3B");
         });
 
         modelBuilder.Entity<AttachmentNote>(entity =>
@@ -116,7 +119,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdAttachmentNavigation).WithMany(p => p.AttachmentNotes)
                 .HasForeignKey(d => d.IdAttachment)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ATTACHMEN__ID_AT__40058253");
+                .HasConstraintName("FK__ATTACHMEN__ID_AT__634EBE90");
 
             entity.HasOne(d => d.IdNoteNavigation).WithMany(p => p.AttachmentNotes)
                 .HasForeignKey(d => d.IdNote)
@@ -140,7 +143,7 @@ public partial class DbCsclDamicoV2Context : DbContext
 
             entity.HasOne(d => d.IdAttachmentNavigation).WithMany(p => p.AttachmentQuestions)
                 .HasForeignKey(d => d.IdAttachment)
-                .HasConstraintName("FK__ATTACHMEN__ID_AT__43D61337");
+                .HasConstraintName("FK__ATTACHMEN__ID_AT__6442E2C9");
 
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.AttachmentQuestions)
                 .HasForeignKey(d => d.IdQuestion)
