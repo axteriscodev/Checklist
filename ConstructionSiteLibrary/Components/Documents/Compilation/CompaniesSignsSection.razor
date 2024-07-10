@@ -20,7 +20,8 @@ else
             </div>
             <div class="hstack">
                 <RadzenLabel Text="Data:" Component="Data" Style="margin-right: 8px; vertical-align: middle;" />
-                <RadzenDatePicker Value="@Document.SignDate" TValue="DateTime?" DateFormat="dd/MM/yyyy" Style="max-width:200px;" />
+                <RadzenDatePicker Value="@Document.SignDate" TValue="DateTime?" DateFormat="dd/MM/yyyy" Style="max-width:200px;"
+                    Change="@(args=> SaveSignDate(args))"/>
             </div>
             <div class="row">
                 <div class="col">
@@ -83,8 +84,8 @@ else
 
 @code {
 
-        [Parameter]
-        public DocumentModel Document { get; set; } = new();
+    [Parameter]
+    public DocumentModel Document { get; set; } = new();
 
     private List<CompanyQuestionsReported> CompaniesQuestionsReported = [];
 
@@ -149,6 +150,13 @@ else
             }
         }
     }
+
+    private void SaveSignDate(DateTime? date)
+    {
+        Document.SignDate = date;
+    }
+
+    #region Firma 
 
     private async Task OpenSignaturePad(object? obj)
     {
@@ -220,6 +228,10 @@ else
         StateHasChanged();
     }
 
+    #endregion
+
+    #region Classi interne 
+
     class CompanyQuestionsReported
     {
         public CompanyModel Company = new();
@@ -249,4 +261,5 @@ else
         }
     }
 
+    #endregion
 }

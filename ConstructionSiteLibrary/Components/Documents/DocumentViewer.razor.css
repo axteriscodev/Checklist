@@ -10,6 +10,11 @@
 
 }
 
+.buttonPrint, ::deep .buttonPrint{
+    width:300px;
+    height:40px;
+}
+
 .document{
     display:flex;
     justify-content:center;
