@@ -17,6 +17,8 @@ public partial class Attachment
 
     public string? FilePath { get; set; }
 
+    public string? Image { get; set; }
+
     public bool Active { get; set; }
 
     public virtual ICollection<AttachmentNote> AttachmentNotes { get; set; } = new List<AttachmentNote>();

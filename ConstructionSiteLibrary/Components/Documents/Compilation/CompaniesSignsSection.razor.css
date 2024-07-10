@@ -12,13 +12,6 @@
     padding-left: 1.5rem !important;
 }
 
-.SectionTitle, ::deep .SectionTitle {
-    margin: 0px;
-}
-
-.spaceBetween, ::deep .spaceBetween {
-    justify-content: space-between !important;
-}
 
 .borderBottom, ::deep .borderBottom {
     border-bottom: solid 1px #dee2e6;
@@ -28,6 +21,10 @@
     padding: 0rem 0.7rem 0.7rem 0.7rem;
     margin-top: 1.5rem !important;
     margin-bottom: 1.5rem !important;
+}
+
+.paddingDescrizione{
+    padding:3rem;
 }
 
 .marginYResponsive {
@@ -63,6 +60,10 @@
         padding: 0rem 0.7rem 0.7rem 0.7rem;
         margin-top: 0.5rem !important;
         margin-bottom: 0.5rem !important;
+    }
+
+    .paddingDescrizione {
+        padding: 0.2rem;
     }
 
     .marginYResponsive {
