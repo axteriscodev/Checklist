@@ -1,0 +1,33 @@
+﻿@using Microsoft.JSInterop
+@using Radzen
+
+@inject IJSRuntime JS
+@inject DialogService DialogService
+
+<video id="player" controls autoplay></video>
+<button id="capture">Capture</button>
+<canvas id="canvas" width="320" height="240"></canvas>
+
+
+@code {
+
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+
+    var jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./camera-service.js");
+
+    await jsModule.InvokeVoidAsync("Init", DotNetObjectReference.Create(this));
+  }
+
+  [JSInvokable]
+  public async Task GetImage(string base64Image)
+  {
+    
+
+    DialogService.Close(base64Image); 
+    
+  }
+
+}
+

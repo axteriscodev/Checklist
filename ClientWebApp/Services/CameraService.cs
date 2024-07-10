@@ -1,5 +1,7 @@
 ﻿using ConstructionSiteLibrary.Components.Choices;
+using ConstructionSiteLibrary.Components.Utilities;
 using ConstructionSiteLibrary.Interfaces;
+using ClientWebApp.Components;
 using Radzen;
 
 
@@ -12,9 +14,9 @@ namespace ClientWebApp.Services
 
         public async Task<string> OpenCamera()
         {
-            await _dialogService.Confirm("", "titolo",
-            new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
-            return "";
+           
+            var img = await _dialogService.OpenAsync<CameraComponent>("");
+            return img;
         }
     }
 }

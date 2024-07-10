@@ -103,6 +103,8 @@
     private async Task TakePicture()
     {
         var img = await CameraService.OpenCamera();
+
+        Console.WriteLine(img);
        
        // StateHasChanged();
     }
