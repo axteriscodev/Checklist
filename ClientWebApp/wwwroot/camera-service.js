@@ -35,6 +35,10 @@ export function takePicture(dotnethelper) {
      });
 }
 
+export function openDocuments() {
+    document.getElementById('pictureLoader').click();
+}
+
 // export function Init(dotnethelper) {
 //     const player = document.getElementById('player');
 //     const canvas = document.getElementById('canvas');

@@ -17,10 +17,11 @@ else
         <ReportConstructorSiteDataSection Document="@document" />
         <CompaniesPresentSection Companies="@document.Companies" />
         <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@UpdateDocument" />
+        <AttachmentsSection Categories="@document.Categories" /> 
         <QuestionNotesSection Document="@document" />
         <DocumentNoteSection Document="@document" />
         <CompaniesSignsSection Document="@document" />
-        <AttachmentsSection Categories="@document.Categories" />
+       
     </div>
     <div class="d-flex justify-content-center">
         <RadzenButton Text="Stampa" Click="StampaDocumento" Style="width:300px;height:40px;"/>

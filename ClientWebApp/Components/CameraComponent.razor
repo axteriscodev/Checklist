@@ -6,7 +6,8 @@
 
 
 <RadzenButton Text="Fotocamera" Icon="photo_camera" Click="@OpenCamera" />
-<RadzenButton Text="Documenti" Icon="folder" />
+<RadzenButton Text="Documenti" Icon="folder" Click="@OpenDocuments" />
+<InputFile OnChange="LoadFile" style="display: none;" id="pictureLoader"/>
 
 @if (isCameraOpen)
 {
@@ -46,6 +47,25 @@
   public async Task OpenCamera()
   {
     isCameraOpen = true;
+  }
+
+  public void OpenDocuments()
+  {
+    jsModule.InvokeVoidAsync("openDocuments");
+  }
+
+  private async Task LoadFile(InputFileChangeEventArgs e)
+  {
+    Console.WriteLine("");
+    var readStream = e.File.OpenReadStream(2048000);
+
+    var buffer = new byte[e.File.Size];
+
+    await readStream.ReadAsync(buffer, 0, buffer.Length);
+
+    var base64Image = Convert.ToBase64String(buffer);
+
+    DialogService.Close("data:image/jpeg;charset=utf-8;base64," + base64Image);
   }
 
   public async Task TakePicture()
