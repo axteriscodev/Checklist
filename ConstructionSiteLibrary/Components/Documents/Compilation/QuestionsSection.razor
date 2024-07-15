@@ -118,7 +118,7 @@
                 });
         }
 
-        // StateHasChanged();
+        StateChangeNotification();
     }
 
 
@@ -161,8 +161,6 @@
         question.CurrentChoices.Remove(choice);
         StateHasChanged();
     }
-
-
 
     private string ReportedCompany(DocumentChoiceModel choice)
     {
