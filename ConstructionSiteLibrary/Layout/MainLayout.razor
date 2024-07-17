@@ -2,10 +2,9 @@
 @using ConstructionSiteLibrary.Services
 
 @inherits LayoutComponentBase
-@inject GlobalVariables GVariables
 
 
-<ScreenComponent @ref="@screenComponent" SizeS="641" OnScreenDimensionChanged="ScreenDimensionObserver" />
+<ScreenComponent @ref="@screenComponent" SizeS="GlobalVariables.MinNavbarPx" OnScreenDimensionChanged="ScreenDimensionObserver" />
 <div class="page">
     <div class="sidebar" style="@IconMenuCssClass">
         <NavMenu ShowIconMenu="ToggleIconMenu" IconMenuActive="@_iconMenuActive"/>
@@ -32,16 +31,15 @@
         _ => ""
     };
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        var size = screenComponent.GetScreenSize();
-        Console.WriteLine("ciao");
-        if(size.Width < 641)
-        {
-            navbarState = NavbarState.Collapse;
-        }
-    }
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     await base.OnAfterRenderAsync(firstRender);
+    //     var size = screenComponent.GetScreenSize();
+    //     if (size.Width < GlobalVariables.MinNavbarPx)
+    //     {
+    //         navbarState = NavbarState.Collapse;
+    //     }
+    // }
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,7 +57,7 @@
 
     private void ScreenDimensionObserver(ScreenDimension? dimension)
     {
-        if (dimension == ScreenDimension.S)
+        if (dimension == ScreenDimension.S || dimension == ScreenDimension.XS)
         {
             _iconMenuActive = false;
             navbarState = NavbarState.Collapse;
