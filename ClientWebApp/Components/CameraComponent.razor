@@ -8,41 +8,42 @@
 
 
 
-@if (isCameraOpen)
-{
-  <video id="player" controls autoplay></video>
+@* @if (isCameraOpen)
+{ *@
+<video id="player" controls autoplay></video>
 
-  <canvas id="canvas" width="1280" height="720"></canvas>
+<canvas id="canvas" width="1280" height="720"></canvas>
 
-    <RadzenButton Text="Scatta" Click="@TakePicture" />
-}
+<RadzenButton Text="Scatta" Click="@TakePicture" />
+
+@* }
 else
 {
-    <RadzenButton Text="Fotocamera" Icon="photo_camera" Click="@OpenCamera" />
-    <RadzenButton Text="Documenti" Icon="folder" Click="@OpenDocuments" />
-    <InputFile OnChange="LoadFile" style="display: none;" id="pictureLoader" />
-}
+<RadzenButton Text="Fotocamera" Icon="photo_camera" Click="@OpenCamera" />
+<RadzenButton Text="Documenti" Icon="folder" Click="@OpenDocuments" />
+<InputFile OnChange="LoadFile" style="display: none;" id="pictureLoader" />
+} *@
 
 
 @code {
 
   private IJSObjectReference jsModule;
 
-  private bool isCameraOpen = false;
+  private bool isCameraOpen = true;
 
   private bool isAlreadyOpen = false;
 
-  protected override async Task OnAfterRenderAsync(bool firstRender)
+  @* protected override async Task OnAfterRenderAsync(bool firstRender)
   {
-    if(isCameraOpen && !isAlreadyOpen)
+    if (isCameraOpen && !isAlreadyOpen)
     {
       isAlreadyOpen = true;
       await jsModule.InvokeVoidAsync("openCamera");
-      
+
     }
     Console.WriteLine("Reloaded");
     await base.OnAfterRenderAsync(firstRender);
-  }
+  } *@
 
 
   protected override async Task OnInitializedAsync()
@@ -51,14 +52,16 @@ else
 
     jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./camera-service.js");
 
+    await jsModule.InvokeVoidAsync("openCamera");
+
   }
 
-  public async Task OpenCamera()
+  @* public async Task OpenCamera()
   {
     isCameraOpen = true;
-  }
+  } *@
 
-  public void OpenDocuments()
+  @* public void OpenDocuments()
   {
     jsModule.InvokeVoidAsync("openDocuments");
   }
@@ -74,7 +77,7 @@ else
     var base64Image = Convert.ToBase64String(buffer);
 
     DialogService.Close("data:image/jpeg;charset=utf-8;base64," + base64Image);
-  }
+  } *@
 
   public async Task TakePicture()
   {
@@ -85,7 +88,7 @@ else
   [JSInvokable]
   public async Task GetImage(string base64Image)
   {
-    isAlreadyOpen = false;
+    //isAlreadyOpen = false;
     DialogService.Close(base64Image);
   }
 
