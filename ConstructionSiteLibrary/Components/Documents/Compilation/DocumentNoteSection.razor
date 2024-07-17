@@ -8,6 +8,7 @@
 @using Radzen.Blazor;
 @inject DialogService DialogService
 
+
 @* NOTE AGGIUNTIVE *@
 <div class="vstack px-4">
     <div class="my-4 ">
@@ -40,6 +41,7 @@
 </div>
 
 
+
 @code {
     [Parameter]
     public EventCallback OnCompaniesSelected { get; set; }
@@ -57,14 +59,14 @@
     {
 
         var number = Document.Notes.Count();
-        Document.Notes.Add(new NoteModel(){ Id = number});
+        Document.Notes.Add(new NoteModel() { Id = number });
 
     }
 
     private void AddTextNote(string text, int number)
     {
-        var note = Document.Notes.Where(x=>x.Id == number).SingleOrDefault();
-        if(note is not null)
+        var note = Document.Notes.Where(x => x.Id == number).SingleOrDefault();
+        if (note is not null)
         {
             note.Text = text;
         }

@@ -20,7 +20,6 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
         public static string DocumentNotes = "NOTE AGGIUNTIVE";
         public static string DocumentSignatures = "FIRME";
 
-
         #endregion
 
         #region Metodi di visualizzazione per Firme

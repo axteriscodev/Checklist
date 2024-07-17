@@ -12,7 +12,7 @@ else
         <div class="vstack documentSection">
             <div class="marginYResponsive2">
                 <div class="row SectionTitleDiv">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
                         <strong>
                             @DocumentCompilationUtils.Companies
                         </strong>
@@ -22,46 +22,45 @@ else
                 @foreach (var company in Companies)
                 {
                     <div class="border marginYResponsive paddingSezione">
-                    <div class=" row my-2 borderBottom">
-                        <div class="col ">
-                            <RadzenText>Impresa Esecutrice</RadzenText>
-                        </div>
-                        <div class="col impresaEsecutrice">
-                            <RadzenRow>
-                                <RadzenLabel Text="Presente" Component="Presente" />
+                        <div class=" row my-2 borderBottom">
+                            <div class="col ">
+                                <RadzenText>Impresa Esecutrice</RadzenText>
+                            </div>
+                            <div class="col impresaEsecutrice">
+                                <RadzenRow>
+                                    <RadzenLabel Text="Presente" Component="Presente" />
                                     <RadzenCheckBox Value="@company.Present" Name="Presente" TValue="bool?" Change="@(args=>AddPresent(args, company))" />
-                            </RadzenRow>
+                                </RadzenRow>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col">
-        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Ragione Sociale: </RadzenText>
-                    <RadzenTextArea Placeholder="Inserisci Ragione Sociale"
-                    Change=@(args => OnChange(args, "RagioneSociale"))
-                    class="w-100" @bind-Value=@company.CompanyName
-                    />
+                        <div class="row my-2">
+                            <div class="col-12 col-md-6 my-2">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Ragione Sociale: </RadzenText>
+                                <RadzenTextArea Placeholder="Inserisci Ragione Sociale"
+                                                Change=@(args => OnChange(args, "RagioneSociale"))
+                                                class="w-100" @bind-Value=@company.CompanyName />
+                            </div>
+                            <div class="col-12 col-md-6 my-2">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Sede legale: </RadzenText>
+                                <RadzenTextArea Placeholder="Inserisci Sede Legale"
+                                                Change=@(args => OnChange(args, "Sedelegale"))
+                                                class="w-100" @bind-Value=@company.Address />
+                            </div>
                         </div>
-                        <div class="col">
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Sede legale: </RadzenText>
-                            <RadzenTextArea Placeholder="Inserisci Sede Legale"
-                            Change=@(args => OnChange(args, "Sedelegale"))
-                            class="w-100" @bind-Value=@company.Address />
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col">
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Lavori previsti: </RadzenText>
-                            <RadzenTextArea Placeholder="Inserisci Lavori previsti"
-                            Change=@(args => OnChange(args, "LavoriPrevisti"))
-                            class="w-100" @bind-Value=@company.JobsDescriptions />
-                        </div>
-                        <div class="col">
+                        <div class="row my-2">
+                            <div class="col-12 col-md-6 my-2">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Lavori previsti: </RadzenText>
+                                <RadzenTextArea Placeholder="Inserisci Lavori previsti"
+                                                Change=@(args => OnChange(args, "LavoriPrevisti"))
+                                                class="w-100" @bind-Value=@company.JobsDescriptions />
+                            </div>
+                            <div class="col-12 col-md-6 my-2">
                                 <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">P. Iva: </RadzenText>
-                            <RadzenTextArea Placeholder="Inserisci P. Iva"
-                            Change=@(args => OnChange(args, "PIva"))
-                            class="w-100" @bind-Value=@company.VatCode />
+                                <RadzenTextArea Placeholder="Inserisci P. Iva"
+                                                Change=@(args => OnChange(args, "PIva"))
+                                                class="w-100" @bind-Value=@company.VatCode />
+                            </div>
                         </div>
-                    </div>
                     </div>
                 }
             </div>
@@ -97,6 +96,6 @@ else
 
     private void OnChange(string? args, string name)
     {
-        
+
     }
 }
