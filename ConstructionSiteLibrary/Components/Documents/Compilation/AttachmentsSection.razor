@@ -30,7 +30,11 @@
                                 <RadzenRow>
                                     @foreach (var attach in elem.Attachments)
                                     {
-                                        <RadzenImage Path="@attach.Image" Style="width:8rem;" />
+                                        <RadzenStack Orientation="Orientation.Vertical">
+                                            <RadzenImage Path="@attach.Image" Style="width: 10rem;" />
+                                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
+                                            Click="@(() => DeleteAttachment(elem.Attachments, attach))"/>
+                                        </RadzenStack>
                                     }
                                 </RadzenRow>
                             </RadzenColumn>
