@@ -8,8 +8,8 @@ namespace ConstructionSiteLibrary.Model
 {
     public enum NavbarState
     {
-        Open,
-        Close,
-        Collapse
+        Open = 250,
+        Close = 80,
+        Collapse = 0
     }
 }

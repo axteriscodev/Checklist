@@ -16,8 +16,15 @@
     [Parameter]
     public EventCallback<ScreenSize?> OnScreenSizeChanged { get; set; }
 
+    [Parameter]
+    public EventCallback<ScreenDimension?> OnMainDimensionChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<ScreenSize?> OnMainSizeChanged { get; set; }
+
     /// <summary>
     /// Valore minimo della larghezza dello schermo per considerarlo small
+    ///<remarks> tutte le dimensioni inferiori sono considerate XS</remarks>
     /// </summary>
     [Parameter]
     public int SizeS { get; set; } = 600;
@@ -41,9 +48,10 @@
     /// La dimensione attuale dello schermo
     /// </summary>
     public ScreenDimension? ScreenDimension { get; set; }
-
     public ScreenSize? ScreenSize { get; set; }
 
+    public ScreenDimension? MainDimension { get; set; }
+    public ScreenSize? MainSize { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,9 +70,15 @@
         await ScreenManager.Init(JS);
         ScreenSize = ScreenManager.GetScreenSize();
         ScreenDimension = CalculateScreenDimension(ScreenSize);
-        ScreenManager.Resize += ScreenDimensionChanged!;
-        CallDimensionEvent();
-        CallSizeEvent();
+        MainSize = ScreenManager.GetMainSize();
+        MainDimension = CalculateScreenDimension(MainSize);
+        ScreenManager.ResizeScreen += ScreenDimensionChanged!;
+        ScreenManager.ResizeMain += MainDimensionChanged!;
+
+        CallScreenSizeEvent();
+        CallMainSizeEvent();
+        CallScreenDimensionEvent();
+        CallMainDimensionEvent();
     }
 
     /// <summary>
@@ -75,12 +89,24 @@
     private void ScreenDimensionChanged(object sender, ScreenSize size)
     {
         ScreenSize = size;
-        CallSizeEvent();
-        var newDimension = CalculateScreenDimension(ScreenManager.GetScreenSize());
+        CallScreenSizeEvent();
+        var newDimension = CalculateScreenDimension(ScreenSize);
         if (newDimension != ScreenDimension)
         {
             ScreenDimension = newDimension;
-            CallDimensionEvent();
+            CallScreenDimensionEvent();
+        }
+    }
+
+    private void MainDimensionChanged(object sender, ScreenSize size)
+    {
+        MainSize = size;
+        CallMainSizeEvent();
+        var newDimension = CalculateScreenDimension(MainSize);
+        if (newDimension != ScreenDimension)
+        {
+            MainDimension = newDimension;
+            CallMainDimensionEvent();
         }
     }
 
@@ -128,10 +154,42 @@
         return ScreenSize;
     }
 
+    public ScreenDimension GetScreenDimension()
+    {
+        if (ScreenSize is null)
+        {
+            ScreenSize = ScreenManager.GetScreenSize() ?? new();
+        }
+        var dimension = CalculateScreenDimension(ScreenSize);
+        return dimension!.Value;
+    }
+
+    public ScreenSize GetMainSize()
+    {
+        if (MainSize is null)
+        {
+            MainSize = ScreenManager.GetMainSize() ?? new();
+        }
+        return MainSize;
+    }
+
+    public ScreenDimension GetMainDimension()
+    {
+        if (MainSize is null)
+        {
+            MainSize = ScreenManager.GetMainSize() ?? new();
+        }
+        var dimension = CalculateScreenDimension(MainSize);
+        return dimension!.Value;
+    }
+
     /// <summary>
     /// Metodo che fa scattare l'evento per comunicare a chi è in ascolto che la dimensione
     ///  dello schermo è cambiata
     /// </summary>
-    private void CallDimensionEvent() => OnScreenDimensionChanged.InvokeAsync(ScreenDimension);
-    private void CallSizeEvent() => OnScreenSizeChanged.InvokeAsync(ScreenSize);
+    private void CallScreenDimensionEvent() => OnScreenDimensionChanged.InvokeAsync(ScreenDimension);
+    private void CallScreenSizeEvent() => OnScreenSizeChanged.InvokeAsync(ScreenSize);
+
+    private void CallMainDimensionEvent() => OnMainDimensionChanged.InvokeAsync(MainDimension);
+    private void CallMainSizeEvent() => OnMainSizeChanged.InvokeAsync(MainSize);
 }

@@ -1,13 +1,15 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using ConstructionSiteLibrary.Services
+@using ConstructionSiteLibrary.Managers
+@inject ScreenManager ScreenManager
 
 @inherits LayoutComponentBase
-@inject GlobalVariables GlobalVariables
 
 
+<ScreenComponent @ref="@screenComponent" SizeM="GlobalVariables.MinNavbarPx" OnScreenDimensionChanged="ScreenDimensionObserver" />
 <div class="page">
     <div class="sidebar" style="@IconMenuCssClass">
-        <NavMenu ShowIconMenu="ToggleIconMenu"/>
+        <NavMenu ShowIconMenu="ToggleIconMenu" IconMenuActive="@_iconMenuActive"/>
     </div>
     
 
@@ -20,9 +22,14 @@
 </div>
 
 @code{
-    private bool _iconMenuActive { get; set; }
-    private string? IconMenuCssClass => _iconMenuActive ? $"width:{GlobalVariables.NavbarWidthClosed};" : "";
-
+    private ScreenComponent? screenComponent;
+    private bool _iconMenuActive  = false;
+    private NavbarState navbarState = NavbarState.Open;
+    private string? IconMenuCssClass => navbarState switch
+    {
+        NavbarState.Collapse => "",
+        _ => $"width:{(int)navbarState}px;"
+    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -33,9 +40,28 @@
     protected void ToggleIconMenu(bool iconMenuActive)
     {
         _iconMenuActive = iconMenuActive;
-        //GlobalVariables.IsNavBarOpen = _iconMenuActive;
+        navbarState = _iconMenuActive ? NavbarState.Close : NavbarState.Open;
+        UpdateScreenManagerNavbarSize();
     }
 
+    private void ScreenDimensionObserver(ScreenDimension? dimension)
+    {
+        if (dimension == ScreenDimension.S || dimension == ScreenDimension.XS)
+        {
+            _iconMenuActive = false;
+            navbarState = NavbarState.Collapse;
+            UpdateScreenManagerNavbarSize();
+            StateHasChanged();
+        } else
+        {
+            navbarState = navbarState == NavbarState.Collapse ? NavbarState.Open : navbarState;
+            UpdateScreenManagerNavbarSize();
+        }
+    }
 
-  
+    private void UpdateScreenManagerNavbarSize()
+    {
+        ScreenManager.SetNavbarWidth((int)navbarState);
+    }
+
 }
