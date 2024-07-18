@@ -1,5 +1,7 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using ConstructionSiteLibrary.Services
+@using ConstructionSiteLibrary.Managers
+@inject ScreenManager ScreenManager
 
 @inherits LayoutComponentBase
 
@@ -20,26 +22,14 @@
 </div>
 
 @code{
-    private ScreenComponent screenComponent;
+    private ScreenComponent? screenComponent;
     private bool _iconMenuActive  = false;
     private NavbarState navbarState = NavbarState.Open;
     private string? IconMenuCssClass => navbarState switch
     {
-        NavbarState.Open => $"width:{GlobalVariables.NavbarWidthOpen};",
-        NavbarState.Close => $"width:{GlobalVariables.NavbarWidthClosed};",
         NavbarState.Collapse => "",
-        _ => ""
+        _ => $"width:{(int)navbarState}px;"
     };
-
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     await base.OnAfterRenderAsync(firstRender);
-    //     var size = screenComponent.GetScreenSize();
-    //     if (size.Width < GlobalVariables.MinNavbarPx)
-    //     {
-    //         navbarState = NavbarState.Collapse;
-    //     }
-    // }
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,9 +40,8 @@
     protected void ToggleIconMenu(bool iconMenuActive)
     {
         _iconMenuActive = iconMenuActive;
-
         navbarState = _iconMenuActive ? NavbarState.Close : NavbarState.Open;
-
+        UpdateScreenManagerNavbarSize();
     }
 
     private void ScreenDimensionObserver(ScreenDimension? dimension)
@@ -61,10 +50,18 @@
         {
             _iconMenuActive = false;
             navbarState = NavbarState.Collapse;
+            UpdateScreenManagerNavbarSize();
             StateHasChanged();
+        } else
+        {
+            navbarState = navbarState == NavbarState.Collapse ? NavbarState.Open : navbarState;
+            UpdateScreenManagerNavbarSize();
         }
     }
 
+    private void UpdateScreenManagerNavbarSize()
+    {
+        ScreenManager.SetNavbarWidth((int)navbarState);
+    }
 
-  
 }

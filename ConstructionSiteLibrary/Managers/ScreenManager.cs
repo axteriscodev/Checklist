@@ -5,9 +5,14 @@ namespace ConstructionSiteLibrary.Managers
 {
     public class ScreenManager
     {
+
+        public event EventHandler<ScreenSize>? ResizeScreen;
+        public event EventHandler<ScreenSize>? ResizeMain;
+        private int navbarSize = 0;
         private IJSRuntime? JS;
-        public event EventHandler<ScreenSize>? Resize;
-        private ScreenSize? dimension;
+        private ScreenSize? screenSize;
+        private ScreenSize? mainSize;
+
 
         /// <summary>
         /// 
@@ -22,7 +27,9 @@ namespace ConstructionSiteLibrary.Managers
                     JS = js;
                     var jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/screenService.js");
                     //setto la dimensione corrente dello schermo
-                    dimension = await jsModule.InvokeAsync<ScreenSize>("getWindowSize");
+                    screenSize = await jsModule.InvokeAsync<ScreenSize>("getWindowSize");
+                    mainSize = new() { Height = screenSize.Height, Width = screenSize.Width - navbarSize };
+                    
                     //invoco la funzione js per rimanere in ascolto del ridimensionamento dello schermo
                     await jsModule.InvokeAsync<string>("resizeListener", DotNetObjectReference.Create(this));
                 }
@@ -31,7 +38,24 @@ namespace ConstructionSiteLibrary.Managers
 
         public ScreenSize? GetScreenSize()
         {
-            return dimension;
+            return screenSize;
+        }
+
+        /// <summary>
+        /// Metodo che restituisce la grandezza della schermata togliendo la larghezza della navbar
+        /// </summary>
+        /// <returns></returns>
+        public ScreenSize? GetMainSize()
+        {
+            return mainSize;
+        }
+
+        public void SetNavbarWidth(int width)
+        {
+            navbarSize = width;
+            mainSize.Width = screenSize.Width - navbarSize;
+            Console.WriteLine($"funzione1 => width:{width} - mainSize.Width: {mainSize.Width}");
+            ResizeMain?.Invoke(this, mainSize);
         }
 
         /// <summary>
@@ -44,9 +68,13 @@ namespace ConstructionSiteLibrary.Managers
         [JSInvokable]
         public void SetScreenDimensions(int jsBrowserWidth, int jsBrowserHeight)
         {
-            dimension!.Width = jsBrowserWidth;
-            dimension!.Height = jsBrowserHeight;
-            Resize?.Invoke(this, dimension);
+            screenSize!.Width = jsBrowserWidth;
+            screenSize!.Height = jsBrowserHeight;
+            mainSize!.Width = jsBrowserWidth - navbarSize;
+            mainSize!.Height = jsBrowserHeight;
+            Console.WriteLine($"funzione2 => width:{navbarSize} - mainSize.Width: {mainSize.Width}");
+            ResizeScreen?.Invoke(this, screenSize);
+            ResizeMain?.Invoke(this, mainSize); 
         }
     }
 }
