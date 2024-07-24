@@ -8,9 +8,9 @@ namespace TDatabase.Queries
 {
     public class QuestionDbHelper
     {
-        public static List<TemplateQuestionModel> Select(DB db, int idCategory = 0)
+        public static List<TemplateQuestionModel> Select(DB db, int organizationId, int idCategory = 0)
         {
-            var questions = db.Questions.AsQueryable();
+            var questions = db.Questions.Where(x=> x.IdOrganization == organizationId).AsQueryable();
 
             if (idCategory > 0)
             {
@@ -40,7 +40,7 @@ namespace TDatabase.Queries
             return list;
         } 
 
-        public static async Task<int> Insert(DB db, TemplateQuestionModel question)
+        public static async Task<int> Insert(DB db, TemplateQuestionModel question, int organizationId)
         {
             var questionId = 0;
             try
@@ -51,6 +51,7 @@ namespace TDatabase.Queries
                     Id = nextId,
                     Text = question.Text,
                     IdCategory = question.IdCategory,
+                    IdOrganization = organizationId,
                     Active = true
                 };
                 db.Questions.Add(newQuestion);
