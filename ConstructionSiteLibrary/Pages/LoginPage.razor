@@ -1,0 +1,113 @@
+﻿@using AXT_WebComunication.WebResponse
+@using ConstructionSiteLibrary.Utility
+@using Shared.Login
+@layout EmptyLayout
+
+@inject NavigationService navigation
+@inject AppAuthenticationStateProvider AuthStateProvider
+@attribute [Route(PageRouting.LoginPage)]
+
+<RadzenStack Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 400px; overflow: hidden;">
+    <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-background-color-info rz-p-12" style="text-align: center;">
+        <RadzenText TextStyle="TextStyle.DisplayH3" TagName="TagName.H2" Class="rz-color-white rz-mb-0">Accedi</RadzenText>
+    </RadzenCard>
+    <RadzenCard Class="rz-shadow-0 rz-p-12">
+        <RadzenTemplateForm Data=@("SimpleLogin")>
+            <RadzenLogin AllowRegister="false" AllowResetPassword="false" Username="@username" Password="@password" Login="@(args => OnLogin(args))"
+                         UserText="Nome utente"
+                         UserRequired="Il nome utente è obbligatorio"
+                         PasswordRequired="La password è obbligatoria" />
+        </RadzenTemplateForm>
+    </RadzenCard>
+</RadzenStack>
+@* Messaggio di errore *@
+<RadzenRow Class="rz-my-12 rz-mx-auto" Style="width: 100%; max-width: 800px; overflow: hidden;">
+    <RadzenAlert Visible="@showAlert" AllowClose="false" AlertStyle="AlertStyle.Danger" Variant="Variant.Flat" Shade="Shade.Light">
+        @message
+    </RadzenAlert>
+</RadzenRow>
+
+@*LOADING*@
+@if (loading)
+{
+    <RadzenStack AlignItems="AlignItems.Center" Gap="2rem" class="mt-5">
+        <RadzenProgressBarCircular Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Size="ProgressBarCircularSize.Large" />
+    </RadzenStack>
+}
+
+@code {
+    /// <summary>
+    /// Messaggio di errore di login
+    /// </summary>
+    private readonly string LOGIN_ERR_MSG = "Attenzione, dati di accesso non corretti";
+    /// <summary>
+    /// Messaggio di errore generico
+    /// </summary>
+    private readonly string GENERAL_ERR_MSG = "Si è presentato un errore imprevisto, si prega di riprovare piu tardi";
+    /// <summary>
+    /// boleano che indica il caricamento
+    /// </summary>
+    private bool loading = false;
+    /// <summary>
+    /// Username inserito dall'utente
+    /// </summary>
+    private string username = "";
+    /// <summary>
+    /// La password inserita dall'utente
+    /// </summary>
+    private string password = "";
+    /// <summary>
+    /// flag per visualizzare o meno l'alert
+    /// </summary>
+    private bool showAlert = false;
+    /// <summary>
+    /// il messaggio da visualizzare in caso di alert
+    /// </summary>
+    private string message = "";
+
+
+    /// <summary>
+    /// Metodo privato chiamato per eseguire il login
+    /// </summary>
+    /// <param name="args"></param>
+    /// <returns></returns>
+    private async Task OnLogin(LoginArgs args)
+    {
+        showAlert = false;
+        loading = true;
+        LoginRequest rq = new()
+            {
+                Username = args.Username,
+                Password = args.Password
+            };
+       // var response = await DataService.Login(rq);
+       // await ProcessWebResponse(response);
+    }
+
+    /// <summary>
+    /// Metodo privato per processare la WebResponse e in base al risultato
+    /// svolgere determinate operazioni
+    /// </summary>
+    /// <param name="response">la risposta del server</param>
+    /// <returns></returns>
+    private async Task ProcessWebResponse(AXT_WebResponse response)
+    {
+        if (response.Code.Equals("0"))
+        {
+            var token = response.Content!.ToString();
+            if (token is not null)
+            {
+                //salvo il token nello  storage
+                await AuthStateProvider.SaveAuthenticationAsync(token);
+                navigation.ChangePage(PageRouting.HomePage);
+            }
+        }
+        else
+        {
+            message = response.Code.Equals("Ex89842D3A") ? LOGIN_ERR_MSG : GENERAL_ERR_MSG;
+            showAlert = true;
+        }
+        loading = false;
+    }
+
+}

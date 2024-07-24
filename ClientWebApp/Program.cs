@@ -5,9 +5,11 @@ using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Repositories;
 using ConstructionSiteLibrary.Services;
 using ConstructionSiteLibrary.Utility;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
+using WebStorageManagement;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -44,8 +46,16 @@ builder.Services.AddScoped<IndexedDBService>();
 builder.Services.AddScoped<NavigationService>();
 builder.Services.AddScoped<InvokeJSRuntime>();
 
-
 //componenti radzen
 builder.Services.AddRadzenComponents();
+
+//Gestione dello storage
+builder.Services.AddWebStorageManagement();
+
+//gestione autenticazione e autorizzazione
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AppAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
+    provider.GetRequiredService<AppAuthenticationStateProvider>());
 
 await builder.Build().RunAsync();
