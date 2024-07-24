@@ -2,7 +2,7 @@
 @using System.Reflection
 @using ConstructionSiteLibrary.Pages
 
-<CascadingAuthenticationState>
+@* <CascadingAuthenticationState>
 <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="@ImporterPages.LoadAssemblyPages()">
     <Found Context="routeData">
         <AuthorizeView>
@@ -22,8 +22,19 @@
         </LayoutView>
     </NotFound>
 </Router>
-</CascadingAuthenticationState>
-
+</CascadingAuthenticationState> *@
+<Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="@ImporterPages.LoadAssemblyPages()">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
 
 @code{
     protected override Task OnInitializedAsync()
