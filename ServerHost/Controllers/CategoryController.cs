@@ -1,4 +1,5 @@
 ﻿using AXT_WebComunication.WebResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
 using Shared.ApiRouting;
@@ -15,6 +16,7 @@ public class CategoryController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.CategoriesList)]
+    [Authorize]
     [HttpPost]
     public AXT_WebResponse CategoriesList()
     {
@@ -25,7 +27,8 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = CategoryDbHelper.Select(db);
+            var idOrganizzation = GetUserOrganization();
+            var list = CategoryDbHelper.Select(db, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -39,6 +42,7 @@ public class CategoryController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.SaveCategory)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveCategory(CategoryModel newCategory)
     {
@@ -49,7 +53,8 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await CategoryDbHelper.Insert(db, newCategory);
+            var idOrganizzation = GetUserOrganization();
+            var list = await CategoryDbHelper.Insert(db, newCategory, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -63,6 +68,7 @@ public class CategoryController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.UpdateCategories)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> UpdateCategories(List<CategoryModel> categories)
     {
@@ -87,6 +93,7 @@ public class CategoryController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.HideCategories)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> HideCategories(List<CategoryModel> categories)
     {

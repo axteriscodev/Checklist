@@ -8,9 +8,9 @@ namespace TDatabase.Queries;
 
 public class TemplateDbHelper
 {
-    public static List<TemplateModel> Select(DB db, int idTemplate = 0)
+    public static List<TemplateModel> Select(DB db, int organizationId, int idTemplate = 0)
     {
-        var templateSelect = db.Templates.AsQueryable();
+        var templateSelect = db.Templates.Where(x=>x.IdOrganization == organizationId).AsQueryable();
 
         if (idTemplate > 0)
         {
@@ -79,7 +79,7 @@ public class TemplateDbHelper
         return docs;
     }
 
-    public static async Task<int> Insert(DB db, TemplateModel template)
+    public static async Task<int> Insert(DB db, int organizationId, TemplateModel template)
     {
         var templateId = 0;
 
@@ -93,6 +93,7 @@ public class TemplateDbHelper
                 Title = template.TitleTemplate,
                 Note = template.Note,
                 Date = template.CreationDate,
+                IdOrganization = organizationId,
                 Active = true,
             };
 

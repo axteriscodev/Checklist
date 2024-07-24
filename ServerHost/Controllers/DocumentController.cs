@@ -4,6 +4,7 @@ using ServerHost.Services;
 using Shared.Documents;
 using TDatabase.Queries;
 using Shared.ApiRouting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ServerHost.Controllers;
 
@@ -12,6 +13,7 @@ public class DocumentController : DefaultController
 {
     [LogAction]
     [Route(ApiRouting.DocumentsList)]
+    [Authorize]
     [HttpPost()]
     public AXT_WebResponse DocumentsList([FromBody]int idDocument)
     {
@@ -22,7 +24,8 @@ public class DocumentController : DefaultController
             try
             {
                 var db = GetDbConnection();
-                var list = DocumentDbHelper.Select(db, idDocument);
+            var idOrganizzation = GetUserOrganization();
+            var list = DocumentDbHelper.Select(db, idOrganizzation, idDocument);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
             }
@@ -36,6 +39,7 @@ public class DocumentController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.SiteDocumentsList)]
+    [Authorize]
     [HttpPost()]
     public AXT_WebResponse SiteDocumentsList([FromBody] int idSite)
     {
@@ -60,6 +64,7 @@ public class DocumentController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.SaveDocument)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveDocument(DocumentModel newDocument)
     {
@@ -70,7 +75,8 @@ public class DocumentController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var q = await DocumentDbHelper.Insert(db, newDocument);
+            var idOrganizzation = GetUserOrganization();
+            var q = await DocumentDbHelper.Insert(db, newDocument, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
 
         }
@@ -84,6 +90,7 @@ public class DocumentController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.UpdateDocument)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> UpdateDocument(List<DocumentModel> documents)
     {
@@ -94,7 +101,8 @@ public class DocumentController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var q = await DocumentDbHelper.Update(db, documents);
+            var idOrganizzation = GetUserOrganization();
+            var q = await DocumentDbHelper.Update(db, documents, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
 
         }
@@ -108,6 +116,7 @@ public class DocumentController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.HideDocuments)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> HideDocuments(List<DocumentModel> documents)
     {
@@ -132,6 +141,7 @@ public class DocumentController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.MeteoConditionsList)]
+    [Authorize]
     [HttpPost]
     public AXT_WebResponse MeteoConditionsList()
     {

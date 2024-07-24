@@ -8,10 +8,10 @@ namespace TDatabase.Queries
     {
 
 
-        public static List<TemplateDescriptionModel> Select(DB db, int idDescription = 0)
+        public static List<TemplateDescriptionModel> Select(DB db, int organizationId, int idDescription = 0)
         {
             var templateSelect = idDescription > 0 ? db.TemplateDescriptions.Where(x => x.Id == idDescription)
-                                                   : db.TemplateDescriptions;
+                                                   : db.TemplateDescriptions.Where(x => x.IdOrganization == organizationId);
 
             return templateSelect.Select(x => new TemplateDescriptionModel()
             {
@@ -21,7 +21,7 @@ namespace TDatabase.Queries
             }).ToList();
         }
 
-        public static async Task<int> Insert(DB db, TemplateDescriptionModel description)
+        public static async Task<int> Insert(DB db, int organizationId, TemplateDescriptionModel description)
         {
             var descriptionId = 0;
 
@@ -33,6 +33,7 @@ namespace TDatabase.Queries
                     Id = nextId,
                     Title = description.Title,
                     Description = description.Description,
+                    IdOrganization = organizationId,
                     Active = true
                 };
                 db.TemplateDescriptions.Add(newDesc);

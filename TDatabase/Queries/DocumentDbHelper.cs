@@ -8,7 +8,7 @@ namespace TDatabase.Queries;
 
 public class DocumentDbHelper
 {
-    public static List<DocumentModel> Select(DB db, int idDocument = 0)
+    public static List<DocumentModel> Select(DB db, int organizationId, int idDocument = 0)
     {
         var documents = db.Documents.AsQueryable();
 
@@ -18,6 +18,7 @@ public class DocumentDbHelper
         }
 
         var docs = (from d in documents
+                    where d.IdOrganization == organizationId
                     select new DocumentModel()
                     {
                         Id = d.Id,
@@ -218,7 +219,7 @@ public class DocumentDbHelper
         return docs;
     }
 
-    public static async Task<int> Insert(DB db, DocumentModel document)
+    public static async Task<int> Insert(DB db, DocumentModel document, int organizationId)
     {
         //valore restituito dalla funzione
         var documentId = 0;
@@ -229,6 +230,7 @@ public class DocumentDbHelper
             Document newDocument = new()
             {
                 Id = nextId,
+                IdOrganization = organizationId,
                 IdConstructorSite = document.ConstructorSite.Id,
                 IdClient = document.Client?.Id > 0 ? document.Client?.Id : null,
                 IdTemplate = document.IdTemplate,
@@ -370,7 +372,7 @@ public class DocumentDbHelper
         return documentId;
     }
 
-    public static async Task<List<int>> Update(DB db, List<DocumentModel> documents)
+    public static async Task<List<int>> Update(DB db, List<DocumentModel> documents, int organizationId)
     {
         List<int> modified = [];
 
@@ -383,7 +385,7 @@ public class DocumentDbHelper
                 {
                     db.Documents.Remove(doc);
                     await db.SaveChangesAsync();
-                    await Insert(db, document);
+                    await Insert(db, document, organizationId);
                 }
             }
 
