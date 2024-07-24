@@ -36,6 +36,8 @@ builder.Services.AddScoped<ConstructorSitesRepository>();
 builder.Services.AddScoped<ClientsRepository>();
 //repository per le aziende
 builder.Services.AddScoped<CompaniesRepository>();
+//repository per utenti e login
+builder.Services.AddScoped<UserRepository>();
 //Global Variables
 builder.Services.AddSingleton<GlobalVariables>();
 

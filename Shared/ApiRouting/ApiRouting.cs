@@ -90,5 +90,16 @@ namespace Shared.ApiRouting
         public const string HideConstructorSites = "HideConstructorSites";
 
         #endregion
-    }
+
+        #region User routing
+
+        public const string UserList = "UserList";
+        public const string SaveUser = "SaveUser";
+        public const string UpdateUsers = "UpdateUsers";
+        public const string HideUsers = "HideUsers";
+        public const string Login = "UserLogin";
 }
+
+    #endregion
+}
+

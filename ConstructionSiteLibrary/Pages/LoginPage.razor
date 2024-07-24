@@ -3,8 +3,10 @@
 @using Shared.Login
 @layout EmptyLayout
 
+@inject UserRepository UserRepository
 @inject NavigationService navigation
 @inject AppAuthenticationStateProvider AuthStateProvider
+
 @attribute [Route(PageRouting.LoginPage)]
 
 <RadzenStack Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 400px; overflow: hidden;">
@@ -21,7 +23,7 @@
     </RadzenCard>
 </RadzenStack>
 @* Messaggio di errore *@
-<RadzenRow Class="rz-my-12 rz-mx-auto" Style="width: 100%; max-width: 800px; overflow: hidden;">
+<RadzenRow Class="rz-my-12 rz-mx-auto" Style="width: 100%; max-width: 600px; overflow: hidden;">
     <RadzenAlert Visible="@showAlert" AllowClose="false" AlertStyle="AlertStyle.Danger" Variant="Variant.Flat" Shade="Shade.Light">
         @message
     </RadzenAlert>
@@ -75,13 +77,13 @@
     {
         showAlert = false;
         loading = true;
-        LoginRequest rq = new()
+        UserLoginRequest rq = new()
             {
                 Username = args.Username,
                 Password = args.Password
             };
-       // var response = await DataService.Login(rq);
-       // await ProcessWebResponse(response);
+        var response = await UserRepository.Login(rq);
+        await ProcessWebResponse(response);
     }
 
     /// <summary>
