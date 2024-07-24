@@ -61,6 +61,8 @@ else
                         {
                             <div class="paddingDescrizione border my-2">
                                 <RadzenText>Per: <strong>@reportedCompany.Company.CompanyName</strong></RadzenText>
+                                <RadzenText>Nome:</RadzenText>
+                                <RadzenTextBox @bind-Value=@reportedCompany.Sign.Name />
                                 @if (reportedCompany.Sign is not null)
                                 {
                                     <div class="col-12 p-2 ">
