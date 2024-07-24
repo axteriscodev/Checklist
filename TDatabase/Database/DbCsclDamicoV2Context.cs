@@ -605,6 +605,9 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Name)
                 .IsUnicode(false)
                 .HasColumnName("NAME");
+            entity.Property(e => e.Phone)
+                .IsUnicode(false)
+                .HasColumnName("PHONE");
         });
 
         modelBuilder.Entity<Question>(entity =>
@@ -743,9 +746,13 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
             entity.Property(e => e.DocumentsManagement)
                 .HasDefaultValue(true)
                 .HasColumnName("DOCUMENTS_MANAGEMENT");
+            entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Name)
                 .IsUnicode(false)
