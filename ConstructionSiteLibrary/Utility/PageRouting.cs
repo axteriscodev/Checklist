@@ -8,6 +8,7 @@ namespace ConstructionSiteLibrary.Utility
 {
     internal class PageRouting
     {
+        public const string LoginPage = "/login";
         public const string HomePage = "/";
         public const string ConstructorSitePage = "/constructor-sites/";
         public const string DocumentCompilationPage = "/document-compilation/";

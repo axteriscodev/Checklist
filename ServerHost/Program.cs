@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ServerHost.Services;
+using System.Text;
 using TDatabase.Database;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +17,24 @@ builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// servizio di autenticazione con JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = ConfigurationService.GetConfiguration("Jwt:Issuer"),
+            ValidateAudience = true,
+            ValidAudience = ConfigurationService.GetConfiguration("Jwt:Audience"),
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                ConfigurationService.GetConfiguration("Jwt:SecurityKey")!)),
+            RequireExpirationTime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 var app = builder.Build();
 
@@ -28,6 +49,7 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseBlazorFrameworkFiles();

@@ -1,10 +1,19 @@
-﻿@using System.Reflection
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using System.Reflection
+@using ConstructionSiteLibrary.Pages
 
-
+<CascadingAuthenticationState>
 <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="@ImporterPages.LoadAssemblyPages()">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        <AuthorizeView>
+            <Authorized>
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            </Authorized>
+            <NotAuthorized>
+                <LoginPage />
+            </NotAuthorized>
+        </AuthorizeView>
     </Found>
     <NotFound>
         <PageTitle>Not found</PageTitle>
@@ -13,6 +22,8 @@
         </LayoutView>
     </NotFound>
 </Router>
+</CascadingAuthenticationState>
+
 
 @code{
     protected override Task OnInitializedAsync()
