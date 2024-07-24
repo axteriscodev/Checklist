@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Text;
 using Shared.Organizations;
+using Shared.Login;
 
 namespace ServerHost.Model;
 
@@ -34,7 +35,7 @@ public class JWTManager
                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                new(ClaimTypes.Name, user.Name),
                new(ClaimTypes.Role, user.Role.Name),
-               new("User",JsonSerializer.Serialize(user)),
+               new(UserClaims.User,JsonSerializer.Serialize(user)),
         };
 
         JwtSecurityToken jwtSecurityToken = new(ConfigurationService.GetConfiguration("Jwt:Issuer"), ConfigurationService.GetConfiguration("Jwt:Audience"), claims, data, expires, credentials);

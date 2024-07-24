@@ -12,6 +12,7 @@ namespace Shared.Organizations
         public string Name { get; set; } = "";
         public string Surname { get; set; } = "";
         public string Email { get; set; } = "";
+        public string Password { get; set; } = "";
         public string Phone { get; set; } = "";
         public OrganizationModel Organization { get; set; } = new();
         public RoleModel Role { get; set; } = new();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
+using Shared.Login;
 using Shared.Organizations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
@@ -87,7 +88,7 @@ namespace ConstructionSiteLibrary.Services
                             //prelevo la lista di claims dal jwt
                             var claims = jwtSecurityToken.Claims.ToList();
                             //creo l'identita dell utente con la lista di claim
-                            var userIdentity = new ClaimsIdentity(claims, "User");
+                            var userIdentity = new ClaimsIdentity(claims, UserClaims.User);
                             //creo il ClaimsPrincipal inserendogli l'identità
                             var userPrincipal = new ClaimsPrincipal(userIdentity);
                             User = userPrincipal;
@@ -132,7 +133,7 @@ namespace ConstructionSiteLibrary.Services
         public UserModel GetUserInfo()
         {
             UserModel user = new();
-            var temp = User!.Claims.FirstOrDefault(x => x.Type.Equals("Utente"))!.Value;
+            var temp = User!.Claims.FirstOrDefault(x => x.Type.Equals(UserClaims.User))!.Value;
             if (temp is not null)
             {
                 user = JsonSerializer.Deserialize<UserModel>(temp) ?? new();
