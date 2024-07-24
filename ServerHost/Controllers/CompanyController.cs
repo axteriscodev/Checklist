@@ -1,4 +1,5 @@
 ﻿using AXT_WebComunication.WebResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
 using Shared.ApiRouting;
@@ -12,6 +13,7 @@ public class CompanyController : DefaultController
 {
     [LogAction]
     [Route(ApiRouting.CompaniesList)]
+    [Authorize]
     [HttpPost]
     public AXT_WebResponse CompaniesList([FromBody]int idCompany)
     {
@@ -22,7 +24,8 @@ public class CompanyController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = CompanyDbHelper.Select(db, idCompany);
+            var idOrganizzation = GetUserOrganization();
+            var list = CompanyDbHelper.Select(db, idOrganizzation, idCompany);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -36,6 +39,7 @@ public class CompanyController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.SaveCompany)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveCompany(CompanyModel newCompany)
     {
@@ -46,7 +50,8 @@ public class CompanyController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await CompanyDbHelper.Insert(db, newCompany);
+            var idOrganizzation = GetUserOrganization();
+            var list = await CompanyDbHelper.Insert(db, newCompany, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -60,6 +65,7 @@ public class CompanyController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.UpdateCompanies)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> UpdateCompanies(List<CompanyModel> companies)
     {
@@ -84,6 +90,7 @@ public class CompanyController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.HideCompanies)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> HideCompanies(List<CompanyModel> companies)
     {

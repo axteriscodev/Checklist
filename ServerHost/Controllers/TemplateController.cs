@@ -1,4 +1,5 @@
 ﻿using AXT_WebComunication.WebResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
 using Shared.ApiRouting;
@@ -12,6 +13,7 @@ public class TemplateController : DefaultController
 {
     [LogAction]
     [Route(ApiRouting.TemplatesList)]
+    [Authorize]
     [HttpPost()]
     public AXT_WebResponse TemplatesList([FromBody]int idTemplate)
     {
@@ -22,7 +24,8 @@ public class TemplateController : DefaultController
             try
             {
                 var db = GetDbConnection();
-                var list = TemplateDbHelper.Select(db, idTemplate);
+            var idOrganizzation = GetUserOrganization();
+            var list = TemplateDbHelper.Select(db, idOrganizzation, idTemplate);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
             }
@@ -36,6 +39,7 @@ public class TemplateController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.SaveTemplate)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveTemplate(TemplateModel newTemplate)
     {
@@ -46,7 +50,8 @@ public class TemplateController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var q = await TemplateDbHelper.Insert(db, newTemplate);
+            var idOrganizzation = GetUserOrganization();
+            var q = await TemplateDbHelper.Insert(db, idOrganizzation, newTemplate);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
 
         }
@@ -60,6 +65,7 @@ public class TemplateController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.HideTemplates)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> HideTemplates(List<TemplateModel> templates)
     {
@@ -84,6 +90,7 @@ public class TemplateController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.TemplatesDescriptionsList)]
+    [Authorize]
     [HttpPost]
     public AXT_WebResponse TemplateDescitpionsList([FromBody]int idTemplate)
     {

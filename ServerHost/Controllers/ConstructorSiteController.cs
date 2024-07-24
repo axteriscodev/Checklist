@@ -1,4 +1,5 @@
 ﻿using AXT_WebComunication.WebResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
 using Shared.ApiRouting;
@@ -12,6 +13,7 @@ public class ConstructorSiteController : DefaultController
 {
     [LogAction]
     [Route(ApiRouting.ConstructorSitesList)]
+    [Authorize]
     [HttpPost]
     public AXT_WebResponse ConstructorSitesList()
     {
@@ -22,7 +24,8 @@ public class ConstructorSiteController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = ConstructorSiteDbHelper.Select(db);
+            var idOrganizzation = GetUserOrganization();
+            var list = ConstructorSiteDbHelper.Select(db, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
         }
         catch (Exception ex)
@@ -35,6 +38,7 @@ public class ConstructorSiteController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.ConstructorSiteInfo)]
+    [Authorize]
     [HttpPost]
     public AXT_WebResponse ConstructorSiteInfo([FromBody] int idConstructorSite)
     {
@@ -45,7 +49,8 @@ public class ConstructorSiteController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = ConstructorSiteDbHelper.Select(db, idConstructorSite);
+            var idOrganizzation = GetUserOrganization();
+            var list = ConstructorSiteDbHelper.Select(db, idOrganizzation, idConstructorSite);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
         }
         catch (Exception ex)
@@ -58,6 +63,7 @@ public class ConstructorSiteController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.SaveConstructorSite)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveConstructorSite(ConstructorSiteModel newContructorSite)
     {
@@ -68,7 +74,8 @@ public class ConstructorSiteController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await ConstructorSiteDbHelper.Insert(db, newContructorSite);
+            var idOrganizzation = GetUserOrganization();
+            var list = await ConstructorSiteDbHelper.Insert(db, newContructorSite, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -82,6 +89,7 @@ public class ConstructorSiteController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.UpdateConstructorSites)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> UpdateConstructorSites(List<ConstructorSiteModel> constructorSites)
     {
@@ -106,6 +114,7 @@ public class ConstructorSiteController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.HideConstructorSites)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> HideConstructorSites(List<ConstructorSiteModel> constructorSites)
     {

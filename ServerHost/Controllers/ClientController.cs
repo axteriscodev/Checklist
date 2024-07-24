@@ -1,4 +1,5 @@
 ﻿using AXT_WebComunication.WebResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
 using Shared.ApiRouting;
@@ -12,6 +13,7 @@ public class ClientController : DefaultController
 {
     [LogAction]
     [Route(ApiRouting.ClientsList)]
+    [Authorize]
     [HttpPost]
     public AXT_WebResponse ClientsList()
     {
@@ -22,7 +24,8 @@ public class ClientController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = ClientDbHelper.Select(db);
+            var idOrganizzation = GetUserOrganization();
+            var list = ClientDbHelper.Select(db, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
         }
         catch (Exception ex)
@@ -35,6 +38,7 @@ public class ClientController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.SaveClient)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveClient(ClientModel newClient)
     {
@@ -45,7 +49,8 @@ public class ClientController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await ClientDbHelper.Insert(db, newClient);
+            var idOrganizzation = GetUserOrganization();
+            var list = await ClientDbHelper.Insert(db, newClient, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -59,6 +64,7 @@ public class ClientController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.UpdateClients)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> UpdateClients(List<ClientModel> clients)
     {
@@ -83,6 +89,7 @@ public class ClientController : DefaultController
 
     [LogAction]
     [Route(ApiRouting.HideClients)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> HideClients(List<ClientModel> clients)
     {
