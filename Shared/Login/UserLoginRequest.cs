@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared.Login
 {
-    public class LoginRequest
+    public class UserLoginRequest
     {
         public string Username { get; set; } = "";
         public string Password { get; set; } = "";

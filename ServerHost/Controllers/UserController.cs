@@ -1,11 +1,10 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Model;
 using ServerHost.Services;
 using Shared.ApiRouting;
-using Shared.Defaults;
+using Shared.Login;
 using Shared.Organizations;
 using System.Collections.Generic;
 using TDatabase.Queries;
@@ -20,7 +19,7 @@ namespace ServerHost.Controllers
         [LogAction]
         [Route(ApiRouting.Login)]
         [HttpPost]
-        public AXT_WebResponse Login(LoginRequest rq)
+        public AXT_WebResponse Login(UserLoginRequest rq)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -29,7 +28,7 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var user = UserDbHelper.SelectUserFromEmail(db, rq.Email);
+                var user = UserDbHelper.SelectUserFromEmail(db, rq.Username);
                 if(user is not null)
                 {
                     if(CryptUtilities.CryptPassword(rq.Password, user.Salt).Equals(user.Password))
@@ -97,7 +96,6 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var idOrganizzation = GetUserOrganization();
                 var password = CryptUtilities.CreateNewPassword(newUser.Password);
                 var list = await UserDbHelper.Insert(db, newUser, password);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
@@ -160,5 +158,6 @@ namespace ServerHost.Controllers
         }
 
         #endregion
+
     }
 }
