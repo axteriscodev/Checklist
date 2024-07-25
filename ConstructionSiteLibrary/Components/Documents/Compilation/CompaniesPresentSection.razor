@@ -77,6 +77,15 @@ else
                         </div>
                     </div>
                 }
+
+                <div class="text-center">
+                    <RadzenSplitButton Click=@(args => AddCompany(args)) AlwaysOpenPopup=true Text="Aggiungi">
+                        <ChildContent>
+                            <RadzenSplitButtonItem Text="Da anagrafica" Value="Anagrafica" />
+                            <RadzenSplitButtonItem Text="Nuova" Value="Nuova" />
+                        </ChildContent>
+                    </RadzenSplitButton>                
+                </div>
             </div>
         </div>
     </div>
@@ -106,6 +115,18 @@ else
     private void AddPresent(bool? isPresent, CompanyModel company)
     {
         company.Present = isPresent.HasValue ? isPresent.Value : false;
+    }
+
+    private void AddCompany(RadzenSplitButtonItem item)
+    {
+        if(item.Value.Equals("Anagrafica"))
+        {
+            //popup
+        }
+        else
+        {
+            Companies.Add(new CompanyModel(){Present = true});
+        }
     }
 
     private void OnChange(string? args, string name)
