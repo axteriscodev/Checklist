@@ -16,7 +16,7 @@
 
             <RadzenFormField Text="Descrizione <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
                 <ChildContent>
-                    <RadzenTextBox Name="descrizione" @bind-Value="@form.Description" />
+                    <RadzenTextArea Name="descrizione" @bind-Value="@form.Description" />
                 </ChildContent>
                 <Helper>
                     <RadzenRequiredValidator Component="descrizione" Popup=false Text="Il campo descrizione è obbligatorio" />
@@ -36,7 +36,7 @@
     [Parameter]
     public EventCallback<TemplateDescriptionModel> OnSaveComplete { get; set; }
 
-    private FormDescription form;
+    private FormDescription form = new();
     private Variant variant = GlobalVariables.ComponentVariant;
     private bool onSaving;
 

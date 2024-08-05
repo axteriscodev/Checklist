@@ -15,16 +15,18 @@ else
     <div class="card shadow mb-3 divCard">
         <RadzenText>Seleziona una descrizione</RadzenText>
         <RadzenRow>
-                <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Description" Style="width:70%; max-width: 500px" />
-                <RadzenButton Icon="add" Variant="Variant.Text"/>
+                <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Title" Style="width:70%; max-width: 500px" />
+                <RadzenButton Icon="add" Variant="Variant.Text" Click="OpenNewForm" />
         </RadzenRow>
 
     </div>
-        @if (true)
+        @if (CurrentSelection is not null)
         {
             <div class="mb-3">
-                <RadzenFieldset Text="Descrizione" class="selezioneDomande mt-3">
-
+                <RadzenFieldset Text="Descrizione" class="mt-3">
+                    <p>
+                        @CurrentSelection.Description
+                    </p>
                 </RadzenFieldset>
             </div>
         }

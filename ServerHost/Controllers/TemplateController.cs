@@ -92,7 +92,7 @@ public class TemplateController : DefaultController
     [Route(ApiRouting.TemplatesDescriptionsList)]
     [Authorize]
     [HttpPost]
-    public AXT_WebResponse TemplateDescitpionsList([FromBody]int idTemplate)
+    public AXT_WebResponse TemplateDescriptionsList([FromBody]int idTemplateDescription)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -101,7 +101,8 @@ public class TemplateController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var q = TemplateDescriptionDbHelper.Select(db, idTemplate);
+            var idOrganizzation = GetUserOrganization();
+            var q = TemplateDescriptionDbHelper.Select(db, idOrganizzation, idTemplateDescription);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
 
         }
