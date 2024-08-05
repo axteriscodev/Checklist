@@ -112,4 +112,30 @@ public class TemplateController : DefaultController
         StopTime(stopwatch);
         return response;
     }
+
+    [LogAction]
+    [Route(ApiRouting.SaveTemplatesDescriptions)]
+    [Authorize]
+    [HttpPost]
+    public async Task<AXT_WebResponse> SaveTemplateDescription(TemplateDescriptionModel newDesc)
+    {
+        var response = new AXT_WebResponse();
+        var stopwatch = StartTime();
+        ConfigureLog("", 0);
+
+        try
+        {
+            var db = GetDbConnection();
+            var idOrganizzation = GetUserOrganization();
+            var q = await TemplateDescriptionDbHelper.Insert(db, idOrganizzation, newDesc);
+            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
+
+        }
+        catch (Exception ex)
+        {
+            response = ExceptionWebResponse(ex, "");
+        }
+        StopTime(stopwatch);
+        return response;
+    }
 }

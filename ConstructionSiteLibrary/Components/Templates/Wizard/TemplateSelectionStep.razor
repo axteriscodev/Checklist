@@ -18,7 +18,6 @@ else
                             Placeholder="-" />
         </div>
 
-
         @if (Data.SelectedTemplate is not null)
         {
             <div class="mb-3">
@@ -33,7 +32,6 @@ else
                 <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
             </div>
         </div>
-
     </RadzenTemplateForm>
 }
 
@@ -43,7 +41,6 @@ else
 
     FormData Data = new();
 
-
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
     /// </summary>
@@ -51,7 +48,6 @@ else
 
     [Parameter]
     public EventCallback<TemplateStepArgs> OnForward { get; set; }
-
 
     ScreenComponent screenComponent;
 

@@ -164,6 +164,22 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
         return _templateDescriptions;
     }
 
+    public async Task<bool> SaveTemplateDescription(TemplateDescriptionModel desc)
+    {
+        var result = false;
+        try
+        {
+            var response = await _httpManager.SendHttpRequest(ApiRouting.SaveTemplatesDescriptions, desc);
+            if (response.Code.Equals("0"))
+            {
+                result = true;
+            }
+        }
+        catch (Exception) { }
+
+        return result;
+    }
+
     #region Metodi per effettuare la sincronizzazione con il server
 
     public async Task<bool> DownloadTemplates()
