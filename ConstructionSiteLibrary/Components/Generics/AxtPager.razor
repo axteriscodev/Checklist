@@ -4,10 +4,10 @@
 @if (singlePage)
 {
     <div class="row">
-        <div class="col">
+        <div class="col-8">
             <p>@PrintSummary()</p>
         </div>
-        <div class="col buttonCol">
+        <div class="col-4 buttonCol">
             <div class="hstack buttonStack">
                 <RadzenButton Icon="arrow_back" Variant="Variant" class="arrowButton" Disabled="DisableBack"
                               Click="@(()=> ChangePage(PageNavigaton.Back))" />
