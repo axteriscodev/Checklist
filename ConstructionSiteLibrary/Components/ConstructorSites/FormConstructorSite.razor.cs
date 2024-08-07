@@ -51,7 +51,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
 
         private bool CheckIfSelected(CompanyModel company)
         {
-            return form.Companies.Any(x => x.Id == company.Id);
+            return form.Companies.Exists(x => x.Id == company.Id);
         }
 
         private void CheckIfAllSelected()

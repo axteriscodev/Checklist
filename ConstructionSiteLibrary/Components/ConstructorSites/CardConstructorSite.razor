@@ -1,20 +1,20 @@
 ﻿@inject NavigationService Navigation
 
 
-<div class="card round-border cardClass cardColor1" onclick="@(()=>OnClick())">
+<div class="card round-border cardClass" onclick="@(()=>OnClick())">
     <div class="round-border">
         <div class="row my-3">
-            <div class="col-6">
-                <h5 class="card-title title-weight text-color"><strong>@Site.Name</strong></h5>
-                <p class="card-text text-size text-color">@Site.JobDescription</p>
+            <div class="col-12 col-lg-6">
+                <h4 class="card-title title-weight text-color"><strong>@Site.Name</strong></h4>
+                <p class="text-15">@Site.JobDescription</p>
             </div>
 
-            <div class="col-3 d-flex align-items-center">
-                <p class="card-text text-size text-color">@PrintDate(Site.StartDate)</p>
+            <div class="col-12 col-md-6 col-lg-3 d-flex align-items-center mt-3 mt-lg-0">
+                <p class="text-15">@PrintDate(Site.StartDate)</p>
                 
             </div>
-            <div class="col-3 d-flex align-items-center">
-                <p class="card-text text-size text-bborder text-color">@Site.Address</p>
+            <div class="col-12 col-md-6 col-lg-3 d-flex align-items-center mt-3 mt-lg-0">
+                <p class="text-15">@Site.Address</p>
                 @* <p class="card-text"><strong>Data fine:</strong> @PrintDate(Site.EndDate)</p> *@
             </div>
         </div>
