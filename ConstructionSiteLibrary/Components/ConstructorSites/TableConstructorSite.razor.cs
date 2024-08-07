@@ -1,5 +1,5 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
-using ConstructionSiteLibrary.Repositories;
+using ConstructionSiteLibrary.Model;
 using ConstructionSiteLibrary.Utility;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -37,9 +37,9 @@ public partial class TableConstructorSite
     }
 
 
-    private void PageChanged(PagerEventArgs args)
+    private void PageChanged(AxtPagerEventArgs args)
     {
-        pageIndex = args.PageIndex;
+        pageIndex = args.CurrentPage;
         FilterSites();
     }
 

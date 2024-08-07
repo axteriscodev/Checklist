@@ -1,11 +1,8 @@
 ﻿
 /* CSS GENERALE */
-html,body {
+html, body {
     font-family: var(--font) !important;
     font-feature-settings: 'liga' off, 'clig' off;
-}
-
-.page {
     background-color: var(--page-background-color) !important;
 }
 
@@ -35,6 +32,10 @@ h5, .h5 {
     font-weight: 500;
     font-size: 12px;
 
+}
+
+p,.p {
+    color: var(--rz-primary) !important;
 }
 
 /* DIMENSIONI TESTI */
@@ -103,7 +104,7 @@ h5, .h5 {
     font-size: 23px !important;
 }
 
-.text-20 {
+.text-20, h4, .h4 {
     font-size: 20px !important;
 }
 
@@ -115,7 +116,7 @@ h5, .h5 {
     font-size: 17px !important;
 }
 
-.text-16, h4, .h4 {
+.text-16,  {
     font-size: 16px !important;
 }
 

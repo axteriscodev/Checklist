@@ -28,8 +28,7 @@ else
             }
         </div>
         <div class="mt-5">
-            <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" Density="Density.Compact"
-                HorizontalAlign="HorizontalAlign.Right" Count="count" PageSize="@pageSize" PageChanged="@PageChanged" />
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
         </div>
     </div>
 }
