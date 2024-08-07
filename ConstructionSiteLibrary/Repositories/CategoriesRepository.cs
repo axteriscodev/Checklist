@@ -20,22 +20,18 @@ public class CategoriesRepository(HttpManager httpManager)
 
     public async Task<List<TemplateCategoryModel>> GetCategories()
     {
-        if (Categories.Count == 0)
+        try
         {
-            try
+            var response = await _httpManager.SendHttpRequest(ApiRouting.CategoriesList, "");
+            if (response.Code.Equals("0"))
             {
-                var response = await _httpManager.SendHttpRequest(ApiRouting.CategoriesList, "");
-                if (response.Code.Equals("0"))
-                {
-                    Categories = JsonSerializer.Deserialize<List<TemplateCategoryModel>>(response.Content.ToString() ?? "") ?? [];
-                }
-            }
-            catch (Exception e) 
-            { 
-                var msg = e.Message;
+                Categories = JsonSerializer.Deserialize<List<TemplateCategoryModel>>(response.Content.ToString() ?? "") ?? [];
             }
         }
-
+        catch (Exception e)
+        {
+            var msg = e.Message;
+        }
         return Categories;
     }
 

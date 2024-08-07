@@ -13,13 +13,10 @@ public class CompaniesRepository(HttpManager httpManager)
 
     public async Task<List<CompanyModel>> GetCompanies()
     {
-        if (Companies.Count == 0)
+        var response = await _httpManager.SendHttpRequest(ApiRouting.CompaniesList, 0);
+        if (response.Code.Equals("0"))
         {
-            var response = await _httpManager.SendHttpRequest(ApiRouting.CompaniesList, 0);
-            if (response.Code.Equals("0"))
-            {
-                Companies = JsonSerializer.Deserialize<List<CompanyModel>>(response.Content.ToString() ?? "") ?? [];
-            }
+            Companies = JsonSerializer.Deserialize<List<CompanyModel>>(response.Content.ToString() ?? "") ?? [];
         }
 
         return Companies;
