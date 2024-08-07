@@ -1,19 +1,23 @@
 ﻿@using System.Text;
 @using ConstructionSiteLibrary.Model
 
-<div class="row">
-    <div class="col">
-        <p class="text-16">@PrintSummary()</p>
-    </div>
-    <div class="col buttonCol">
-        <div class="hstack buttonStack">
-            <RadzenButton Icon="arrow_back" Variant="Variant" class="arrowButton" Disabled="DisableBack"
-                          Click="@(()=> ChangePage(PageNavigaton.Back))" />
-            <RadzenButton Icon="arrow_forward" Variant="Variant" class="arrowButton" Disabled="DisableForward"
-                          Click="@(()=> ChangePage(PageNavigaton.Forward))" />
+@if (singlePage)
+{
+    <div class="row">
+        <div class="col">
+            <p class="text-16">@PrintSummary()</p>
+        </div>
+        <div class="col buttonCol">
+            <div class="hstack buttonStack">
+                <RadzenButton Icon="arrow_back" Variant="Variant" class="arrowButton" Disabled="DisableBack"
+                              Click="@(()=> ChangePage(PageNavigaton.Back))" />
+                <RadzenButton Icon="arrow_forward" Variant="Variant" class="arrowButton" Disabled="DisableForward"
+                              Click="@(()=> ChangePage(PageNavigaton.Forward))" />
+            </div>
         </div>
     </div>
-</div>
+}
+
 
 
 @code {
@@ -46,6 +50,8 @@
     private bool DisableBack;
     private bool DisableForward;
 
+    private bool singlePage;
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
@@ -54,11 +60,15 @@
 
     private void CalculatePages()
     {
-        if (Count > 0 && PageSize > 0 && currentPage is null)
+        if (Count > 0 && PageSize > 0)
         {
             totPages = (Count + (PageSize - 1)) / PageSize;
+        }
+        if (currentPage is null)
+        {
             currentPage = 0;
         }
+        singlePage = totPages > 1;
         CheckCurrentPage();
     }
 
