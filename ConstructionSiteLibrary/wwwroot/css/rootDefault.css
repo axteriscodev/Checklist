@@ -13,11 +13,12 @@
     --rz-primary-lighter: #418bff !important;
     --rz-primary-dark: #1d5bbb !important;
     --rz-primary-darker: #124188 !important;
-    --rz-secondary: #ff5e00 !important;
+    --rz-secondary: #ff0e0e !important;
     --rz-secondary-light: #ff0e0e !important;
     --rz-secondary-lighter: #ff7151 !important;
     --rz-secondary-dark: #c34800 !important;
     --rz-secondary-darker: #c90000 !important;
+    --rz-info: #0C336E !important;
     /* Colori background */
     --page-background-color: #F1F4F7 !important;
     --card-background-color: white !important;

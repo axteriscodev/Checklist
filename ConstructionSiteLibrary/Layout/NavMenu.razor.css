@@ -63,6 +63,7 @@
 }
 
     .buttonLogout:hover, ::deep .buttonLogout:hover {
+        background-color: var(--sidebar-color) !important;
         color: red !important;
     }
 
@@ -123,7 +124,6 @@
 
     .separator :hover {
         color: white !important;
-        border-color:white !important;
     }
 
 .margin-top-35{
