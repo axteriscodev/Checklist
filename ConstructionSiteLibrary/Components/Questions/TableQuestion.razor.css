@@ -7,6 +7,12 @@
 }
 
 
+::deep .buttonOptions {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: var(--rz-primary) !important;
+}
+
 .table-striped > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
     background-color: var(--axt-table-striped-bg);
