@@ -25,7 +25,8 @@
     --side-bar-color2: #0c336e !important;
     --topRow-Background-Color: #f7f7f7 !important;
     --topRow-Background-alpha: rgba(0, 0, 0, 0.2) !important;
-    /*Bordi*/
+    /* Bordi */
     --border-Card: #afcaf3 !important;
-    /* Gestione dimensioni */
+    /* Colori tabelle */
+    --bs-table-striped-bg: rgba(175, 201, 243, 0.15) !important; 
 }
