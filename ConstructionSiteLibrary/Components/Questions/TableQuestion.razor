@@ -28,13 +28,31 @@ else
     <div>
 
         <table class="table table-striped">
+            <thead>
+                <th>
+                    <span> Domanda</span>
+                </th>
+                <th>
+                    <span class="">Id Categoria</span>
+                </th>
+            </thead>
             <tbody>
                 @for (int i = 0; i < displayedQuestions.Count; i += 1)
                     {
                         <tr>
                             <td>@displayedQuestions[i].Text</td>
-                            <td>
-                                <RadzenButton Icon="more_vert" class="buttonOptions"></RadzenButton>
+                            <td>@displayedQuestions[i].IdCategory</td>
+
+                            <td>                               <div class="dropdown">
+
+                                <RadzenButton Icon="more_vert" class="dropbtn" Click="@myFunction()" /> 
+  @* <button onclick="myFunction()" class="dropbtn">Dropdown</button > *@
+  <div id="myDropdown" class="dropdown-content">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</div>
                             </td>
                         </tr>
                     }
@@ -46,7 +64,30 @@ else
                 OnPageChanged="@PageChanged" />
         </div>
     </div>
+
 }
+
+<script>
+    @*When the user clicks on the button,
+        toggle between hiding and showing the dropdown content *@
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
 
 
 @code {
@@ -73,8 +114,7 @@ else
     private async Task LoadData()
     {
         questions = await QuestionRepository.GetQuestions();
-                //displayedQuestions = questions;
-
+        FilterQuestions();
     }
 
 
@@ -83,6 +123,7 @@ else
         pageIndex = args.CurrentPage;
         FilterQuestions();
     }
+
 
     private void SearchChanged(string args)
     {
