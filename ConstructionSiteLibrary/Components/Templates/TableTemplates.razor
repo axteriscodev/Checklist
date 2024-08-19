@@ -1,4 +1,5 @@
 ﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared
 @using Shared.Templates
 
@@ -7,12 +8,21 @@
 @inject DialogService DialogService
 
 <ScreenComponent @ref="screenComponent" />
-@if (initialLoading)
+
+@if (onLoading)
 {
     <Loading />
 }
 else
-{
+{   
+
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="Template" ButtonText="+ aggiungi template" SearchPlaceholder="Cerca template"
+                        OnButtonClicked="@OpenWizard"
+    
+    </div>
+
+    <!--
 
     <h2>@Param</h2>
 
@@ -45,4 +55,6 @@ else
             </RadzenDataGrid>
         </RadzenFieldset>
     </div>
+
+    -->
 }
