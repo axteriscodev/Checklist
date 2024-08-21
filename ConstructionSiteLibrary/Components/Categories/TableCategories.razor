@@ -1,4 +1,5 @@
 ﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared
 @using Shared.Templates
 
@@ -15,7 +16,7 @@ else
 {
     <div class="mx-2 my-5">
         <SectionTitle PageTitle="Categorie" ButtonText="+ aggiungi categoria" SearchPlaceholder="Cerca categoria"
-        OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" @/>
+        OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
     
         <table class="table table-striped">
             <thead>
