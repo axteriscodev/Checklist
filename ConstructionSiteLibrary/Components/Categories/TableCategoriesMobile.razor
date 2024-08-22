@@ -23,7 +23,7 @@ else
         <SectionTitle PageTitle="Categorie" ButtonText="+ aggiungi categoria" SearchPlaceholder="Cerca categoria"
             OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
 
-            @foreach (var category in categories)
+            @foreach (var category in displayedCategories)
             {
                 <div class="card round-border cardClass mb-3">
 
