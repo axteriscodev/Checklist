@@ -115,11 +115,11 @@ public partial class TableTemplates
         Console.WriteLine("non è prevista la modifica dei template");
     }
 
-    private async Task OpenDeleteTemplate(object question)
+    private async Task OpenDeleteTemplate(object template)
     {
-        var q = question as TemplateModel;
+        var t = template as TemplateModel;
 
-        await Hide(q ?? new());
+        await Hide(t ?? new());
     }
 
     private async Task ReloadTable()
