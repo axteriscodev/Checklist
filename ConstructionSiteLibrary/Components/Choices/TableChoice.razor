@@ -22,9 +22,10 @@
 }
 else
 {
-  <div class="mx-2 my-5">
-    <SectionTitle PageTitle="Opzioni risposta" ButtonText="+ aggiungi risposta" SearchPlaceholder="Cerca scelta"
-        OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
+    <div class="mx-2 my-5">
+    <SectionTitle PageTitle="Opzioni
+    risposta" ButtonText="+ aggiungi risposta" SearchPlaceholder="Cerca scelta" OnButtonClicked="@OpenForm"
+        OnSearchChanged="@SearchChanged" />
     <div>
         <table class="table table-striped">
             <thead>
@@ -56,61 +57,28 @@ else
         </div>
     </div>
 
-    @* <script>
-    function myFunction() {
-        var isAlreadyOpen = false;
-        if (!this.nextElementSibling.classList.contains('hide')) {
-            // if the clicked button dropdown is already open then use this bool to not show it again.
-            isAlreadyOpen = true;
-        }
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        for (var d = 0; d < dropdowns.length; d++) {
-            var openDropdown = dropdowns[d];
-            if (!openDropdown.classList.contains('hide')) {
-                openDropdown.classList.toggle("hide");
+    <script>
+        @* function myFunction() {
+            var isAlreadyOpen = false;
+            if (!this.nextElementSibling.classList.contains('hide')) {
+                // if the clicked button dropdown is already open then use this bool to not show it again.
+                isAlreadyOpen = true;
             }
-        }
-        if (!isAlreadyOpen) {
-            // if the dropdown was hidden when clicked then show it
-            this.nextElementSibling.classList.toggle("hide");
-        }
-    }
-</script> *@
- 
- 
-    @* La tabella dei campi misurazione *@
-   /*
-   
-    using ConstructionSiteLibrary.Components.Questions;
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            for (var d = 0; d < dropdowns.length; d++) {
+                var openDropdown = dropdowns[d];
+                if (!openDropdown.classList.contains('hide')) {
+                    openDropdown.classList.toggle("hide");
+                }
+            }
+            if (!isAlreadyOpen) {
+                // if the dropdown was hidden when clicked then show it
+                this.nextElementSibling.classList.toggle("hide");
+            }
+        } *@
+    </script>
 
-#line default
-#line hidden
-#nullable disable
-lable disable
-        <RadzenDataGrid @ref="grid" TItem="TemplateChoiceModel" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@list"
-                            AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
-                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left"
-                            Density="Density.Compact">
 
-                <Columns>
-                    <RadzenDataGridColumn TItem="ChoiceModel" Property="Id" Title="Id" Width="40px" /> 
-                    <RadzenDataGridColumn TItem="TemplateChoiceModel" Property="Tag" Title="Nome" Width="100px" />
-                    <RadzenDataGridColumn TItem="TemplateChoiceModel" Property="Value" Title="Scelta" />
-                    <RadzenDataGridColumn TItem="TemplateChoiceModel" Title="Azioni" Width="60px" Sortable="false">
-                        <Template Context="data">
-                                 Mostro i bottoni solo se ho i permessi di modifica 
-                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>OpenUpdateForm(data))"  />
-                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>Disable(data))" />
-                        </Template>
-                    </RadzenDataGridColumn>
-                </Columns>
-            </RadzenDataGrid>
-        </RadzenFieldset>
-    </div> *@
-
-*/
 }
 @code {
     ScreenComponent? screenComponent;
