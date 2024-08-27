@@ -35,18 +35,16 @@ else
                 <div class="marginListEntry">
                     <RadzenStack Gap="0">
                         @*<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Id
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@client.Id</b></RadzenText>*@
+                </RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@client.Id</b></RadzenText>*@
                         <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.SpaceBetween">
                             <RadzenColumn>
+                                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Nome
+                                </RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body1"><b>@client.Name</b></RadzenText>
                             </RadzenColumn>
-                            <ButtonDropdown Object="@category" OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide" />
+                            <ButtonDropdown Object="@client" OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide" />
                         </RadzenRow>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Nome
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@client.Name</b></RadzenText>
-
-                        
                     </RadzenStack>
                 </div>
                 <hr class="solid">
