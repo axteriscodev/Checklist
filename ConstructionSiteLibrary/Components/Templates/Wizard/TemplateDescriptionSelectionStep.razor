@@ -72,6 +72,18 @@ else
         }
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+       if (CurrentTemplate.IdTemplate != 0 && CurrentTemplate.Description.Id != 0)
+        {
+            CurrentSelection = CurrentTemplate.Description;
+        }
+        else
+        {
+            CurrentSelection = TemplatesDescriptions.FirstOrDefault();
+        } 
+    }
+
 
     private async Task OpenNewForm()
     {

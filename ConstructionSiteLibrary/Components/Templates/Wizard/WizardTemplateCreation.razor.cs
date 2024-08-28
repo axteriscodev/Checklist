@@ -23,15 +23,11 @@ public partial class WizardTemplateCreation
 
     private RadzenSteps? _stepsComponent;
 
-    [Parameter]
-    public int SiteId { get; set; }
+    // [Parameter]
+    // public int SiteId { get; set; }
 
 
-    private void Back()
-    {
-        _stepsComponent?.PrevStep();
-    }
-
+    
     private void OnTemplateChanged(TemplateModel? template)
     {
         if(template is not null)
@@ -45,35 +41,41 @@ public partial class WizardTemplateCreation
         StateHasChanged();
     }
 
-    private void Forward(TemplateStepArgs args)
-    {
+    // private void Forward(TemplateStepArgs args)
+    // {
 
-        switch (args.Step)
-        {
-            case TemplateStep.TemplateSelection:
-                if (args.Object is not null)
-                {
-                    _template = (args.Object as TemplateModel)!;
-                }
-                break;
-            case TemplateStep.Description:
-                if (args.Object is not null)
-                {
-                    _template.Description = (args.Object as TemplateDescriptionModel)!;
-                }
-                break;
-            case TemplateStep.Questions:
-                if (args.Object is not null)
-                {
-                    _template = (args.Object as TemplateModel)!;
-                }
-                break;
-            case TemplateStep.Title:
-                break;
-            default:
-                break;
-        }
-        _stepsComponent?.NextStep();
+    //     switch (args.Step)
+    //     {
+    //         case TemplateStep.TemplateSelection:
+    //             if (args.Object is not null)
+    //             {
+    //                 _template = (args.Object as TemplateModel)!;
+    //             }
+    //             break;
+    //         case TemplateStep.Description:
+    //             if (args.Object is not null)
+    //             {
+    //                 _template.Description = (args.Object as TemplateDescriptionModel)!;
+    //             }
+    //             break;
+    //         case TemplateStep.Questions:
+    //             if (args.Object is not null)
+    //             {
+    //                 _template = (args.Object as TemplateModel)!;
+    //             }
+    //             break;
+    //         case TemplateStep.Title:
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    //     _stepsComponent?.NextStep();
 
-    }
+    // }
+
+    // private void Back()
+    // {
+    //     _stepsComponent?.PrevStep();
+    // }
+
 }
