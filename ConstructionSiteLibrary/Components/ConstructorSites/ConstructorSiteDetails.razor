@@ -18,7 +18,7 @@ else
 {
     <div class="mx-sm-1 mx-lg-5 my-5">
         <SectionTitle PageTitle="I miei cantieri" ButtonText="+ aggiungi cantiere" SearchPlaceholder="Cerca cantiere"
-                       ShowSearchBar="false" ShowButton="false" />
+                      ShowSearchBar="false" ShowButton="false" />
         @* Bottone torna indietro *@
         <div class="row margin-top-100">
             <div class="col-12">
@@ -29,12 +29,12 @@ else
         </div>
         @* Card info cantiere *@
         <div class="py-3">
-            <CardInfoConstructorSite ConstructorSite="@site" />
+            <CardInfoConstructorSite ConstructorSite="@site"  ReloadInfo="@LoadData"/>
         </div>
         @* Bottone nuovo + ricerca *@
         <div class="row my-5">
             <div class="col-md-6 col-12 d-flex justify-content-md-start justify-content-center">
-                <RadzenButton Variant="Variant.Text" class="btu-add" >
+                <RadzenButton Variant="Variant.Text" class="btu-add">
                     <i><u>+ Aggiungi documento</u></i>
                 </RadzenButton>
             </div>
@@ -44,7 +44,7 @@ else
                         <RadzenIcon Icon="search" />
                     </Start>
                     <ChildContent>
-                         <RadzenTextBox Placeholder="Cerca documento" @oninput="@(args=>SearchChanged(args))" />
+                        <RadzenTextBox Placeholder="Cerca documento" @oninput="@(args=>SearchChanged(args))" />
                     </ChildContent>
                 </RadzenFormField>
             </div>
@@ -79,8 +79,6 @@ else
 
 @code {
     ScreenComponent? screenComponent;
-
-
 
     [Parameter]
     public int SiteId { get; set; }
@@ -148,6 +146,7 @@ else
     {
         NavigationService.ChangePage(PageRouting.HomePage);
     }
+
 
     #region Metodi di visualizzazione
 
