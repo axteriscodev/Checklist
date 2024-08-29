@@ -12,14 +12,15 @@
 else
 {
     <RadzenTemplateForm TItem="TemplateDescriptionModel" Data="@CurrentSelection">
-    <div class="card shadow mb-3 divCard">
+    <div class="card round-border mb-3 divCard cardClass">
         <RadzenText>Seleziona una descrizione</RadzenText>
         <RadzenRow>
-                <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Title" Style="width:70%; max-width: 500px" />
-                <RadzenButton Icon="add" Variant="Variant.Text" Click="OpenNewForm" />
+            <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Title"
+                Style="width:70%; max-width: 500px" />
+            <RadzenButton Icon="add" Variant="Variant.Text" Click="OpenNewForm" />
         </RadzenRow>
 
-    </div>
+
         @if (CurrentSelection is not null)
         {
             <div class="mb-3">
@@ -30,7 +31,10 @@ else
                 </RadzenFieldset>
             </div>
         }
-</RadzenTemplateForm>
+    </div>
+    </RadzenTemplateForm>
+
+
 
 }
 
@@ -74,14 +78,14 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-       if (CurrentTemplate.IdTemplate != 0 && CurrentTemplate.Description.Id != 0)
+        if (CurrentTemplate.IdTemplate != 0 && CurrentTemplate.Description.Id != 0)
         {
             CurrentSelection = CurrentTemplate.Description;
         }
         else
         {
             CurrentSelection = TemplatesDescriptions.FirstOrDefault();
-        } 
+        }
     }
 
 
@@ -97,10 +101,10 @@ else
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-            {
-                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
-                { "OnSaveComplete", EventCallback.Factory.Create<TemplateDescriptionModel>(this, Reload) },
-            };
+{
+//tra i parametri che invio al dialog creo un EventCallback da passare al componente
+{ "OnSaveComplete", EventCallback.Factory.Create<TemplateDescriptionModel>(this, Reload) },
+};
         await DialogService.OpenAsync<FormTemplateDescription>("Nuova scelta", parameters: param, options: newOptions);
     }
 

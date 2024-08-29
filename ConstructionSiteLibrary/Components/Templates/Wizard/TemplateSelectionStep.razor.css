@@ -7,11 +7,18 @@
     margin-bottom: 2rem;
 }
 
-.divForward {
+/* .divForward {
     display: flex;
     justify-content: flex-end;
-}
+} */
 
-.buttonForward, ::deep .buttonForward {
+/* .buttonForward, ::deep .buttonForward {
     width: 120px;
+} */
+
+.cardClass {
+    border-radius: 0.8rem !important;
+    background: #FFF;
+    border-color: var(--border-Card);
+    background-color: var(--card-background-color) !important;
 }
