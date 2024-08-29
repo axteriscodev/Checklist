@@ -14,7 +14,7 @@ else
     <RadzenTemplateForm TItem="TemplateModel" Data="@CurrentTemplate" >
         <div class="card shadow mb-3 divCard">
             <RadzenText>Seleziona un template preesistente o creane uno nuovo</RadzenText>
-            <RadzenDropDown @bind-Value=@CurrentTemplate Data=@Templates TextProperty="TitleTemplate" AllowClear=true
+            <RadzenDropDown @bind-Value=@Data.SelectedTemplate Data=@Templates TextProperty="TitleTemplate" AllowClear=true
                             Change="@((args) => OnTemplateChanged(args))" Placeholder="-" />
         </div>
 
@@ -63,6 +63,7 @@ else
     private async Task OnTemplateChanged(object template)
     {
         //CurrentTemplate = template as TemplateModel;
+        Data.SelectedTemplate = template as TemplateModel;
         await OnTemplateSelected.InvokeAsync(template as TemplateModel);
     }
 
