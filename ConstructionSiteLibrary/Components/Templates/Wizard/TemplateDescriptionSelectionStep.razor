@@ -11,9 +11,8 @@
 }
 else
 {
-    <RadzenTemplateForm TItem="TemplateDescriptionModel" Data="@CurrentSelection">
-    <div class="card round-border mb-3 divCard cardClass">
-        <RadzenText>Seleziona una descrizione</RadzenText>
+    <fieldset class="card cardClass round-border divCard mb-2">
+        <legend class="fieldset-title">Seleziona una descrizione</legend>
         <RadzenRow>
             <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Title"
                 Style="width:70%; max-width: 500px" />
@@ -31,8 +30,7 @@ else
                 </RadzenFieldset>
             </div>
         }
-    </div>
-    </RadzenTemplateForm>
+    </fieldset>
 
 
 

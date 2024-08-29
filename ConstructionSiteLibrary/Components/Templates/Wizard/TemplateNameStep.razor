@@ -11,24 +11,26 @@
 }
 else
 {
-    <RadzenTemplateForm TItem="string" Data="@Title">
-    <div class="card round-border mb-3 divCard cardClass">
-        <RadzenText>Inserisci un nome per il template</RadzenText>
-        <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
-            class="formFieldTitolo">
-            <ChildContent>
-                <RadzenTextBox Name="Nome" @bind-Value="@Title" />
-            </ChildContent>
-            <Helper>
-                <RadzenRequiredValidator @ref="@validator" Component="Nome" Popup=false Text="Il titolo è obbligatorio"  />
-            </Helper>
-        </RadzenFormField>
+    <fieldset class="card cardClass round-border divCard mb-2">
+    @* <RadzenTemplateForm TItem="string" Data="@Title"> *@
+        @* <div class="card round-border mb-3 divCard cardClass"> *@
+            <legend class="fieldset-title">Inserisci un nome per il template</legend>
+            <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
+                class="formFieldTitolo">
+                <ChildContent>
+                    <RadzenTextBox Name="Nome" @bind-Value="@Title" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator @ref="@validator" Component="Nome" Popup=false Text="Il titolo è obbligatorio"  />
+                </Helper>
+            </RadzenFormField>
 
-        @* <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" /> *@
+            @* <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" /> *@
 
-  
-    </div>
-</RadzenTemplateForm>
+    
+        @* </div> *@
+    </fieldset>
+    @* </RadzenTemplateForm> *@
 }
 
 @code

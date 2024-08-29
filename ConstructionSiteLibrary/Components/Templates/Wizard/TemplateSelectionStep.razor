@@ -11,12 +11,11 @@
 }
 else
 {
-    <RadzenTemplateForm TItem="TemplateModel" Data="@CurrentTemplate" >
-        <div class="card round-border mb-3 divCard cardClass" >
-            <RadzenText>Seleziona un template preesistente o creane uno nuovo</RadzenText>
+        <fieldset class="card cardClass round-border divCard mb-2">
+            <legend class="fieldset-title">Seleziona un template preesistente o creane uno nuovo</legend>
             <RadzenDropDown @bind-Value=@Data.SelectedTemplate Data=@Templates TextProperty="TitleTemplate" AllowClear=true
                             Change="@((args) => OnTemplateChanged(args))" Placeholder="-" />
-        </div>
+        </fieldset>
 
         @* @if (Data.SelectedTemplate is not null)
         {
@@ -25,7 +24,6 @@ else
             </div>
         } *@
 
-    </RadzenTemplateForm>
 }
 
 @code
