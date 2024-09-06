@@ -198,6 +198,10 @@
         display: block;
     }
 
+        .collapse:not(.show) {
+            display: block !important;
+        }
+
     .nav-scrollable {
         /* Allow sidebar to scroll for tall menus */
         height: calc(100vh - var(--sidebar-top-hight));
