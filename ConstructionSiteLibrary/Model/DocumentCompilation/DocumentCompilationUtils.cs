@@ -85,12 +85,17 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
 
         public static string CategoryText(DocumentCategoryModel cat)
         {
-            return cat.Text;
+            return cat.Order +". " + cat.Text;
         }
 
-        public static string QuestionText(DocumentCategoryModel cat, string questionText, int order)
+        public static string QuestionTextNumber(DocumentCategoryModel cat, string questionText, int order)
         {
             return cat.Order + "." + order + " " + questionText;
+        }
+
+        public static string QuestionText(DocumentCategoryModel cat, string questionText)
+        {
+            return questionText;
         }
 
         public static string QuestionNumber(DocumentCategoryModel cat, int order)
