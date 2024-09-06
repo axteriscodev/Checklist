@@ -13,12 +13,12 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
 
         #region Titoli macro categorie documento
 
-        public static string ConstructionSiteData = "DATI,CANTIERE,FIGURE RESPONSABILI,PROGETTISTI,RIUNIONI";
-        public static string Companies = "IMPRESE PRESENTI: FIGURE RESPONSABILI,PERSONALE,FORMALE,ATTREZZATURA";
-        public static string QuestionNotes = "ULTERIORI PRECISAZIONI ED EVENTUALI PRESCRIZIONI";
-        public static string Attachment = "ALLEGATI";
-        public static string DocumentNotes = "NOTE AGGIUNTIVE";
-        public static string DocumentSignatures = "FIRME";
+        public static string ConstructionSiteData = "Dati, cantiere, figure responsabili, progettisti, riunioni";
+        public static string Companies = "Imprese presenti: figure responsabili, personale, formale, attrezzatura";
+        public static string QuestionNotes = "Ulteriori precisazioni ed eventuali prescrizioni";
+        public static string Attachment = "Allegati";
+        public static string DocumentNotes = "Note aggiuntive";
+        public static string DocumentSignatures = "Firme";
 
         #endregion
 
