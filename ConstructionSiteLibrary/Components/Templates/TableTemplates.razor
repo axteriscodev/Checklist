@@ -35,8 +35,7 @@ else
                             <td>@template.NameTemplate</td>
                             <td>@template.CreationDate</td>
                             <td>
-                                <ButtonDropdown Object="@template"
-                                                OnUpdateClicked="@OpenModifyTemplate" OnDeleteClicked="@OpenDeleteTemplate" />
+                                <ButtonDropdown Object="@template" OnDeleteClicked="@OpenDeleteTemplate" DisableModify="true" />
                             </td>
                         </tr>
                     }

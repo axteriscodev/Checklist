@@ -155,12 +155,47 @@ else
     private async Task OpenModifyQuestion(object question)
     {
         var q = question as TemplateQuestionModel;
-        Console.WriteLine("apro la form di modifica");
+        var width = screenComponent.GetScreenSize();
+
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
+        var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+        {
+            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+            { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+            { "CreationMode", false },
+            {"Question", q!}
+        };
+        await DialogService.OpenAsync<FormQuestions>("Nuova domanda", parameters: param, options: newOptions);
     }
 
     private async Task OpenDeleteQuestion(object question)
     {
         var q = question as TemplateQuestionModel;
-        Console.WriteLine("apro la form di conferma cancellazione");
+
+        var titolo = "Disattivazione domanda";
+        var text = "Vuoi disattivare la domanda: " + q.Text + "?";
+        var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
+        Console.WriteLine("cliccato: " + confirmationResult);
+        if (confirmationResult == true)
+        {
+            var response = await QuestionRepository.HideQuestions([q]);
+            //NotificationService.Notify(response);
+            if (response)
+            {
+                await ReloadTable();
+            }
+        }
+    }
+
+    private async Task ReloadTable()
+    {
+        DialogService.Close();
+        await LoadData();
     }
 }
