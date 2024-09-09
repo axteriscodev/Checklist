@@ -18,14 +18,6 @@ else
             <h1 class="title">Nuovo template</h1>
         </div>
         <div class="col-12 col-lg-6 mt-5 m-lg-0 d-flex justify-content-center justify-content-lg-end">
-            @* <RadzenFormField AllowFloatingLabel="false" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
-                <Start>
-                    <RadzenIcon Icon="search" />
-                </Start>
-                <ChildContent>
-                    <RadzenTextBox Placeholder="@SearchPlaceholder" @oninput="@SearchChanged" />
-                </ChildContent>
-            </RadzenFormField> *@
             <RadzenButton Icon="save" Text="Salva" ButtonStyle="ButtonStyle.Info" Click="@SaveTemplate" IsBusy="@onSaving" class="my-button"/>
         </div>
     </div>

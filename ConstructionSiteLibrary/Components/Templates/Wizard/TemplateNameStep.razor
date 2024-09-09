@@ -4,7 +4,6 @@
 @inject TemplatesRepository TemplatesRepository
 @inject NavigationService NavigationService
 
-<ScreenComponent @ref="screenComponent" />
 @if (initialLoading)
 {
     <Loading />
@@ -12,8 +11,6 @@
 else
 {
     <fieldset class="card cardClass round-border divCard mb-2">
-    @* <RadzenTemplateForm TItem="string" Data="@Title"> *@
-        @* <div class="card round-border mb-3 divCard cardClass"> *@
             <legend class="fieldset-title">Inserisci un nome per il template</legend>
             <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
                 class="formFieldTitolo">
@@ -24,13 +21,8 @@ else
                     <RadzenRequiredValidator @ref="@validator" Component="Nome" Popup=false Text="Il titolo è obbligatorio"  />
                 </Helper>
             </RadzenFormField>
-
-            @* <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" /> *@
-
-    
-        @* </div> *@
     </fieldset>
-    @* </RadzenTemplateForm> *@
+
 }
 
 @code
@@ -42,17 +34,12 @@ else
 
     private bool onSaving = false;
 
-    private List<CategoryQuestionsGroup> groups = [];
-
     /// <summary>
     /// il design degli elementi della form
     /// </summary>
     readonly Variant variant = Variant.Outlined;
-
-    ScreenComponent screenComponent;
     RadzenRequiredValidator validator;
 
-    string? Title;
 
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
@@ -61,33 +48,6 @@ else
     {
         initialLoading = true;
         await base.OnInitializedAsync();
-        //LoadData();
-        //InitData();
         initialLoading = false;
     }
-
-    
-
-
-    @* public async Task SaveTemplate()
-    {
-        if (Title is not null && !string.IsNullOrEmpty(Title.Trim()))
-        {
-            onSaving = true;
-
-            CurrentTemplate.NameTemplate = Title;
-            CurrentTemplate.TitleTemplate = Title;
-
-            await TemplatesRepository.SaveTemplate(CurrentTemplate);
-
-            onSaving = false;
-
-            NavigationService.ChangePage(PageRouting.TemplatePage);
-        }
-        else
-        {
-            Title = null;
-        }
-    } *@
-
 }

@@ -85,7 +85,24 @@ p,.p {
     .my-button-text:hover {
         background-color: var(--rz-primary) !important;
         color: white !important;
+
     }
+
+.button-container{
+    border-radius: 12px;
+    border: 1px solid #AFCAF3;
+    display: flex;
+    padding: 15px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.bordered {
+    border-radius: 12px;
+    border: 1px solid #AFCAF3;
+}
 
 /* TABELLE */
 .table > :not(caption) > * > * {
@@ -160,8 +177,79 @@ tr {
     box-shadow: 0px var(--bs-accordion-btn-focus-box-shadow);
 }
 
-/* DIMENSIONI TESTI */
+/* Fieldset */
+fieldset.my-fieldset{
+    border-width: 1px;
+    border-style: groove;
+/*    border-color: rgb(192, 192, 192);*/
+    border-image: initial;
+    display: block;
+    margin-inline-start: 2px;
+    margin-inline-end: 2px;
+    padding-block-start: 0.35em;
+    padding-inline-start: 0.75em;
+    padding-inline-end: 0.75em;
+    padding-block-end: 0.625em;
+    min-inline-size: min-content;
+    border-radius: 12px;
+    border-color: #AFCAF3;
+    background: #FFF;
+    margin-top: 20px;
+}
 
+    fieldset.my-fieldset legend{
+        float: unset;
+        width: unset;
+        color: #0C336E;
+        leading-trim: both;
+        text-edge: cap;
+        font-feature-settings: 'liga' off, 'clig' off;
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 150%; /* 24px */
+        padding: 5px 10px;
+        background-color: #AFCAF3;
+        border-radius: 4px;
+        border: 1px #AFCAF3;
+    }
+
+    fieldset.my-fieldset label {
+        font-size: 12px !important;
+    }
+
+    fieldset.my-fieldset input.my-input,
+    fieldset.my-fieldset textarea.my-input{
+        border-color: #AFCAF3 !important;
+        width: 100%;
+        color: #0C336E;
+        font-feature-settings: 'liga' off, 'clig' off;
+        font-family: Inter;
+        font-size: 16px;
+        font-style: italic;
+        font-weight: 400;
+        line-height: 150%; /* 24px */
+    }
+
+    fieldset.my-fieldset h3{
+        font-weight: 700 !important;
+    }
+
+/* INPUT */
+.inputBorder {
+    border-color: var(--rz-primary-lighter) !important;
+}
+
+    .inputBorder > span > input {
+        border-color: var(--rz-primary-lighter) !important;
+    }
+
+.rz-radiobutton-box {
+    border-color: var(--rz-primary-lighter) !important;
+}
+
+/* DIMENSIONI TESTI */
 .text-100 {
     font-size: 100px !important;
 }

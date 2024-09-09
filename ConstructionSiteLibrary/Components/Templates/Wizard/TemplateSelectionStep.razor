@@ -16,14 +16,6 @@ else
             <RadzenDropDown @bind-Value=@Data.SelectedTemplate Data=@Templates TextProperty="TitleTemplate" AllowClear=true
                             Change="@((args) => OnTemplateChanged(args))" Placeholder="-" />
         </fieldset>
-
-        @* @if (Data.SelectedTemplate is not null)
-        {
-            <div class="mb-3">
-                <RecapTemplateQuestions SelectedTemplate="@Data.SelectedTemplate" />
-            </div>
-        } *@
-
 }
 
 @code
