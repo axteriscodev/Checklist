@@ -155,7 +155,7 @@ namespace ConstructionSiteLibrary.Services
         /// Metodo che restituisce la sede dell'utente loggato
         /// </summary>
         /// <returns></returns>
-        public OrganizationModel GetUserOrganizzation()
+        public OrganizationModel GetUserOrganization()
         {
             var user = GetUserInfo();
             return user.Organization;
