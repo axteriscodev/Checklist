@@ -14,18 +14,26 @@ else
     <div class="my-5">
     <div class="row">
         <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start">
-            <h1 class="title">Nuovo template</h1>
+            <h1 class="title">Il mio profilo</h1>
         </div>
         <div class="col-12 col-lg-6 mt-5 m-lg-0 d-flex justify-content-center justify-content-lg-end">
-            <RadzenButton Icon="save" Text="Salva" ButtonStyle="ButtonStyle.Info" Click="@Save"
+            <RadzenButton Icon="save" Text="Salva modifiche" ButtonStyle="ButtonStyle.Info" Click="@Save"
                 IsBusy="@onSaving" class="my-button" />
         </div>
     </div>
 </div>
 
-    <OrganizationView Organization="@organization" />
+    <div class="row">
+        <div class="col-4">
+            <OrganizationView Organization="@organization" Role="@role"/>
+        </div>
 
-    <UserInfo User="@user" />
+        <div class="col-8">
+
+            <UserInfo User="@user" />
+        </div>
+
+    </div>
 }
 
 
@@ -61,7 +69,7 @@ else
 
     private void Save()
     {
-        
+
     }
 
 
