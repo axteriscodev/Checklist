@@ -2,6 +2,7 @@
 @using Shared.Organizations
 
 @inject AppAuthenticationStateProvider AuthProvider
+@inject UserRepository UserRepository
 
 @attribute [Route(PageRouting.UserPage)]
 
@@ -67,9 +68,13 @@ else
         role = AuthProvider.GetUserRole();
     }
 
-    private void Save()
+    private async Task Save()
     {
+       onSaving = true;
+       await UserRepository.UpdateUsers([user]);
 
+       
+       onSaving = false;
     }
 
 
