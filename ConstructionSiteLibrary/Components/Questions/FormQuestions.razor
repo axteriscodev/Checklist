@@ -23,7 +23,8 @@ else
                 <RadzenFormField Text="Categoria <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
                     <ChildContent>
                         <RadzenDropDownDataGrid Data="@categories" TextProperty="Text" ValueProperty="Id" @bind-Value="@form.IdCategory"
-                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="Categoria">
+                                                AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
+                                                AllowColumnResize="true" AllowSorting="true" Name="Categoria">
                             <Columns>
                                 <RadzenDropDownDataGridColumn Property="Order" Title="N." Width="40px" />
                                 <RadzenDropDownDataGridColumn Property="Text" Title="Categoria" Width="200px" />
@@ -33,13 +34,7 @@ else
                     <Helper>
                         <RadzenRequiredValidator Component="Categoria" Popup=false Text="Il campo Categoria è obbligatorio" />
                     </Helper>
-                </RadzenFormField>
-                <RadzenFormField Text="Argomento" Variant="@variant">
-                    <ChildContent>
-                        <RadzenDropDown Data="@subjects" TextProperty="Text" ValueProperty="Id" @bind-Value="@form.IdSubject"
-                            AllowClear="true" AllowFiltering="true"/>
-                    </ChildContent>
-                </RadzenFormField>             
+                </RadzenFormField>           
                 <RadzenFormField Text="Note" Variant="@variant">
                     <ChildContent>
                         <RadzenTextBox Name="Note" @bind-Value="@form.Note" />

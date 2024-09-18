@@ -9,7 +9,11 @@ public partial class CompanyDocument
 
     public int IdCompany { get; set; }
 
-    public string? Notes { get; set; }
+    public bool Present { get; set; }
+
+    public string? InChargeWorker { get; set; }
+
+    public string? Workers { get; set; }
 
     public virtual Company IdCompanyNavigation { get; set; } = null!;
 

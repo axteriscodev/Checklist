@@ -1,12 +1,9 @@
-﻿@using ConstructionSiteLibrary.Components.Subjects;
-@using ConstructionSiteLibrary.Components.Categories;
-@using ConstructionSiteLibrary.Model
+﻿@using ConstructionSiteLibrary.Components.Categories;
+@using ConstructionSiteLibrary.Model;
 
-@page "/categories"
+@attribute [Route(PageRouting.CategoriesPage)]
 
-<h3>Categorie</h3>
-
-<ScreenComponent MediumWith="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
+<ScreenComponent SizeS="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
 
 <DynamicComponent @ref=dynamicComponent Type=@selectedType/>
 
@@ -18,7 +15,7 @@
 
      private void ScreenDimensionObserver(ScreenDimension? dimension)
     {
-        if (dimension == ScreenDimension.Small)
+        if (dimension == ScreenDimension.S || dimension == ScreenDimension.XS)
         {
             selectedType = typeof(TableCategoriesMobile);
         }

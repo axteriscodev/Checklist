@@ -1,0 +1,61 @@
+﻿@using Shared.Templates
+@using ConstructionSiteLibrary.Model.DocumentWizard
+@using ConstructionSiteLibrary.Model
+@using ConstructionSiteLibrary.Components.Templates
+@inject TemplatesRepository TemplateRepository
+
+
+<div>
+    @if (onloading)
+    {
+        <Loading />
+    }
+    else
+    {
+                <fieldset class="my-fieldset">
+            <legend class="my-legend">Seleziona un template</legend>
+            <RadzenDropDown TValue="TemplateModel" Name="TemplateChoice" @bind-Value="@selectedTemplate" class="inputBorder"
+                            Data="@templates" TextProperty="NameTemplate" Change="@(args=>  ChangedSelectedTemplate(args))" />
+        </fieldset>
+    }
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public EventCallback<TemplateModel> OnTemplateSelected{ get; set; }
+
+    private TemplateModel? selectedTemplate { get; set; }
+
+    private List<TemplateModel> templates = [];
+
+    private bool onloading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        onloading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onloading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+
+
+
+    public async Task LoadData()
+    {
+        templates = await TemplateRepository.GetTemplates();
+    }
+
+    public async Task ChangedSelectedTemplate(object args)
+    {
+        await OnTemplateSelected.InvokeAsync(selectedTemplate);
+    }
+
+}

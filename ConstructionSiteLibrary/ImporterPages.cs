@@ -13,10 +13,11 @@ namespace ConstructionSiteLibrary
             List<System.Reflection.Assembly> pages = [];
             pages.Add(typeof(Pages.Home).Assembly);
             pages.Add(typeof(Pages.QuestionPage).Assembly);
-            pages.Add(typeof(Pages.FormCreationPage).Assembly);
-            pages.Add(typeof(Pages.FormCompilationPage).Assembly);
+            pages.Add(typeof(Pages.TemplatePage).Assembly);
+            pages.Add(typeof(Pages.DocumentCompilationPage).Assembly);
             pages.Add(typeof(Pages.ChoicesPage).Assembly);
             pages.Add(typeof(Pages.CategoriesPage).Assembly);
+            pages.Add(typeof(Pages.ConstructorSitePage).Assembly);
 
             return pages;
         }

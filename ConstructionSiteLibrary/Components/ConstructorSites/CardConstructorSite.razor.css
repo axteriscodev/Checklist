@@ -1,0 +1,32 @@
+﻿
+.round-border {
+    border-radius: 1.2rem !important;
+}
+
+.text-border {
+    margin-bottom: 0rem !important
+}
+
+
+
+.title-weight {
+    font-weight: 900;
+}
+
+
+.cardClass {
+    border-radius: 0.8rem !important;
+    background: #FFF;
+    border-color: var(--border-Card);
+    padding: 1rem 2.5rem !important;
+    background-color: var(--card-background-color) !important;
+}
+
+    .cardClass:hover {
+        border: 1px solid var(--rz-primary);
+        box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, .15) !important;
+        background-color: var(--card-background-color-hover) !important;
+    }
+
+/* CARDS */
+

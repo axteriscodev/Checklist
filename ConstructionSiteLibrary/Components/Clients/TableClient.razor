@@ -1,0 +1,53 @@
+﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
+@using Shared;
+@using Shared.Documents;
+
+@inject ClientsRepository ClientsRepository
+@inject DialogService DialogService
+@inject GlobalVariables GlobalVariables
+
+<ScreenComponent @ref="screenComponent" />
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="Committenti" ButtonText="+ aggiungi committente" SearchPlaceholder="Cerca committente"
+                        OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
+
+        <table class="table table-striped my-table">
+            <thead>
+                <th scope="col">Nome</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                @if(displayedClients.Count > 0)
+                {
+                    @foreach(var client in displayedClients)
+                    {
+                        <tr>
+                            <td>@client.Name</td>
+                            <td>
+                                <ButtonDropdown Object="@client"
+                                                OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="2">Nessun cliente trovato</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+        </div>
+    </div>
+}

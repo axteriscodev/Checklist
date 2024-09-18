@@ -1,6 +1,8 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
+using Shared.Login;
+using Shared.Organizations;
 using System.Diagnostics;
 using System.Text.Json;
 using TDatabase.Database;
@@ -15,7 +17,28 @@ namespace ServerHost.Controllers
 
 
         [NonAction]
-        protected DbCsclAxteriscoContext GetDbConnection()
+        protected UserModel GetUser()
+        {
+            UserModel user = new();
+            try
+            {
+                var json = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals(UserClaims.User))!.Value ;
+                user = JsonSerializer.Deserialize<UserModel>(json) ?? new();
+            }
+            catch (Exception) { }
+
+            return user;
+        }
+
+        [NonAction]
+        protected int GetUserOrganization()
+        {
+            var user = GetUser();
+            return user.Organization.Id;
+        }
+
+        [NonAction]
+        protected DbCsclDamicoV2Context GetDbConnection()
         {
             var connectionString = ConfigurationService.GetConnection() ?? "";
             return DatabaseContextFactory.Create(connectionString);

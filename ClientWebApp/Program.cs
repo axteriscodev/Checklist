@@ -3,9 +3,13 @@ using ClientWebApp.Services;
 using ConstructionSiteLibrary.Interfaces;
 using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Repositories;
+using ConstructionSiteLibrary.Services;
+using ConstructionSiteLibrary.Utility;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
+using WebStorageManagement;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -24,11 +28,36 @@ builder.Services.AddScoped<CategoriesRepository>();
 builder.Services.AddScoped<QuestionRepository>();
 //repository per i documenti
 builder.Services.AddScoped<DocumentsRepository>();
+//repository per i template
+builder.Services.AddScoped<TemplatesRepository>();
+//repository per i cantieri
+builder.Services.AddScoped<ConstructorSitesRepository>();
+//repository per i clienti
+builder.Services.AddScoped<ClientsRepository>();
+//repository per le aziende
+builder.Services.AddScoped<CompaniesRepository>();
+//repository per utenti e login
+builder.Services.AddScoped<UserRepository>();
+//Global Variables
+builder.Services.AddSingleton<GlobalVariables>();
 
 builder.Services.AddScoped<ICameraService, CameraService>();
+builder.Services.AddScoped<IndexedDBService>();
 
+/* Servizi per la navigazione delle pagine */
+builder.Services.AddScoped<NavigationService>();
+builder.Services.AddScoped<InvokeJSRuntime>();
 
 //componenti radzen
 builder.Services.AddRadzenComponents();
+
+//Gestione dello storage
+builder.Services.AddWebStorageManagement();
+
+//gestione autenticazione e autorizzazione
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AppAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
+    provider.GetRequiredService<AppAuthenticationStateProvider>());
 
 await builder.Build().RunAsync();

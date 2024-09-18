@@ -1,0 +1,17 @@
+﻿@using ConstructionSiteLibrary.Managers
+@using ConstructionSiteLibrary.Repositories
+@using Shared;
+
+@inject CategoriesRepository CategoriesRepository
+@inject TemplatesRepository TemplatesRepository
+@inject DialogService DialogService
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <QuestionsSelection @ref="questionsSelection" CurrentTemplate="@CurrentTemplate"/>
+}

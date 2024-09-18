@@ -1,0 +1,61 @@
+﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
+@using Shared
+@using Shared.Documents
+
+@inject CompaniesRepository CompaniesRepository
+@inject DialogService DialogService
+@inject NavigationService Navigation
+@inject GlobalVariables GlobalVariables
+
+<ScreenComponent @ref="screenComponent" />
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="Ditte cantiere" ButtonText="+ aggiungi ditta" SearchPlaceholder="Cerca azienda"
+                    OnButtonClicked="@OpenAddCompanyPage" OnSearchChanged="@SearchChanged" />
+
+        <table class="table table-striped my-table">
+                <thead>
+                <th scope="col">Nome</th>
+                <th scope="col">Indirizzo</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Email</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                @if(displayedCompanies.Count > 0)
+                {
+                    @foreach(var comp in displayedCompanies)
+                    {
+                        <tr>
+                            <td>@GetName(comp)</td>
+                            <td>@comp.Address</td>
+                            <td>@comp.Phone</td>
+                            <td>@comp.Email</td>
+                            <td>
+                                <ButtonDropdown Object="@comp"
+                                                OnUpdateClicked="@OpenUpdateCompany" OnDeleteClicked="@OpenDeleteCompany" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">Nessuna ditta cantiere trovata</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+        </div>
+    </div>
+}

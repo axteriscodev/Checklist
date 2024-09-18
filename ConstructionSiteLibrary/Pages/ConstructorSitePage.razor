@@ -1,0 +1,14 @@
+﻿@using ConstructionSiteLibrary.Components.ConstructorSites
+@inject ConstructorSitesRepository SiteRepository
+
+@attribute [Route(PageRouting.ConstructorSitePage + "{SiteId:int}")]
+
+
+<ConstructorSiteDetails SiteId="@SiteId" />
+
+
+@code{
+
+    [Parameter]
+    public int SiteId { get; set; }
+}

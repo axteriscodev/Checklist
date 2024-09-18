@@ -1,0 +1,31 @@
+﻿
+
+
+@using ConstructionSiteLibrary.Components.Companies
+@using ConstructionSiteLibrary.Model
+@attribute [Route(PageRouting.CompaniesPage)]
+
+<ScreenComponent SizeS="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
+
+<DynamicComponent @ref=dynamicComponent Type=@selectedType/>
+
+@code
+{
+
+    private DynamicComponent? dynamicComponent;
+    private Type selectedType = typeof(TableCompanies);
+
+     private void ScreenDimensionObserver(ScreenDimension? dimension)
+    {
+        if (dimension == ScreenDimension.S || dimension == ScreenDimension.XS)
+        {
+            selectedType = typeof(TableCompaniesMobile);
+        }
+        else
+        {
+            selectedType = typeof(TableCompanies);
+        }
+
+        StateHasChanged();
+    }
+}

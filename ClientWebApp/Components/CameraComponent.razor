@@ -1,0 +1,76 @@
+﻿@using Microsoft.JSInterop
+@using Radzen
+
+@inject IJSRuntime JS
+@inject DialogService DialogService
+
+
+
+
+
+
+
+<div class="vstack">
+  <video id="player" controls autoplay></video>
+
+  <canvas id="canvas" width="1280" height="720" style="display: none;"></canvas>
+
+  <div class="row mt-2 justify-content-center" style="display: flex;" id="shutterButton">
+    <RadzenButton class="cameraButtons"Icon="camera" Click="@TakePicture" />
+  </div>
+
+  <div class="hstack gap-3 mt-2 justify-content-center" id="controlButtons" style="display: none;">  
+    <RadzenButton class="cameraButtons" Text="Cancella" ButtonStyle="ButtonStyle.Danger" Click="@CancelPicture" />
+    <RadzenButton class="cameraButtons" Text="Conferma" Click="@ConfirmPicture" IsBusy="@isSaving" BusyText="Salvataggio..."/>
+  </div>
+</div>
+
+
+
+@code {
+
+  private IJSObjectReference jsModule;
+
+  private bool isSaving = false;
+
+
+  @* protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+
+} *@
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+
+    jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./camera-service.js");
+
+    await jsModule.InvokeVoidAsync("openCamera");
+
+  }
+
+  public async Task ConfirmPicture()
+  {
+    isSaving = true;
+    await jsModule.InvokeVoidAsync("confirmPicture" , DotNetObjectReference.Create(this));
+  }
+
+  public async Task CancelPicture()
+  {
+    await jsModule.InvokeVoidAsync("openCamera");
+  }
+
+  public async Task TakePicture()
+  {
+    await jsModule.InvokeVoidAsync("takePicture");
+  }
+
+
+  [JSInvokable]
+  public async Task GetImage(string base64Image)
+  {
+    isSaving = false;
+    //isAlreadyOpen = false;
+    DialogService.Close(base64Image);
+  }
+
+}

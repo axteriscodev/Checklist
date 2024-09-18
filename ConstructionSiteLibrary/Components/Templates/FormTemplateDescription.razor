@@ -1,0 +1,64 @@
+﻿@using Shared.Templates;
+
+@inject TemplatesRepository TemplateRepository
+
+<div class="">
+    <RadzenTemplateForm TItem="FormDescription" Data=@form Submit=@Save>
+        <RadzenStack class="px-2">
+            <RadzenFormField Text="Titolo<span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox Name="titolo" @bind-Value="@form.Title" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="titolo" Popup=false Text="Il campo titolo è obbligatorio" />
+                </Helper>
+            </RadzenFormField>
+
+            <RadzenFormField Text="Descrizione <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextArea Name="descrizione" @bind-Value="@form.Description" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="descrizione" Popup=false Text="Il campo descrizione è obbligatorio" />
+                </Helper>
+            </RadzenFormField>
+
+
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
+                          BusyText="Salvataggio in corso" />
+        </RadzenStack>
+    </RadzenTemplateForm>
+</div>
+
+@code {
+
+
+    [Parameter]
+    public EventCallback<TemplateDescriptionModel> OnSaveComplete { get; set; }
+
+    private FormDescription form = new();
+    private Variant variant = GlobalVariables.ComponentVariant;
+    private bool onSaving;
+
+
+
+
+    private async Task Save(){
+        onSaving = true;
+        var rq = new TemplateDescriptionModel() { Title = form.Title ?? "", Description = form.Description ?? "" };
+        var response = await TemplateRepository.SaveTemplateDescription(rq);
+        if (response)
+        {
+            await OnSaveComplete.InvokeAsync(rq);
+        }
+        onSaving = false;
+    }
+
+
+    private class FormDescription
+    {
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+    }
+
+}

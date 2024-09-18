@@ -1,14 +1,14 @@
-﻿using System.Data.Common;
-using Shared;
+﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+using Shared.Documents;
+using System.Reflection.Emit;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclAxteriscoContext;
-using DocumentModel = Shared.DocumentModel;
+using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
 namespace TDatabase.Queries;
 
 public class DocumentDbHelper
 {
-    public static List<DocumentModel> Select(DB db, int idDocument = 0)
+    public static List<DocumentModel> Select(DB db, int organizationId, int idDocument = 0)
     {
         var documents = db.Documents.AsQueryable();
 
@@ -18,162 +18,392 @@ public class DocumentDbHelper
         }
 
         var docs = (from d in documents
+                    where d.IdOrganization == organizationId
                     select new DocumentModel()
                     {
                         Id = d.Id,
-                        Date = d.Date,
+                        IdTemplate = d.IdTemplate,
                         Title = d.Title,
+                        Description = d.Description ?? "",
+                        CreationDate = d.CreationDate ?? DateTime.Now,
+                        CompilationDate = d.CompilationDate,
+                        LastEditDate = d.LastEditDate ?? DateTime.Now,
+                        CSE = d.Cse,
+                        DraftedIn = d.DraftedIn,
+                        CompletedIn = d.CompletedIn,
+                        MeteoCondition = (from m in db.MeteoConditions
+                                          where d.IdMeteo == m.Id
+                                          select new MeteoConditionModel()
+                                          {
+                                              Id = m.Id,
+                                              Description = m.Description,
+                                          }).SingleOrDefault(),
                         Categories = (from r in (from qc in db.QuestionChosens
-                                                 from q in db.Questions
-                                                 where qc.IdDocument == d.Id
-                                                 && q.Id == qc.IdQuestion
-                                                 group q by q.IdCategory into q2
-                                                 select new { IdCategory = q2.First().IdCategory })
+                                                 where qc.IdTemplate == d.IdTemplate
+                                                 join q in db.Questions on qc.IdQuestion equals q.Id
+                                                 select new { q.IdCategory }).Distinct()
 
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
                                       orderby c.Order
-                                      select new CategoryModel()
+                                      select new DocumentCategoryModel()
                                       {
-                                          Id = c.Id,
+                                          Id = r.IdCategory,
                                           Text = c.Text,
                                           Order = c.Order,
-                                          Questions = (from qc in db.QuestionChosens
+                                          Questions = (from tc in db.Templates
+                                                       from qc in db.QuestionChosens
                                                        from q in db.Questions
-                                                       where qc.IdDocument == d.Id
+                                                       where tc.Id == d.IdTemplate
+                                                       && qc.IdTemplate == tc.Id
                                                        && q.Id == qc.IdQuestion
                                                        && q.IdCategory == c.Id
-                                                       select new QuestionModel()
+                                                       orderby qc.Order
+                                                       select new DocumentQuestionModel()
                                                        {
-                                                           Id = qc.IdQuestion,
+                                                           Id = qc.Id,
                                                            Text = q.Text,
                                                            Order = qc.Order,
                                                            Note = qc.Note ?? "",
-                                                           CurrentChoice = (from cc in db.Choices
-                                                                            where cc.Id == qc.IdCurrentChoice
-                                                                            select new ChoiceModel() 
+                                                           CurrentChoices = (
+                                                                            from qa in db.QuestionAnswereds
+                                                                            from cc in db.Choices
+                                                                            where qa.IdDocument == d.Id
+                                                                            && qa.IdQuestionChosen == qc.Id
+                                                                            && cc.Id == qa.IdCurrentChoice
+                                                                            select new DocumentChoiceModel()
                                                                             {
                                                                                 Id = cc.Id,
                                                                                 Value = cc.Value,
-                                                                                Tag = cc.Tag,
-                                                                            }).FirstOrDefault(),
-                                                            Choices = (
+                                                                                Reportable = cc.Reportable,
+                                                                                Color = cc.Color,
+                                                                                ReportedCompanyIds = (from rc in db.ReportedCompanies
+                                                                                                      where rc.IdCurrentChoice == qa.IdCurrentChoice
+                                                                                                      && rc.IdQuestionChosen == qa.IdQuestionChosen
+                                                                                                      && rc.IdDocument == d.Id
+                                                                                                      select rc.IdCompany).ToList(),
+                                                                            }).ToList(),
+                                                           Choices = (
                                                              from qch in db.QuestionChoices
                                                              from ch in db.Choices
                                                              where qch.IdQuestion == q.Id
                                                              && ch.Id == qch.IdChoice
                                                              && ch.Active == true
-                                                             select new ChoiceModel()
+                                                             select new DocumentChoiceModel()
                                                              {
-                                                                Id = ch.Id,
-                                                                Value = ch.Value,
-                                                                Tag = ch.Tag,
-                                                             }).ToList()
+                                                                 Id = ch.Id,
+                                                                 Value = ch.Value,
+                                                                 Reportable = ch.Reportable,
+                                                                 Color = ch.Color,
+
+                                                             }).ToList(),
+
+                                                           Attachments = (from aq in db.AttachmentQuestions
+                                                                          from att in db.Attachments
+                                                                          where aq.IdQuestion == qc.Id
+                                                                          && att.IdDocument == d.Id
+                                                                          && att.Id == aq.IdAttachment
+                                                                          select new AttachmentModel()
+                                                                          {
+                                                                              Id = att.Id,
+                                                                              Name = att.Name,
+                                                                              Date = att.DateTime,
+                                                                              Path = att.FilePath ?? "",
+                                                                              Image = att.Image ?? ""
+                                                                          }).ToList(),
                                                        }).ToList()
                                       }).ToList(),
+                        ConstructorSite = (from cs in db.ConstructorSites
+                                           where cs.Id == d.IdConstructorSite
+                                           select new ConstructorSiteModel()
+                                           {
+                                               Id = cs.Id,
+                                               JobDescription = cs.JobDescription ?? "",
+                                               StartDate = cs.StartDate ?? DateTime.Now,
+                                               Address = cs.Address ?? "",
+                                               Client = (from cl in db.Clients
+                                                         where cl.Id == cs.IdClient
+                                                         select new ClientModel()
+                                                         {
+                                                             Id = cl.Id,
+                                                             Name = cl.Name
+                                                         }).SingleOrDefault() ?? new(),
+                                           }).SingleOrDefault() ?? new(),
+                        Client = (from cl in db.Clients
+                                  where cl.Id == d.IdClient
+                                  select new ClientModel()
+                                  {
+                                      Id = cl.Id,
+                                      Name = cl.Name
+                                  }).SingleOrDefault(),
 
+                        Companies = (from compDoc in db.CompanyDocuments
+                                     from comp in db.Companies
+                                     where compDoc.IdDocument == d.Id
+                                     && comp.Id == compDoc.IdCompany
+                                     select new CompanyModel()
+                                     {
+                                         Id = comp.Id,
+                                         CompanyName = comp.CompanyName ?? "",
+                                         Address = comp.Address ?? "",
+                                         VatCode = comp.Vatcode ?? "",
+                                         Present = compDoc.Present,
+                                         InChargeWorker = compDoc.InChargeWorker ?? "",
+                                         Workers = compDoc.Workers ?? ""
+                                     }).ToList(),
+                        Notes = (from n in db.Notes
+                                 where n.IdDocument == d.Id
+                                 && n.Active == true
+                                 orderby n.Id
+                                 select new NoteModel()
+                                 {
+                                     Id = n.Id,
+                                     Text = n.Text ?? "",
+                                     CompanyListIds = (from cn in db.CompanyNotes
+                                                       where cn.IdNote == n.Id
+                                                       select cn.IdCompany).ToList(),
+                                     Attachments = (from an in db.AttachmentNotes
+                                                    from att in db.Attachments
+                                                    where an.IdNote == n.Id
+                                                    && att.Id == an.IdAttachment
+                                                    select new AttachmentModel()
+                                                    {
+                                                        Id = att.Id,
+                                                        Name = att.Name,
+                                                        Date = att.DateTime,
+                                                        Path = att.FilePath ?? "",
+                                                        Image = att.Image ?? "",
+                                                    }).ToList(),
+                                 }).ToList(),
                     }).ToList();
 
         return docs;
     }
 
-    public static async Task<int> Insert(DB db, DocumentModel document)
+
+    public static List<DocumentModel> SelectFromSite(DB db, int siteId)
     {
+        var docs = (from d in db.Documents
+                    where d.IdConstructorSite == siteId
+                    join cs in db.ConstructorSites on d.IdConstructorSite equals cs.Id
+                    select new DocumentModel()
+                    {
+                        Id = d.Id,
+                        IdTemplate = d.IdTemplate,
+                        Title = d.Title,
+                        Description = d.Description ?? "",
+                        CreationDate = d.CreationDate ?? DateTime.Now,
+                        CompilationDate = d.CompilationDate,
+                        LastEditDate = d.LastEditDate,
+                        ConstructorSite = new()
+                        {
+                            Id = cs.Id,
+                            JobDescription = cs.JobDescription ?? "",
+                            StartDate = cs.StartDate ?? DateTime.Now,
+                            Address = cs.Address ?? "",
+                            Client = (from cl in db.Clients
+                                      where cl.Id == cs.IdClient
+                                      select new ClientModel()
+                                      {
+                                          Id = cl.Id,
+                                          Name = cl.Name
+                                      }).SingleOrDefault() ?? new(),
+                        },
+                        Client = (from cl in db.Clients
+                                  where cl.Id == d.IdClient
+                                  select new ClientModel()
+                                  {
+                                      Id = cl.Id,
+                                      Name = cl.Name
+                                  }).SingleOrDefault(),
+                    }).ToList();
+
+        return docs;
+    }
+
+    public static async Task<int> Insert(DB db, DocumentModel document, int organizationId)
+    {
+        //valore restituito dalla funzione
         var documentId = 0;
         try
         {
-            var nextId = (db.Documents.Any() ? db.Documents.Max(x => x.Id) : 0) + 1;
+            var nextId = document.Id == 0 ? (db.Documents.Any() ? db.Documents.Max(x => x.Id) : 0) + 1 : document.Id;
+            // inserisco i dati principali del documento
             Document newDocument = new()
             {
                 Id = nextId,
-                IdConstructorSite = document.ConstructorSite?.Id,
-                IdClient = document.Client?.Id,
+                IdOrganization = organizationId,
+                IdConstructorSite = document.ConstructorSite.Id,
+                IdClient = document.Client?.Id > 0 ? document.Client?.Id : null,
+                IdTemplate = document.IdTemplate,
+                CreationDate = document.CreationDate,
+                LastEditDate = document.LastEditDate,
+                CompilationDate = document.CompilationDate,
                 Title = document.Title,
-                Date = document.Date,
+                Description = document.Description,
+                ReadOnly = document.ReadOnly,
+                Cse = document.CSE,
+                DraftedIn = document.DraftedIn,
+                CompletedIn = document.CompletedIn,
+                IdMeteo = document.MeteoCondition?.Id,
             };
 
             db.Documents.Add(newDocument);
 
-            var nextQuestionChosenId = (db.QuestionChosens.Any() ? db.QuestionChosens.Max(x => x.Id) : 0) + 1;
-
-            foreach (var c in document.Categories)
+            //aggiungo le compagnia associate al documento
+            foreach (var companyDoc in document.Companies)
             {
-                foreach (var q in c.Questions)
+                //se la company è nuova riutilizziamo l'insert della company per aggiungerla
+                if (companyDoc.Id == 0)
                 {
-                    QuestionChosen qc = new()
-                    {
-                        Id = nextQuestionChosenId,
-                        IdDocument = nextId,
-                        IdQuestion = q.Id,
-                        Order = q.Order,
-                        Printable = true,
-                        Hidden = false
-                    };
-                    db.QuestionChosens.Add(qc);
-                    nextQuestionChosenId++;
+                    companyDoc.Id = await CompanyDbHelper.Insert(db, companyDoc, organizationId, false);
                 }
 
+                CompanyDocument cd = new()
+                {
+                    IdCompany = companyDoc.Id,
+                    IdDocument = nextId,
+                    Present = companyDoc.Present ?? false,
+                    InChargeWorker = companyDoc.InChargeWorker ?? "",
+                    Workers = companyDoc.Workers ?? "",
+                };
+
+                db.CompanyDocuments.Add(cd);
+            }
+
+            var nextAttachId = (db.Attachments.Any() ? db.Attachments.Max(x => x.Id) : 0) + 1;
+
+            //aggiungo le risposte compilate del documento
+            foreach (var cat in document.Categories)
+            {
+                foreach (var q in cat.Questions)
+                {
+                    foreach (var cc in q.CurrentChoices)
+                    {
+                        if (cc.Id != 0)
+                        {
+                            QuestionAnswered qc = new()
+                            {
+                                IdDocument = nextId,
+                                IdCurrentChoice = cc.Id,
+                                IdQuestionChosen = q.Id
+                            };
+                            db.QuestionAnswereds.Add(qc);
+                            //aggiungo le compagnie riportate delle varie risposte se ci sono
+                            foreach (var rci in cc.ReportedCompanyIds)
+                            {
+                                ReportedCompany rc = new()
+                                {
+                                    IdCompany = rci,
+                                    IdDocument = nextId,
+                                    IdCurrentChoice = cc.Id,
+                                    IdQuestionChosen = q.Id
+                                };
+                                db.ReportedCompanies.Add(rc);
+                            }
+                        }
+
+                    }
+
+                    foreach (var attach in q.Attachments)
+                    {
+
+                        Attachment attachment = new()
+                        {
+                            Id = nextAttachId,
+                            IdType = 1,
+                            IdDocument = nextId,
+                            DateTime = attach.Date,
+                            Name = attach.Name,
+                            Image = attach.Image,
+
+                        };
+                        db.Attachments.Add(attachment);
+
+                        AttachmentQuestion attachmentQuestion = new()
+                        {
+                            IdAttachment = nextAttachId,
+                            IdQuestion = q.Id,
+                        };
+                        db.AttachmentQuestions.Add(attachmentQuestion);
+                        nextAttachId++;
+                    }
+                }
+            }
+            //carico le note
+            foreach (var n in document.Notes)
+            {
+                var nextNoteId = (db.Notes.Any() ? db.Attachments.Max(x => x.Id) : 0) + 1;
+                var note = new Note()
+                {
+                    Id = nextNoteId,
+                    IdDocument = nextId,
+                    Text = n.Text,
+                };
+                //inserisco gli allegati della nota se presenti
+                foreach (var a in n.Attachments)
+                {
+                    Attachment attachment = new()
+                    {
+                        Id = nextAttachId,
+                        IdDocument = nextId,
+                        DateTime = a.Date,
+                        Image = a.Image,
+                    };
+                    db.Attachments.Add(attachment);
+
+                    AttachmentNote attachmentNote = new()
+                    {
+                        IdAttachment = nextAttachId,
+                        IdNote = nextNoteId,
+                    };
+                    db.AttachmentNotes.Add(attachmentNote);
+                    nextAttachId++;
+                }
+                //inserisco le compagnie associate alle note se presenti
+                foreach (var c in n.CompanyListIds)
+                {
+                    var companyNote = new CompanyNote()
+                    {
+                        IdCompany = c,
+                        IdNote = nextNoteId
+                    };
+                }
+                nextNoteId++;
             }
             await db.SaveChangesAsync();
             documentId = nextId;
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             var ex = e.Message;
-         }
+        }
 
         return documentId;
     }
 
-    public static async Task<List<int>> Update(DB db, List<DocumentModel> documents)
+    public static async Task<List<int>> Update(DB db, List<DocumentModel> documents, int organizationId)
     {
         List<int> modified = [];
+
         try
         {
             foreach (var document in documents)
             {
-                var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
-                if (d is not null)
+                var doc = db.Documents.Where(x => x.Id == document.Id).SingleOrDefault();
+                if (doc is not null)
                 {
-                    foreach (var c in document.Categories)
-                    {
-                        foreach(var q in c.Questions)
-                        {
-                            var qc = db.QuestionChosens.Where(x => x.IdDocument == document.Id && x.IdQuestion == q.Id).FirstOrDefault();
-                            if(qc is not null)
-                            {
-                                qc.IdCurrentChoice = q.CurrentChoice.Id;
-                                qc.Order = q.Order;
-                                qc.Printable = q.Printable;
-                                qc.Hidden = q.Hidden;
-                                await db.SaveChangesAsync();
-                                modified.Add(qc.Id);
-                            }
-                        }
-                    }
-
-                    // d.IdCategory = elem.IdCategory;
-                    // d.IdSubject = elem.IdSubject;
-                    // d.Text = elem.Text;
-
-                    // db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));
-                    // foreach(var choice in elem.Choices)
-                    // {
-                    //     QuestionChoice newqc = new()
-                    //     {
-                    //         IdChoice = choice.Id,
-                    //         IdQuestion = elem.Id
-                    //     };
-                    //     db.Add(newqc);
-                    // }
-
-                    // if (await db.SaveChangesAsync() > 0)
-                    // {
-                    //     modified.Add(elem.Id);
-                    // }
+                    db.Documents.Remove(doc);
+                    await db.SaveChangesAsync();
+                    await Insert(db, document, organizationId);
                 }
             }
+
         }
-        catch (Exception) { }
+        catch (Exception e)
+        {
+            var ex = e.Message;
+        }
 
         return modified;
     }
@@ -188,7 +418,7 @@ public class DocumentDbHelper
                 var c = db.Documents.Where(x => x.Id == elem.Id).SingleOrDefault();
                 if (c is not null)
                 {
-                    //c.Active = false;
+                    // c.Active = false;
                     if (await db.SaveChangesAsync() > 0)
                     {
                         hiddenItems.Add(elem.Id);
@@ -200,4 +430,178 @@ public class DocumentDbHelper
 
         return hiddenItems;
     }
+
+    public static List<MeteoConditionModel> SelectMeteo(DB db, int idMeteo = 0)
+    {
+        var meteoConditions = db.MeteoConditions.AsQueryable();
+
+        var meteoConditionsList = (from m in meteoConditions
+                                   orderby m.Id
+                                   select new MeteoConditionModel()
+                                   {
+                                       Id = m.Id,
+                                       Description = m.Description,
+                                   }).ToList();
+
+        return meteoConditionsList;
+    }
+
+    private static bool CheckLastEdit(DateTime? oldEdit, DateTime newEdit)
+    {
+        return oldEdit is null || oldEdit < newEdit;
+    }
 }
+
+
+
+/*
+ 
+
+        var nextAttachId = (db.Attachments.Any() ? db.Attachments.Max(x => x.Id) : 0) + 1;
+ 
+            foreach (var document in documents)
+            {
+                var doc = db.Documents.Where(x => x.Id == document.Id).SingleOrDefault();
+                //aggiorno i dati base del documento
+                if (doc is not null)
+                {
+                    doc.LastEditDate = document.LastEditDate;
+                    doc.CompilationDate = document.CompilationDate;
+                    doc.Title = document.Title;
+                    doc.ReadOnly = document.ReadOnly;
+
+                    //aggiungo le compagnia associate al documento
+                    foreach (var companyDoc in document.Companies)
+                    {
+                        var comp = db.CompanyDocuments.Where(x => x.IdDocument == document.Id && x.IdCompany == companyDoc.Id).SingleOrDefault();
+                        if (comp is not null)
+                        {
+                            comp.Present = companyDoc.Present ?? false;
+                        }
+                        else
+                        {
+                            CompanyDocument cd = new()
+                            {
+                                IdCompany = companyDoc.Id,
+                                IdDocument = document.Id,
+                                Present = companyDoc.Present ?? false,
+                            };
+
+                            db.CompanyDocuments.Add(cd);
+                        }
+                    }
+
+                    foreach (var cat in document.Categories)
+                    {
+                        foreach (var q in cat.Questions)
+                        {
+                            var responses = db.QuestionAnswereds.Where(x => x.IdDocument == document.Id
+                                                                       && x.IdQuestionChosen == q.Id).ToList();
+                            foreach (var cc in q.CurrentChoices)
+                            {
+                                var current = responses.Where(x => x.IdDocument == document.Id
+                                                                         && x.IdQuestionChosen == q.Id
+                                                                         && x.IdCurrentChoice == cc.Id).SingleOrDefault();
+                                //se è null creo la nuova risposta
+                                if (current is null)
+                                {
+                                    current = new()
+                                    {
+                                        IdDocument = document.Id,
+                                        IdCurrentChoice = cc.Id,
+                                        IdQuestionChosen = q.Id
+                                    };
+                                    db.QuestionAnswereds.Add(current);
+                                    //aggiungo le compagnie riportate delle varie risposte se ci sono
+                                    foreach (var rci in cc.ReportedCompanyIds)
+                                    {
+                                        ReportedCompany rc = new()
+                                        {
+                                            IdCompany = rci,
+                                            IdDocument = document.Id,
+                                            IdCurrentChoice = cc.Id,
+                                            IdQuestionChosen = q.Id
+                                        };
+                                        db.ReportedCompanies.Add(rc);
+                                    }
+                                }
+                                else
+                                {
+                                    var oldReported = db.ReportedCompanies.Where(x => x.IdDocument == document.Id
+                                                                                 && x.IdQuestionChosen == q.Id
+                                                                                 && x.IdCurrentChoice == cc.Id).ToList();
+                                    foreach(var idcomp in cc.ReportedCompanyIds)
+                                    {
+                                        var repComp = oldReported.Where(x => x.IdCompany == idcomp).SingleOrDefault();
+                                        if(repComp is null)
+                                        {
+                                            ReportedCompany rc = new()
+                                            {
+                                                IdCompany = idcomp,
+                                                IdDocument = document.Id,
+                                                IdCurrentChoice = cc.Id,
+                                                IdQuestionChosen = q.Id
+                                            };
+                                            db.ReportedCompanies.Add(rc);
+                                        } else
+                                        {
+                                            oldReported.Remove(repComp);
+                                        }
+                                    }
+                                    if(oldReported.Count > 0)
+                                    {
+                                        db.ReportedCompanies.RemoveRange(oldReported);
+                                    }
+
+                                    responses.Remove(current);
+                                }
+                            }
+
+                            if (responses.Count > 0)
+                            {
+                                db.QuestionAnswereds.RemoveRange(responses);
+                            }
+
+                            var oldAttach = (from a in db.Attachments
+                                             join aq in db.AttachmentQuestions on a.Id equals aq.IdAttachment
+                                             where a.IdDocument == document.Id
+                                             && aq.IdQuestion == q.Id
+                                             select aq).ToList();
+
+                            foreach (var attach in q.Attachments)
+                            {
+
+                                var att = oldAttach.Where(x => x.IdAttachment == attach.Id).SingleOrDefault();
+                                if(att is null)
+                                {
+                                    Attachment attachment = new()
+                                    {
+                                        Id = nextAttachId,
+                                        IdDocument = document.Id,
+                                        DateTime = attach.Date,
+                                    };
+                                    db.Attachments.Add(attachment);
+
+                                    AttachmentQuestion attachmentQuestion = new()
+                                    {
+                                        IdAttachment = nextAttachId,
+                                        IdQuestion = q.Id,
+                                    };
+                                    db.AttachmentQuestions.Add(attachmentQuestion);
+                                    nextAttachId++;
+                                } else
+                                {
+                                    oldAttach.Remove(att);
+                                }
+                            }
+                            if(oldAttach.Count > 0)
+                            {
+                                db.AttachmentQuestions.Where
+                            }
+                        }
+                    }
+
+                }
+            }
+ 
+ */

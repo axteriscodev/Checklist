@@ -1,0 +1,64 @@
+﻿@using ConstructionSiteLibrary.Model.TemplateWizard
+@using ConstructionSiteLibrary.Repositories
+@using Shared.Templates
+
+@inject TemplatesRepository TemplatesRepository
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+        <fieldset class="card cardClass round-border divCard mb-2">
+            <legend class="fieldset-title">Seleziona un template preesistente o creane uno nuovo</legend>
+            <RadzenDropDown @bind-Value=@Data.SelectedTemplate Data=@Templates TextProperty="TitleTemplate" AllowClear=true
+                            Change="@((args) => OnTemplateChanged(args))" Placeholder="-" />
+        </fieldset>
+}
+
+@code
+{
+    List<TemplateModel> Templates = [];
+
+    FormData Data = new();
+
+    /// <summary>
+    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+    /// </summary>
+    private bool initialLoading;
+
+    [Parameter]
+    required public TemplateModel CurrentTemplate { get; set; }
+
+    [Parameter]
+    required public EventCallback<TemplateModel?> OnTemplateSelected { get; set; }
+
+    ScreenComponent screenComponent;
+
+    protected override async Task OnInitializedAsync()
+    {
+        initialLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        initialLoading = false;
+    }
+
+    private async Task LoadData()
+    {
+        Templates = await TemplatesRepository.GetTemplates();
+    }
+
+    private async Task OnTemplateChanged(object template)
+    {
+        //CurrentTemplate = template as TemplateModel;
+        Data.SelectedTemplate = template as TemplateModel;
+        await OnTemplateSelected.InvokeAsync(template as TemplateModel);
+    }
+
+    class FormData
+    {
+        public TemplateModel? SelectedTemplate;
+    }
+}

@@ -9,6 +9,6 @@
             "type": "maui",
             "request": "launch",
             "preLaunchTask": "maui: Build"
-        }
+        },
     ]
 }

@@ -1,0 +1,181 @@
+﻿@using Shared.Documents;
+@using ConstructionSiteLibrary.Model.DocumentCompilation
+
+@inject DialogService DialogService
+
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="mt-3">
+        @foreach (var company in Companies)
+        {
+            <a class="anchor" id="@CreateAnchor(company)"></a>
+            <fieldset class="my-fieldset" >
+                <legend class="my-legend">Impresa Esecutrice</legend>
+                <div class="row">
+                    <div class="col impresaEsecutrice">
+                        <RadzenRow>
+                            <RadzenLabel Text="Presente" Component="Presente" />
+                            <RadzenCheckBox Value="@company.Present" Name="Presente" TValue="bool?" Change="@(args=>AddPresent(args, company))" />
+                        </RadzenRow>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="Ragione Sociale:" Component="RagioneSociale" />
+                        <RadzenTextBox Placeholder="Inserisci Ragione Sociale" Name="RagioneSociale"
+                                       Change=@(args => OnChangeRagioneSociale(company,args, "RagioneSociale"))
+                                       class="my-input" @bind-Value=@company.CompanyName />
+                    </div>
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="Sede Legale:" Component="SedeLegale" />
+                        <RadzenTextBox Placeholder="Inserisci Sede Legale" Name="SedeLegale"
+                                        Change=@(args => OnChange(args, "SedeLegale"))
+                                       class="my-input" @bind-Value=@company.Address />
+                    </div>
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="Lavori previsti:" Component="LavoriPrevisti" />
+                        <RadzenTextBox Placeholder="Inserisci Lavori previsti" Name="LavoriPrevisti"
+                                        Change=@(args => OnChange(args, "LavoriPrevisti"))
+                                       class="my-input" @bind-Value=@company.JobsDescriptions />
+                    </div>
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="P. Iva:" Component="PartitaIVA" />
+                        <RadzenTextBox Placeholder="Inserisci P. Iva" Name="PartitaIVA"
+                                        Change=@(args => OnChange(args, "PIva"))
+                                       class="my-input" @bind-Value=@company.VatCode />
+                    </div>
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="Reponsabile:" Component="Reponsabile" />
+                        <RadzenTextBox Placeholder="Reponsabile" Name="Reponsabile"
+                                        Change=@(args => OnChange(args, "Responsabile"))
+                                       class="my-input" @bind-Value=@company.InChargeWorker />
+                    </div>
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="Lavoratori:" Component="Lavoratori" />
+                        <RadzenTextBox Placeholder="Lavoratori" Name="Lavoratori"
+                                        Change=@(args => OnChange(args, "Lavoratori"))
+                                       class="my-input" @bind-Value=@company.Workers />
+                    </div>
+                </div>
+            </fieldset>
+        }
+
+        <div class="button-container">
+            <RadzenSplitButton Click=@(args => AddCompany(args)) AlwaysOpenPopup=true Text="Aggiungi impresa esecutrice">
+                <ChildContent>
+                    <RadzenSplitButtonItem Text="Da anagrafica" Value="Anagrafica" />
+                    <RadzenSplitButtonItem Text="Nuova" Value="Nuova" />
+                </ChildContent>
+            </RadzenSplitButton>                
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
+    [Parameter]
+    public EventCallback OnUpdateState { get; set; }
+    [Parameter]
+    public List<CompanyModel> Companies { get; set; } = [];
+    [Parameter]
+    public DocumentNavigator DocumentNavigator { get; set; } = new();
+
+
+    private bool onLoading = false;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        onLoading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        if (firstRender)
+        {
+            OnAnchorAdd.InvokeAsync();
+        }
+    }
+
+
+    private void AddPresent(bool? isPresent, CompanyModel company)
+    {
+        company.Present = isPresent.HasValue ? isPresent.Value : false;
+    }
+
+    private async Task AddCompany(RadzenSplitButtonItem item)
+    {
+        if(item.Value.Equals("Anagrafica"))
+        {
+            //popup
+            // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+            var additionalStyle = $"min-height:fit-content;height:fit-content;max-width:600px";
+            var newOptions = new DialogOptions
+                {
+                    Style = additionalStyle
+                };
+            //creo parametri da inviare al componente caricato con il popup
+            var param = new Dictionary<string, object>
+            {
+
+                { "PresentCompanies", Companies },
+            }; 
+            CompanyModel? selectedCompany = await DialogService.OpenAsync<FormAddCompany>("Seleziona azienda", parameters: param,  options: newOptions);
+
+            if(selectedCompany is not null)
+            {
+                selectedCompany.Present = true;
+                Companies.Add(selectedCompany);
+                CreateAnchor(selectedCompany);
+            }
+        }
+        else
+        {
+            var newComp = new CompanyModel() { Present = true };
+            Companies.Add(newComp);
+            CreateAnchor(newComp);
+        }
+    }
+
+
+
+    private void OnChange(string? args, string name)
+    {
+
+    }
+
+    private async Task OnChangeRagioneSociale(CompanyModel comp, string? args, string name)
+    {
+        var index = Companies.IndexOf(comp);
+        var anchor = DocumentNavigator.Anchors.Where(x => x.TypeIndex == DocumentUtils.TypeCompanies && x.Index == index).FirstOrDefault();
+        if(anchor is not null)
+        {
+            anchor.Text = $"Dati {args}";
+        }
+    }
+
+    private string CreateAnchor(CompanyModel comp)
+    {
+        var companyName = comp.CompanyName;
+        var index = Companies.IndexOf(comp);
+        var anchor = new DocumentAnchor(DocumentUtils.TypeCompanies, index, $"Dati {companyName}", $"company_{index}");
+        DocumentNavigator.AddAnchor(anchor);
+        return anchor.Anchor;
+    }
+}

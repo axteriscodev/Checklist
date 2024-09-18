@@ -1,19 +1,22 @@
 ﻿using AXT_WebComunication.WebResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
-using Shared;
+using Shared.ApiRouting;
+using Shared.Defaults;
 using TDatabase.Queries;
 
 namespace ServerHost.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
 public class CategoryController : DefaultController
 {
 
     #region Category
 
     [LogAction]
+    [Route(ApiRouting.CategoriesList)]
+    [Authorize]
     [HttpPost]
     public AXT_WebResponse CategoriesList()
     {
@@ -24,7 +27,8 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = CategoriesDbHelper.Select(db);
+            var idOrganizzation = GetUserOrganization();
+            var list = CategoryDbHelper.Select(db, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -37,6 +41,8 @@ public class CategoryController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.SaveCategory)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveCategory(CategoryModel newCategory)
     {
@@ -47,7 +53,8 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await CategoriesDbHelper.Insert(db, newCategory);
+            var idOrganizzation = GetUserOrganization();
+            var list = await CategoryDbHelper.Insert(db, newCategory, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -60,6 +67,8 @@ public class CategoryController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.UpdateCategories)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> UpdateCategories(List<CategoryModel> categories)
     {
@@ -70,7 +79,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await CategoriesDbHelper.Update(db, categories);
+            var list = await CategoryDbHelper.Update(db, categories);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -83,6 +92,8 @@ public class CategoryController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.HideCategories)]
+    [Authorize]
     [HttpPost]
     public async Task<AXT_WebResponse> HideCategories(List<CategoryModel> categories)
     {
@@ -93,103 +104,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await CategoriesDbHelper.Hide(db, categories);
-            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
-
-        }
-        catch (Exception ex)
-        {
-            response = ExceptionWebResponse(ex, "");
-        }
-        StopTime(stopwatch);
-        return response;
-    }
-
-    #endregion
-
-    #region Subject
-
-    [LogAction]
-    [HttpPost]
-    public AXT_WebResponse SubjectsList()
-    {
-        var response = new AXT_WebResponse();
-        var stopwatch = StartTime();
-        ConfigureLog("", 0);
-
-        try
-        {
-            var db = GetDbConnection();
-            var list = SubjectDbHelper.Select(db);
-            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
-
-        }
-        catch (Exception ex)
-        {
-            response = ExceptionWebResponse(ex, "");
-        }
-        StopTime(stopwatch);
-        return response;
-    }
-
-    [LogAction]
-    [HttpPost]
-    public async Task<AXT_WebResponse> SaveSubject(SubjectModel newSubject)
-    {
-        var response = new AXT_WebResponse();
-        var stopwatch = StartTime();
-        ConfigureLog("", 0);
-
-        try
-        {
-            var db = GetDbConnection();
-            var list = await SubjectDbHelper.Insert(db, newSubject);
-            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
-
-        }
-        catch (Exception ex)
-        {
-            response = ExceptionWebResponse(ex, "");
-        }
-        StopTime(stopwatch);
-        return response;
-    }
-
-    [LogAction]
-    [HttpPost]
-    public async Task<AXT_WebResponse> UpdateSubjects(List<SubjectModel> subjects)
-    {
-        var response = new AXT_WebResponse();
-        var stopwatch = StartTime();
-        ConfigureLog("", 0);
-
-        try
-        {
-            var db = GetDbConnection();
-            var list = await SubjectDbHelper.Update(db, subjects);
-            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
-
-        }
-        catch (Exception ex)
-        {
-            response = ExceptionWebResponse(ex, "");
-        }
-        StopTime(stopwatch);
-        return response;
-    }
-
-    [LogAction]
-    [HttpPost]
-    public async Task<AXT_WebResponse> HideSubjects(List<SubjectModel> subjects)
-    {
-        var response = new AXT_WebResponse();
-        var stopwatch = StartTime();
-        ConfigureLog("", 0);
-
-        try
-        {
-            var db = GetDbConnection();
-            var list = await SubjectDbHelper.Hide(db, subjects);
+            var list = await CategoryDbHelper.Hide(db, categories);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }

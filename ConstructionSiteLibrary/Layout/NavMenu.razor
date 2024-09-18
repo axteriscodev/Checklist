@@ -1,92 +1,162 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using Microsoft.AspNetCore.Components.Routing;
+@inject NavigationService Navigation
+@inject DialogService DialogService
+@inject AppAuthenticationStateProvider AuthProvider
 
-<ScreenComponent MediumWith="641" OnScreenDimensionChanged="ScreenDimensionObserver" />
-<div class="top-row ps-3 navbar navbar-dark">
+
+@* Top Row *@
+<div class="top-row ps-3 navbar  navbar-dark">
     <div class="container-fluid">
-        <span class="oi oi-monitor" style="color:white;" aria-hidden="true"></span>
-        @if (!@IconMenuActive)
-        {
-            <a class="navbar-brand" href="">Construction Site Report</a>
-        }
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+        @* <span class="oi oi-monitor" style="color:white;" aria-hidden="true"></span> *@
+        <div class="user-profile">
+            @if (IconMenuActive)
+            {
+                <span class="bi bi-person-circle icon-user" aria-hidden="true"></span>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-4">
+                        <img class="profile-img" src="default.png" />
+                    </div>
+                    <div class="col-8 profile-container">
+                        <div class="user-info">                       
+                            <h3 class="profileName">@PrintUserName()</h3>
+                            <p class="profile-role"><a href="@PageRouting.UserPage">Account settings</a></p>
+                        </div>
+                        <RadzenButton Variant="Variant.Text" ButtonStyle="ButtonStyle.Danger" class="buttonLogout" Click="@Logout" >
+                            <i><u>Logout</u></i>
+                        </RadzenButton>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu" style="margin-bottom:1rem;">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </div>
-
+@* Navbar *@
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-@*         <div class="nav-item px-3">
-            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill @biClassRules" aria-hidden="true"></span>
+    <nav class="flex-column @cssDropdownWrapper">
+        @* Cantieri *@
+        <div class="nav-item margin-top-35 @cssNavbarClosed">
+            <NavLink class="@cssLinkMenu" href="@PageRouting.HomePage" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
-                    <label>Home</label>
-                }
-            </NavLink>
-        </div> *@
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="form_compilation">
-                <span class="bi bi-check2-square" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Documenti</label>
+                    <label>I miei cantieri</label>
                 }
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="form_creation">
-                <span class="bi bi-plus-square @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
+        @* Sezione Elementi Report *@
+        <div>
+            <div class="separator mb-3" @onclick="@ToggleAccordionElementi">
+                @if (IconMenuActive)
                 {
-                    <label>Creazione</label>
+                    <p class="text-16">ELEM..</p>
+
                 }
-            </NavLink>
+                else
+                {
+                    <p class="text-16">ELEMENTI REPORT</p>
+                }
+            </div>
+            @if (elementiAccordion)
+            {
+                <div class="nav-item margin-top-12 @cssNavbarClosed">
+                    <NavLink class="@cssLinkMenu" href="@PageRouting.TemplatePage">
+                        <span class="bi bi-file-text" aria-hidden="true"></span>
+                        @if (!@IconMenuActive)
+                        {
+                            <label>Template</label>
+                        }
+                    </NavLink>
+                </div>
+                <div class="nav-item margin-top-12 @cssNavbarClosed">
+                    <NavLink class="@cssLinkMenu" href="@PageRouting.CategoriesPage">
+                        <span class="bi bi-bookmarks " aria-hidden="true"></span>
+                        @if (!@IconMenuActive)
+                        {
+                            <label>Categorie</label>
+                        }
+                    </NavLink>
+                </div>
+                <div class="nav-item margin-top-12 @cssNavbarClosed">
+                    <NavLink class="@cssLinkMenu" href="@PageRouting.QuestionPage">
+                        <span class="bi bi-question-square " aria-hidden="true"></span>
+                        @if (!@IconMenuActive)
+                        {
+                            <label>Domande</label>
+                        }
+                    </NavLink>
+                </div>
+                <div class="nav-item margin-top-12 @cssNavbarClosed">
+                    <NavLink class="@cssLinkMenu" href="@PageRouting.ChoicesPage">
+                        <span class="bi bi-exclamation-square" aria-hidden="true"></span>
+                        @if (!@IconMenuActive)
+                        {
+                            <label>Opzioni risposta</label>
+                        }
+                    </NavLink>
+                </div>
+            }
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="categories">
-                <span class="bi bi-bookmarks @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
+        @* Sezione Anagrafiche *@
+        <div>
+            <div class="separator mb-3" @onclick="ToggleAccordionAnagrafiche">
+                @if (IconMenuActive)
                 {
-                    <label>Categorie</label>
+                    <p class="text-16">ANAG..</p>
                 }
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="questions">
-                <span class="bi bi-question-square @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
+                else
                 {
-                    <label>Domande</label>
+                    <p class="text-16">ANAGRAFICHE</p>
                 }
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="choices">
-                <span class="bi bi-exclamation-square @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Scelte</label>
-                }
-            </NavLink>
+            </div>
+            @if (AnagraficheAccordion)
+            {
+                <div class="nav-item margin-top-12 @cssNavbarClosed">
+                    <NavLink class="@cssLinkMenu" href="@PageRouting.CompaniesPage">
+                        <span class="bi bi-building" aria-hidden="true"></span>
+                        @if (!@IconMenuActive)
+                        {
+                            <label>Ditte cantiere</label>
+                        }
+                    </NavLink>
+                </div>
+                <div class="nav-item margin-top-12 @cssNavbarClosed">
+                    <NavLink class="@cssLinkMenu" href="@PageRouting.ClientsPage">
+                        <span class="bi bi-person-lines-fill" aria-hidden="true"></span>
+                        @if (!@IconMenuActive)
+                        {
+                            <label>Commitenti</label>
+                        }
+                    </NavLink>
+                </div>
+            }
         </div>
     </nav>
-</div>
-
-<div class="bottom-row">
-    <div class="icon-menu-arrow">
-
-        <RadzenButton Icon=@menuIcon Click="ToggleIconMenu" Style="color: white;" Variant="Variant.Text" />
-
-
-
+    <div class="bottom-row">
+        <div class="icon-menu-arrow">
+            <RadzenButton Icon=@menuIcon Click="ToggleIconMenu" Style="color: white;" Variant="Variant.Text" />
+        </div>
     </div>
 </div>
 
+
+
 @code {
     //bool to send to MainLayout for shrinking sidebar and showing/hide menu text
-    private bool IconMenuActive { get; set; } = false;
+    [Parameter]
+    public bool IconMenuActive { get; set; } = false;
 
     //EventCallback for sending bool to MainLayout
     [Parameter]
@@ -95,10 +165,22 @@
     private bool collapseNavMenu = true;
 
     private string menuIcon = "arrow_back";
-
-    private string biClassRules = "";
+    private string cssLinkMenu = "";
+    private string cssDropdownWrapper = "dropdownWrappers";
+    private string cssNavbarClosed = "";
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private bool elementiAccordion = true;
+    private bool AnagraficheAccordion = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        UpdateToggleIconMenu();
+        await base.OnParametersSetAsync();
+
+    }
+
 
     private void ToggleNavMenu()
     {
@@ -106,32 +188,56 @@
 
     }
 
+    private void ToggleAccordionElementi()
+    {
+        elementiAccordion = !elementiAccordion;
+    }
+
+
+    private void ToggleAccordionAnagrafiche()
+    {
+        AnagraficheAccordion = !AnagraficheAccordion;
+    }
+
+
+    private void UpdateToggleIconMenu()
+    {
+        menuIcon = !IconMenuActive ? "arrow_back" : "arrow_forward";
+        cssLinkMenu = !IconMenuActive ? "nav-link text-20 lh-07 " : "nav-link text-20 lh-07 onlyIcon";
+        cssDropdownWrapper = !IconMenuActive ? "dropdownWrappers" : "dropdownWrappers-closed";
+        cssNavbarClosed = !IconMenuActive ? "" : "nav-item-closed";
+    }
+
     //Method to toggle IconMenuActive bool and send bool via EventCallback
     private async Task ToggleIconMenu()
     {
         IconMenuActive = !IconMenuActive;
-        menuIcon = !IconMenuActive ? "arrow_back" : "arrow_forward";
-        biClassRules = !IconMenuActive ? "" : "margin-right-zero";
         await ShowIconMenu.InvokeAsync(IconMenuActive);
     }
 
-    private async Task ScreenSizeObserver(ScreenSize size)
+
+    private void OnLinkClick(string url)
     {
-        if (size.Width < 641)
+        Navigation.ChangePage(url);
+    }
+
+    private async Task Logout()
+    {
+        var confirmClose = await DialogService.Confirm("Sei sicuro?", "Conferma", new ConfirmOptions() { OkButtonText = "Sì", CancelButtonText = "No", ShowClose = false });
+
+        if (confirmClose ?? false)
         {
-            IconMenuActive = false;
-            biClassRules = "";
-            await ShowIconMenu.InvokeAsync(IconMenuActive);
+            await AuthProvider.Logout();
         }
     }
 
-    private async Task ScreenDimensionObserver(ScreenDimension? dimension)
+    private string PrintUserName()
     {
-        if (dimension == ScreenDimension.Small)
-        {
-            IconMenuActive = false;
-            biClassRules = "";
-            await ShowIconMenu.InvokeAsync(IconMenuActive);
-        }
+        return $"{AuthProvider.GetUserInfo().Name} {AuthProvider.GetUserInfo().Surname}";
+    }
+
+    private string PrintUserRole()
+    {
+        return $"{AuthProvider.GetUserInfo().Role.Name}";
     }
 }

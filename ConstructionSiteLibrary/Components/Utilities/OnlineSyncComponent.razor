@@ -1,0 +1,69 @@
+﻿@using Microsoft.JSInterop
+@using Shared
+
+@inject IndexedDBService dbService
+@inject DocumentsRepository DocumentRepository
+@inject IJSRuntime JS
+
+@* @if (dbSupport)
+{
+     <div>
+        <RadzenStack Orientation="Orientation.Vertical">
+            <RadzenButton Icon="sync" Text="Sincronizza" Click="Syncronize" BusyText="Sincronizza" IsBusy="onSyncronize" Style="width:200px;height:40px;" />
+            <RadzenButton Icon="" Text="Disco Occupato" Click="DiskSpace" Style="width:200px;height:40px;margin-top:2rem;" />
+            @if(diskSpace is not null)
+            {
+                <RadzenText TextStyle="TextStyle.Body1">
+                    @diskSpace
+                </RadzenText>
+            }
+        </RadzenStack>
+    </div> 
+} *@
+
+
+@code {
+
+
+    private bool dbSupport = false;
+    private bool onSyncronize = false;
+    private string? diskSpace;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dbService.OnDbSupportValidated += DbSupportObserver;
+        await InitializeIndexedDB();
+        await base.OnInitializedAsync();
+    }
+
+
+    private async Task Syncronize()
+    {
+        onSyncronize = true;
+        var uploadResult = await DocumentRepository.UploadDocuments();
+        var downloadResult = await DocumentRepository.DownloadDocuments();
+        onSyncronize = false;
+    }
+
+    private async Task DiskSpace()
+    {
+       diskSpace = await dbService.DiskSpaceOccupied();
+    }
+
+    /// <summary>
+    /// Controllo subito che i indexedDB sia supportato e lo attivo
+    /// </summary>
+    /// <returns></returns>
+    private async Task InitializeIndexedDB()
+    {
+        await dbService.Init(JS);
+    }
+
+    private void DbSupportObserver(bool support)
+    {
+        dbSupport = support;
+        StateHasChanged();
+    }
+
+
+}

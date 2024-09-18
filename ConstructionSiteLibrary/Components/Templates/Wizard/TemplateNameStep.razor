@@ -1,0 +1,53 @@
+﻿@using Shared.Templates
+@using ConstructionSiteLibrary.Model
+
+@inject TemplatesRepository TemplatesRepository
+@inject NavigationService NavigationService
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <fieldset class="card cardClass round-border divCard mb-2">
+            <legend class="fieldset-title">Inserisci un nome per il template</legend>
+            <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
+                class="formFieldTitolo">
+                <ChildContent>
+                    <RadzenTextBox Name="Nome" @bind-Value="@CurrentTemplate.NameTemplate" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator @ref="@validator" Component="Nome" Popup=false Text="Il titolo è obbligatorio"  />
+                </Helper>
+            </RadzenFormField>
+    </fieldset>
+
+}
+
+@code
+{
+    /// <summary>
+    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+    /// </summary>
+    private bool initialLoading;
+
+    private bool onSaving = false;
+
+    /// <summary>
+    /// il design degli elementi della form
+    /// </summary>
+    readonly Variant variant = Variant.Outlined;
+    RadzenRequiredValidator validator;
+
+
+    [Parameter]
+    required public TemplateModel CurrentTemplate { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        initialLoading = true;
+        await base.OnInitializedAsync();
+        initialLoading = false;
+    }
+}

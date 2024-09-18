@@ -1,0 +1,13 @@
+﻿@using ConstructionSiteLibrary.Components.Documents.Compilation;
+
+@attribute [Route(PageRouting.DocumentCompilationPage + "{DocumentId:int}")]
+
+
+
+<DocumentCompilation DocumentId="@DocumentId"/>
+
+@code
+{
+    [Parameter]
+    public int DocumentId { get; set; }
+}

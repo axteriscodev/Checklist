@@ -1,20 +1,23 @@
 ﻿using AXT_WebComunication.WebResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
-using Shared;
+using Shared.ApiRouting;
+using Shared.Templates;
 using TDatabase.Queries;
 
 namespace ServerHost.Controllers
 {
 
     [ApiController]
-    [Route("[controller]/[action]")]
     public class QuestionController : DefaultController
     {
 
         #region Questions
 
         [LogAction]
+        [Route(ApiRouting.QuestionsList)]
+        [Authorize]
         [HttpPost]
         public AXT_WebResponse QuestionsList()
         {
@@ -25,7 +28,8 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var list = QuestionDbHelper.Select(db);
+                var idOrganizzation = GetUserOrganization();
+                var list = QuestionDbHelper.Select(db, idOrganizzation);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
             }
@@ -38,8 +42,10 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.SaveQuestion)]
+        [Authorize]
         [HttpPost]
-        public async Task<AXT_WebResponse> SaveQuestion(QuestionModel newQuestion)
+        public async Task<AXT_WebResponse> SaveQuestion(TemplateQuestionModel newQuestion)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -48,7 +54,8 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var q = await QuestionDbHelper.Insert(db, newQuestion);
+                var idOrganizzation = GetUserOrganization();
+                var q = await QuestionDbHelper.Insert(db, newQuestion, idOrganizzation);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
 
             }
@@ -61,8 +68,10 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.UpdateQuestions)]
+        [Authorize]
         [HttpPost]
-        public async Task<AXT_WebResponse> UpdateQuestions(List<QuestionModel> questions)
+        public async Task<AXT_WebResponse> UpdateQuestions(List<TemplateQuestionModel> questions)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -84,8 +93,10 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.HideQuestions)]
+        [Authorize]
         [HttpPost]
-        public async Task<AXT_WebResponse> HideQuestions(List<QuestionModel> questions)
+        public async Task<AXT_WebResponse> HideQuestions(List<TemplateQuestionModel> questions)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -112,6 +123,8 @@ namespace ServerHost.Controllers
         #region Choice
 
         [LogAction]
+        [Route(ApiRouting.ChoicesList)]
+        [Authorize]
         [HttpPost]
         public AXT_WebResponse ChoicesList()
         {
@@ -122,7 +135,8 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var list = ChoiceDbHelper.Select(db);
+                var idOrganizzation = GetUserOrganization();
+                var list = ChoiceDbHelper.Select(db, idOrganizzation);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
             }
@@ -135,8 +149,10 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.SaveChoice)]
+        [Authorize]
         [HttpPost]
-        public async Task<AXT_WebResponse> SaveChoice(ChoiceModel newChoice)
+        public async Task<AXT_WebResponse> SaveChoice(TemplateChoiceModel newChoice)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -145,7 +161,8 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var c = await ChoiceDbHelper.Insert(db, newChoice);
+                var idOrganizzation = GetUserOrganization();
+                var c = await ChoiceDbHelper.Insert(db, newChoice, idOrganizzation);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), c);
 
             }
@@ -158,8 +175,10 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.UpdateChoices)]
+        [Authorize]
         [HttpPost]
-        public async Task<AXT_WebResponse> UpdateChoices(List<ChoiceModel> choices)
+        public async Task<AXT_WebResponse> UpdateChoices(List<TemplateChoiceModel> choices)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -181,8 +200,10 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.HideChoices)]
+        [Authorize]
         [HttpPost]
-        public async Task<AXT_WebResponse> HideChoices(List<ChoiceModel> choices)
+        public async Task<AXT_WebResponse> HideChoices(List<TemplateChoiceModel> choices)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();

@@ -1,0 +1,65 @@
+.bordoInferiore, ::deep .bordoInferiore {
+    border-bottom: 1px solid !important;
+}
+
+.formFieldTitolo, ::deep .formFieldTitolo {
+    width: 100%;
+    padding: 0rem 1rem;
+}
+
+.margineQuestionario {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.selezioneDomande, ::deep .selezioneDomande {
+    font-weight: 400;
+    margin: 0rem 1rem;
+}
+
+
+.bordoDomanda {
+    margin-left: 3rem !important;
+}
+
+.divCard{
+    padding:1rem;
+}
+
+.cardClass, ::deep .cardClass {
+    border-radius: 0.8rem !important;
+    background: #FFF;
+    border-color: var(--border-Card);
+    background-color: var(--card-background-color) !important;
+}
+
+.fieldset-title, ::deep .fieldset-title {
+    float: none !important;
+    width:inherit; /* Or auto */
+    padding:0 10px; /* To give a bit of padding on the left and right */
+    font-size: medium !important;
+    color: var(--rz-primary) !important;
+    background-color: var(--border-Card);
+    border-radius: 4px;
+}
+
+@media(max-width: 768px) {
+
+    .bordoDomanda {
+        margin-left: 0.2rem !important;
+    }
+
+    .margineQuestionario {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        margin-left: 0rem;
+        margin-right: 0rem;
+    }
+
+    .selezioneDomande, ::deep .selezioneDomande {
+        font-weight: 400;
+        margin: 0rem 0.3rem;
+    }
+}

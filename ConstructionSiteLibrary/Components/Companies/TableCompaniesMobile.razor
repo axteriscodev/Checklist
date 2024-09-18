@@ -1,0 +1,67 @@
+﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
+@using Shared
+@using Shared.Documents
+
+@inject CompaniesRepository CompaniesRepository
+@inject DialogService DialogService
+@inject NavigationService Navigation
+@inject GlobalVariables GlobalVariables
+
+<ScreenComponent @ref="screenComponent" />
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+
+    @* La tabella delle Aziende *@
+    <div class="marginMobile">
+        @* <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
+    <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
+    Click="@(() => OpenAddCompanyPage())" Style="margin-bottom:2rem;margin-top:1rem;" /> *@
+
+        <SectionTitle PageTitle="Ditte" ButtonText="+ aggiungi ditta" SearchPlaceholder="Cerca ditta"
+            OnButtonClicked="@OpenAddCompanyPage" OnSearchChanged="@SearchChanged" />
+
+    </div>
+
+    <ul class="list-unstyled">
+    @foreach (var company in displayedCompanies)
+        {
+            <li>
+                <div class="marginListEntry">
+                    <RadzenStack Gap="0">
+                        <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenColumn>
+                                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Nome
+                                </RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body1"><b>@GetName(company)</b></RadzenText>
+                            </RadzenColumn>
+                            <ButtonDropdown Object="@company" OnUpdateClicked="@OpenUpdateCompany" OnDeleteClicked="@Hide" />
+                        </RadzenRow>
+
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Indirizzo
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@company.Address</b></RadzenText>
+
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Telefono
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@company.Phone</b></RadzenText>
+
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Email
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@company.Email</b></RadzenText>
+
+                    </RadzenStack>
+                </div>
+                <hr class="solid">
+
+            </li>
+        }
+    </ul>
+    @* </RadzenFieldset> *@
+
+}

@@ -1,56 +1,64 @@
-﻿using Shared;
+﻿using Shared.Defaults;
+using Shared.Templates;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclAxteriscoContext;
+using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
 namespace TDatabase.Queries
 {
     public class ChoiceDbHelper
     {
 
-        public static List<ChoiceModel> Select(DB db)
+        public static List<TemplateChoiceModel> Select(DB db, int organizationId)
         {
-            return [.. db.Choices.Where(x=>x.Active == true).Select(c => new ChoiceModel
+            return [.. db.Choices.Where(x=>x.IdOrganization == organizationId && x.Active == true).Select(c => new TemplateChoiceModel
             {
                 Id = c.Id,
                 Value = c.Value,
                 Tag = c.Tag,
+                Reportable = c.Reportable,
+                Color = c.Color,
             })];
         }
 
-        public static async Task<int> Insert(DB db, ChoiceModel choice)
+        public static async Task<int> Insert(DB db, TemplateChoiceModel choice, int organizationId)
         {
-            var choiseId = 0;
+            var choiceId = 0;
             try
             {
-                var nextId = (db.Choices.Any() ? db.Choices.Max(x=>x.Id) : 0) + 1;
+                var nextId = (db.Choices.Any() ? db.Choices.Max(x => x.Id) : 0) + 1;
                 Choice newChoice = new()
                 {
                     Id = nextId,
                     Value = choice.Value,
-                    Tag = choice.Tag,
-                    Active = true
+                    Tag = choice.Tag, //Max 10 char
+                    Reportable = choice.Reportable,
+                    Color = "black", //TODO impostare colore quando verrà usato, max 10 char
+                    Active = true,
+                    IdOrganization = organizationId
                 };
                 db.Choices.Add(newChoice);
                 await db.SaveChangesAsync();
-                choiseId = nextId;
-            }catch (Exception) { }
+                choiceId = nextId;
+            }
+            catch (Exception) { }
 
-            return choiseId;
+            return choiceId;
         }
 
-        public static async Task<List<int>> Update(DB db, List<ChoiceModel> choices)
+        public static async Task<List<int>> Update(DB db, List<TemplateChoiceModel> choices)
         {
             List<int> modified = [];
             try
             {
-                foreach(var elem in choices)
+                foreach (var elem in choices)
                 {
                     var c = db.Choices.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (c is not null)
                     {
                         c.Value = elem.Value;
                         c.Tag = elem.Tag;
-                        if( await db.SaveChangesAsync() > 0)
+                        c.Reportable = elem.Reportable;
+                        if (await db.SaveChangesAsync() > 0)
                         {
                             modified.Add(elem.Id);
                         }
@@ -62,7 +70,7 @@ namespace TDatabase.Queries
             return modified;
         }
 
-        public static async Task<List<int>> Hide(DB db, List<ChoiceModel> choices)
+        public static async Task<List<int>> Hide(DB db, List<TemplateChoiceModel> choices)
         {
             List<int> hiddenItems = [];
             try

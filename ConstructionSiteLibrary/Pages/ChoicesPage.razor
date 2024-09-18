@@ -1,12 +1,9 @@
 ﻿@using ConstructionSiteLibrary.Components.Choices
 @using ConstructionSiteLibrary.Model
-@page "/Choices"
-
-<h3>Scelte</h3>
+@attribute [Route(PageRouting.ChoicesPage)]
 
 
-
-<ScreenComponent MediumWith="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
+<ScreenComponent SizeS="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
 
 <DynamicComponent @ref=dynamicComponent Type=@selectedType />
 
@@ -18,7 +15,7 @@
 
     private void ScreenDimensionObserver(ScreenDimension? dimension)
     {
-        if (dimension == ScreenDimension.Small)
+        if (dimension == ScreenDimension.S || dimension == ScreenDimension.XS)
         {
             selectedType = typeof(TableChoiceMobile);
         }

@@ -1,22 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
-using Shared;
+using Shared.Defaults;
+using Shared.Templates;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclAxteriscoContext;
+using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
 namespace TDatabase.Queries
 {
     public class QuestionDbHelper
     {
-        public static List<QuestionModel> Select(DB db, int idCategory = 0, int idSubject = 0)
+        public static List<TemplateQuestionModel> Select(DB db, int organizationId, int idCategory = 0)
         {
-            var questions = db.Questions.AsQueryable();
+            var questions = db.Questions.Where(x=> x.IdOrganization == organizationId).AsQueryable();
 
-            if (idSubject > 0)
-            {
-                questions = from q in questions
-                            where q.IdSubject == idSubject
-                            select q;
-            }
             if (idCategory > 0)
             {
                 questions = from q in questions
@@ -24,7 +19,7 @@ namespace TDatabase.Queries
                             select q;
             }
 
-            var list = questions.Where(x=>x.Active == true).Select(x => new QuestionModel()
+            var list = questions.Where(x=>x.Active == true).Select(x => new TemplateQuestionModel()
             {
                 Id = x.Id,
                 Text = x.Text,
@@ -32,18 +27,20 @@ namespace TDatabase.Queries
                 Choices = (from qc in db.QuestionChoices
                            from c in db.Choices
                            where qc.IdQuestion == x.Id
-                           && c.Id == qc.IdChoice
-                           select new ChoiceModel()
+                           && c.Id == qc.IdChoice && c.Active == true
+                           select new TemplateChoiceModel()
                            {
                                Id = c.Id,
                                Tag = c.Tag,
                                Value = c.Value,
+                               Reportable = c.Reportable,
+                               Color = c.Color,
                            }).ToList()
             }).ToList();
             return list;
         } 
 
-        public static async Task<int> Insert(DB db, QuestionModel question)
+        public static async Task<int> Insert(DB db, TemplateQuestionModel question, int organizationId)
         {
             var questionId = 0;
             try
@@ -53,8 +50,8 @@ namespace TDatabase.Queries
                 {
                     Id = nextId,
                     Text = question.Text,
-                    IdSubject = question.IdSubject,
                     IdCategory = question.IdCategory,
+                    IdOrganization = organizationId,
                     Active = true
                 };
                 db.Questions.Add(newQuestion);
@@ -76,7 +73,7 @@ namespace TDatabase.Queries
             return questionId;
         }
 
-        public static async Task<List<int>> Update(DB db, List<QuestionModel> questions)
+        public static async Task<List<int>> Update(DB db, List<TemplateQuestionModel> questions)
         {
             List<int> modified = [];
             try
@@ -87,7 +84,6 @@ namespace TDatabase.Queries
                     if (q is not null)
                     {
                         q.IdCategory = elem.IdCategory;
-                        q.IdSubject = elem.IdSubject;
                         q.Text = elem.Text;
 
                         db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));
@@ -113,7 +109,7 @@ namespace TDatabase.Queries
             return modified;
         }
 
-        public static async Task<List<int>> Hide(DB db, List<QuestionModel> questions)
+        public static async Task<List<int>> Hide(DB db, List<TemplateQuestionModel> questions)
         {
             List<int> hiddenItems = [];
             try

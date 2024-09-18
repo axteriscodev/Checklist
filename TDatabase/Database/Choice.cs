@@ -11,9 +11,17 @@ public partial class Choice
 
     public string Tag { get; set; } = null!;
 
+    public string Color { get; set; } = null!;
+
+    public bool Reportable { get; set; }
+
     public bool Active { get; set; }
 
-    public virtual ICollection<QuestionChoice> QuestionChoices { get; set; } = new List<QuestionChoice>();
+    public int? IdOrganization { get; set; }
 
-    public virtual ICollection<QuestionChosen> QuestionChosens { get; set; } = new List<QuestionChosen>();
+    public virtual Organization? IdOrganizationNavigation { get; set; }
+
+    public virtual ICollection<QuestionAnswered> QuestionAnswereds { get; set; } = new List<QuestionAnswered>();
+
+    public virtual ICollection<QuestionChoice> QuestionChoices { get; set; } = new List<QuestionChoice>();
 }
