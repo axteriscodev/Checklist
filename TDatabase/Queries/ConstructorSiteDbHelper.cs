@@ -73,6 +73,10 @@ public class ConstructorSiteDbHelper
                     m.Address = elem.Address;
                     m.StartDate = elem.StartDate;
                     m.EndDate = elem.EndDate;
+                    m.IdSico = elem.IdSico;
+                    m.IdSicoInProgress = elem.IdSicoInProgress;
+                    m.PreliminaryNotificationStart = elem.PreliminaryNotificationStartDate;
+                    m.PreliminaryNotificationInProgress = elem.PreliminaryNotificationInProgress;
                     if (elem.Client is not null && elem.Client.Id > 0)
                     {
                         m.IdClient = elem.Client.Id;

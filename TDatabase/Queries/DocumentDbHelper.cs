@@ -121,6 +121,10 @@ public class DocumentDbHelper
                                                JobDescription = cs.JobDescription ?? "",
                                                StartDate = cs.StartDate ?? DateTime.Now,
                                                Address = cs.Address ?? "",
+                                               IdSico = cs.IdSico,
+                                               IdSicoInProgress = cs.IdSicoInProgress,
+                                               PreliminaryNotificationStartDate = cs.PreliminaryNotificationStart,
+                                               PreliminaryNotificationInProgress = cs.PreliminaryNotificationInProgress,
                                                Client = (from cl in db.Clients
                                                          where cl.Id == cs.IdClient
                                                          select new ClientModel()
@@ -195,11 +199,19 @@ public class DocumentDbHelper
                         CreationDate = d.CreationDate ?? DateTime.Now,
                         CompilationDate = d.CompilationDate,
                         LastEditDate = d.LastEditDate,
+                        MeteoCondition = db.MeteoConditions.Where(m=>m.Id == d.IdMeteo)
+                                                           .Select(m=> new MeteoConditionModel() { Id = m.Id, Description = m.Description  })
+                                                           .SingleOrDefault(),
                         ConstructorSite = new()
                         {
                             Id = cs.Id,
+                            Name = cs.Name,
                             JobDescription = cs.JobDescription ?? "",
                             StartDate = cs.StartDate ?? DateTime.Now,
+                            IdSico = cs.IdSico,
+                            IdSicoInProgress = cs.IdSicoInProgress,
+                            PreliminaryNotificationStartDate = cs.PreliminaryNotificationStart,
+                            PreliminaryNotificationInProgress = cs.PreliminaryNotificationInProgress,
                             Address = cs.Address ?? "",
                             Client = (from cl in db.Clients
                                       where cl.Id == cs.IdClient
@@ -393,6 +405,7 @@ public class DocumentDbHelper
                 var doc = db.Documents.Where(x => x.Id == document.Id).SingleOrDefault();
                 if (doc is not null)
                 {
+                    await ConstructorSiteDbHelper.Update(db,[document.ConstructorSite]);
                     db.Documents.Remove(doc);
                     await db.SaveChangesAsync();
                     await Insert(db, document, organizationId);
