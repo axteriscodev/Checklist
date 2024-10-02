@@ -10,7 +10,7 @@ public class TemplateDbHelper
 {
     public static List<TemplateModel> Select(DB db, int organizationId, int idTemplate = 0)
     {
-        var templateSelect = db.Templates.Where(x=>x.IdOrganization == organizationId).AsQueryable();
+        var templateSelect = db.Templates.Where(x => x.IdOrganization == organizationId).AsQueryable();
 
         if (idTemplate > 0)
         {
@@ -22,7 +22,7 @@ public class TemplateDbHelper
                     select new TemplateModel()
                     {
                         IdTemplate = t.Id,
-                        NameTemplate = t.Name, 
+                        NameTemplate = t.Name,
                         TitleTemplate = t.Title,
                         Description = (from d in db.TemplateDescriptions
                                        where d.Id == t.IdDescription
@@ -39,7 +39,7 @@ public class TemplateDbHelper
                                                  where qc.IdTemplate == t.Id
                                                  && q.Id == qc.IdQuestion
                                                  group qc by qc.IdCategory into q2
-                                                 select new { q2.First().IdCategory, q2.First().OrderCategory})
+                                                 select new { q2.First().IdCategory, q2.First().OrderCategory })
 
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
@@ -98,7 +98,7 @@ public class TemplateDbHelper
             };
 
             // se ho associato una descrizione allora lo salvo nel db
-            if(template.Description.Id > 0)
+            if (template.Description.Id > 0)
             {
                 newTemplate.IdDescription = template.Description.Id;
             }
