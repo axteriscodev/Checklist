@@ -488,10 +488,10 @@ else
                 jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/pdfManager.js");
             }
 
-            String templateString = "templateString";
-            String compilatorString = "compilatorString";
-            String committenteString = "committenteString";
-            String indirizzoCantiereString = "indirizzoCantiereString";
+            String templateString = Document.Title;
+            String compilatorString = Document.CSE ?? "";
+            String committenteString = Document.Client.Name ?? "";
+            String indirizzoCantiereString = Document.ConstructorSite.Address ?? "";
 
 
             // Generate and download the PDF

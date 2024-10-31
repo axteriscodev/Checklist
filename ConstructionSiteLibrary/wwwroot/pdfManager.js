@@ -6,7 +6,7 @@
 export async function generaPDFDocumento(
     filename,
     dotnet,
-    templateString, 
+    templateString,
     compilatorString,
     committenteString,
     indirizzoCantiereString,
@@ -23,28 +23,70 @@ export async function generaPDFDocumento(
         for (let i = 1; i <= pageCount; i++) {
             doc.setPage(i);
 
-            let x = 15;
-            let y = 20;
-
-
-            //Template
-            doc.setDrawColor(192, 192, 192);
-            doc.setFillColor(210, 210, 210);
-            doc.rect(x, y, 60, 15, 'FD');
-            doc.text(templateString, x + 10, y + 10);
-
+            let x = 15; //posizione inizio disegno
+            let y = 20; //posizione inizio disegno
+            let rectx = 100; //Larghezza rettangolo 
+            let recty = 15; //Altezza rettangolo
 
             const pageSize = doc.internal.pageSize;
             const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
             const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+
+            //Template
+            doc.setDrawColor(192, 192, 192);
+            doc.setFillColor(210, 210, 210);
+            doc.rect(x, y, rectx, recty, 'FD');
+            doc.text("Documento", x + 10, y + 10);
+            doc.setFillColor(255, 255, 255,);
+            doc.rect(x, y + recty, rectx, recty, 'FD');
+            doc.text(templateString, x + 10, y + recty + 10);
+
+            //Nominativo compilatore
+            doc.setDrawColor(192, 192, 192);
+            doc.setFillColor(210, 210, 210);
+            doc.rect(x + rectx, y, rectx, recty, 'FD');
+            doc.text("Compilatore", x + rectx + 10, y + 10);
+            doc.setFillColor(255, 255, 255,);
+            doc.rect(x + rectx, y + recty, rectx, recty, 'FD');
+            doc.text(compilatorString, x + rectx + 10, y + recty + 10);
+
+            //Committente
+            let xTitleComm = pageWidth - rectx * 2 - x;
+            doc.setDrawColor(192, 192, 192);
+            doc.setFillColor(210, 210, 210);
+            doc.rect(xTitleComm, y, rectx, recty, 'FD');
+            doc.text("Committente", xTitleComm + 10, y + 10);
+            doc.setFillColor(255, 255, 255,);
+            doc.rect(xTitleComm, y + recty, rectx, recty, 'FD');
+            doc.text(committenteString, xTitleComm + 10, y + recty + 10);
+
+            //Indirizzo cantiere
+            let xTitleIndi = pageWidth - rectx - x;
+            doc.setDrawColor(192, 192, 192);
+            doc.setFillColor(210, 210, 210);
+            doc.rect(xTitleIndi, y, rectx, recty, 'FD');
+            doc.text("Indirizzo cantiere", xTitleIndi + 10, y + 10);
+            doc.setFillColor(255, 255, 255,);
+            doc.rect(xTitleIndi, y + recty, rectx, recty, 'FD');
+            doc.text(indirizzoCantiereString, xTitleIndi + 10, y + recty + 10);
+
+
+
+            // const header = 'Report 2014';
             const footer = `Page ${i} of ${pageCount}`;
 
 
             console.log("pdfLog - pageWidth: " + pageWidth);
             console.log("pdfLog - pageHeight: " + pageHeight);
+            // console.log("pdfLog - header: " + header);
             console.log("pdfLog - footer: " + footer);
             console.log("pdfLog - alt: " + pageHeight - 15);
             console.log("pdfLog - largh: " + pageWidth / 2 - (doc.getTextWidth(footer) / 2));
+
+            // Header
+            // doc.text(header, 50, 15, {
+            //     baseline: 'top'
+            // });
 
             // Footer
             doc.text(footer, pageWidth / 2 - (doc.getTextWidth(footer) / 2), pageHeight - 15, {
