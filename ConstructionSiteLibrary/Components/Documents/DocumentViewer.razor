@@ -488,14 +488,14 @@ else
                 jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/pdfManager.js");
             }
 
-            String templateString = Document.Title;
+            String documentString = Document.Title;
             String compilatorString = Document.CSE ?? "";
             String committenteString = Document.Client.Name ?? "";
             String indirizzoCantiereString = Document.ConstructorSite.Address ?? "";
 
 
             // Generate and download the PDF
-            await jsModule.InvokeVoidAsync("generaPDFDocumento", fileName, DotNetObjectReference.Create(this), templateString, compilatorString, committenteString, indirizzoCantiereString);
+            await jsModule.InvokeVoidAsync("generaPDFDocumento", fileName, DotNetObjectReference.Create(this), documentString, compilatorString, committenteString, indirizzoCantiereString);
         }
         catch (Exception e)
         {

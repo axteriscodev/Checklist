@@ -6,7 +6,7 @@
 export async function generaPDFDocumento(
     filename,
     dotnet,
-    templateString,
+    documentString,
     compilatorString,
     committenteString,
     indirizzoCantiereString,
@@ -18,9 +18,9 @@ export async function generaPDFDocumento(
         format: 'a4',
     });
 
-    const addFooters = doc => {
+    const addHeadersAndFooters = doc => {
         const pageCount = doc.internal.getNumberOfPages();
-        for (let i = 1; i <= pageCount; i++) {
+        for (let i = 1; i < pageCount + 1; i++) {
             doc.setPage(i);
 
             let x = 15; //posizione inizio disegno
@@ -32,14 +32,14 @@ export async function generaPDFDocumento(
             const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
             const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
 
-            //Template
+            //Documento
             doc.setDrawColor(192, 192, 192);
             doc.setFillColor(210, 210, 210);
             doc.rect(x, y, rectx, recty, 'FD');
             doc.text("Documento", x + 10, y + 10);
             doc.setFillColor(255, 255, 255,);
             doc.rect(x, y + recty, rectx, recty, 'FD');
-            doc.text(templateString, x + 10, y + recty + 10);
+            doc.text(documentString, x + 10, y + recty + 10);
 
             //Nominativo compilatore
             doc.setDrawColor(192, 192, 192);
@@ -70,23 +70,14 @@ export async function generaPDFDocumento(
             doc.rect(xTitleIndi, y + recty, rectx, recty, 'FD');
             doc.text(indirizzoCantiereString, xTitleIndi + 10, y + recty + 10);
 
-
-
-            // const header = 'Report 2014';
             const footer = `Page ${i} of ${pageCount}`;
 
-
-            console.log("pdfLog - pageWidth: " + pageWidth);
-            console.log("pdfLog - pageHeight: " + pageHeight);
-            // console.log("pdfLog - header: " + header);
+            console.log("pdfLog - pages: " + pageCount + ", actual: " + i);
+            // console.log("pdfLog - pageWidth: " + pageWidth);
+            // console.log("pdfLog - pageHeight: " + pageHeight);
             console.log("pdfLog - footer: " + footer);
-            console.log("pdfLog - alt: " + pageHeight - 15);
-            console.log("pdfLog - largh: " + pageWidth / 2 - (doc.getTextWidth(footer) / 2));
-
-            // Header
-            // doc.text(header, 50, 15, {
-            //     baseline: 'top'
-            // });
+            // console.log("pdfLog - alt: " + pageHeight - 15);
+            // console.log("pdfLog - largh: " + pageWidth / 2 - (doc.getTextWidth(footer) / 2));
 
             // Footer
             doc.text(footer, pageWidth / 2 - (doc.getTextWidth(footer) / 2), pageHeight - 15, {
@@ -99,7 +90,7 @@ export async function generaPDFDocumento(
     console.log("pdfLog - content offsetHeight: " + content.offsetHeight);
     //seleziono gli elementi che 
     const elements = document.querySelectorAll('.pdfElement');
-    let headerY = 30; // Altezza header
+    let headerY = 50; // Altezza header
     let yPosition = 15 + headerY;
     let xPosition = 12;
     let pageCount = 0;
@@ -149,9 +140,9 @@ export async function generaPDFDocumento(
                 }]
             }]
         });
-
-        addFooters(doc);
     }
+
+    addHeadersAndFooters(doc);
 
 
     return new Promise((resolve, reject) => {
