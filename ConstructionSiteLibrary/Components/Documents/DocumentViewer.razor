@@ -42,7 +42,7 @@ else
                         </div>
                     </div>
                     @* CONDIZIONI METEO *@
-@*                     <RadzenRow class="my-2">
+                    @*                     <RadzenRow class="my-2">
                         <RadzenText>Condizioni meteo: <strong>@StampaMeteo()</strong></RadzenText>
                     </RadzenRow> *@
                 </div>
@@ -103,7 +103,7 @@ else
                         </RadzenText>
                     </div>
                 </div>
-                        @* COMPANY DOCUMENTO *@
+                @* COMPANY DOCUMENTO *@
                 @foreach (var company in Document?.Companies)
                 {
                     <div class="pdfElement">
@@ -165,16 +165,16 @@ else
                 {
                     <div class="pdfElement">
                         <div class="SectionTitleDiv">
-                        <RadzenRow Style="justify-content:space-between !important;">
-                            <RadzenColumn Size="1" Style="display:flex">
-                                <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@DocumentUtils.CategoryNumber(category)</strong></RadzenText>
-                            </RadzenColumn>
-                            <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
-                                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@DocumentUtils.CategoryText(category)</strong></RadzenText>
-                            </RadzenColumn>
-                            <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                            </RadzenColumn>
-                        </RadzenRow>
+                            <RadzenRow Style="justify-content:space-between !important;">
+                                <RadzenColumn Size="1" Style="display:flex">
+                                    <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@DocumentUtils.CategoryNumber(category)</strong></RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
+                                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@DocumentUtils.CategoryText(category)</strong></RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                                </RadzenColumn>
+                            </RadzenRow>
                         </div>
                     </div>
                     @foreach (var question in category.Questions)
@@ -182,29 +182,29 @@ else
                         @if(question.Printable)
                         {
                             <div class="pdfElement">
-                            <div class="border paddingSezione">
-                                <div class="margineDomande bordoDomanda">
-                                    <div class="hstack ">
-                                        <RadzenText>@DocumentUtils.QuestionTextNumber(category, question.Text, question.Order)</RadzenText>
+                                <div class="border paddingSezione">
+                                    <div class="margineDomande bordoDomanda">
+                                        <div class="hstack ">
+                                            <RadzenText>@DocumentUtils.QuestionTextNumber(category, question.Text, question.Order)</RadzenText>
+                                        </div>
+                                        <ul>
+                                            @foreach (var answer in question.CurrentChoices)
+                                            {
+                                                <li>
+                                                    <div class="hstack">
+                                                        <div>
+                                                            <RadzenText class="selectChoice"><strong>@DocumentUtils.PrintDocumentField(answer.Value)</strong></RadzenText>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <RadzenText TextStyle="TextStyle.Caption">@DocumentUtils.ReportedCompany(answer.ReportedCompanyIds, Document)</RadzenText>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
                                     </div>
-                                    <ul>
-                                    @foreach (var answer in question.CurrentChoices)
-                                    {
-                                        <li>
-                                            <div class="hstack">
-                                                <div>
-                                                    <RadzenText class="selectChoice"><strong>@DocumentUtils.PrintDocumentField(answer.Value)</strong></RadzenText>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <RadzenText TextStyle="TextStyle.Caption">@DocumentUtils.ReportedCompany(answer.ReportedCompanyIds, Document)</RadzenText>
-                                            </div>
-                                        </li>
-                                    }
-                                </ul>
+                                </div>
                             </div>
-                        </div>
-                        </div>
                         }
                     }
                 }
@@ -255,23 +255,23 @@ else
                     {
                         if(elem.Attachments.Count > 0)
                         {
-                        <div class="pdfElement ">
-                            <div class="paddingSezione">
-                            <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
-                                <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
-                                    <RadzenText TextStyle="TextStyle.H6">@DocumentUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
-                                </RadzenColumn>
-                                <RadzenColumn>
-                                    <RadzenRow>
-                                        @foreach (var attach in elem.Attachments)
-                                        {
-                                            <img src="@attach.Image" class="attachmentImg"/>
-                                        }
+                            <div class="pdfElement ">
+                                <div class="paddingSezione">
+                                    <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
+                                        <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
+                                            <RadzenText TextStyle="TextStyle.H6">@DocumentUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
+                                        </RadzenColumn>
+                                        <RadzenColumn>
+                                            <RadzenRow>
+                                                @foreach (var attach in elem.Attachments)
+                                                {
+                                                    <img src="@attach.Image" class="attachmentImg"/>
+                                                }
+                                            </RadzenRow>
+                                        </RadzenColumn>
                                     </RadzenRow>
-                                 </RadzenColumn>
-                            </RadzenRow>
-                            </div>
-                        </div>     
+                                </div>
+                            </div>     
                         } 
                     }  
                 }
@@ -301,11 +301,11 @@ else
             @* FIRME *@
             <div class="pdfElement">
                 <div class="row SectionTitleDiv">
-                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
-                            <strong>
-                                @DocumentUtils.DocumentSignatures
-                            </strong>
-                        </RadzenText>
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+                        <strong>
+                            @DocumentUtils.DocumentSignatures
+                        </strong>
+                    </RadzenText>
                 </div>
                 <div class="paddingDescrizione marginYResponsive border">
                     <RadzenText Style="text-decoration:underline">Le firme di presa visione e accettazione di seguito fanno riferimento alle prescrizioni riportate nel verbale, riferite all'impresa di appartenenza e relativi subappaltatori.</RadzenText>
@@ -334,7 +334,7 @@ else
                             <div class="borderBottom w-100"></div>
                         </div>
                     </div>
-                     <div class="col-6">
+                    <div class="col-6">
                         <div class="mb-1">
                             <RadzenText Style="text-decoration:underline">Per presa visione e accettazione</RadzenText>
                         </div>
@@ -344,9 +344,9 @@ else
                                 <RadzenText>Per: <strong>@DocumentUtils.PrintCompanyFromSignature(Document.Signatures[0], Document)</strong></RadzenText>
                                 @if (!string.IsNullOrEmpty(firstCompanySignature.Sign))
                                 {
-                                <div class=" col-12 mb-2">
-                                    <RadzenText> Nome: <strong>@firstCompanySignature.Name</strong></RadzenText>
-                                </div>
+                                    <div class=" col-12 mb-2">
+                                        <RadzenText> Nome: <strong>@firstCompanySignature.Name</strong></RadzenText>
+                                    </div>
                                     <div class="col-12 p-2">
                                         <img src="@Document.Signatures[0].Sign" width="@Document.Signatures[0].Width" height="@Document.Signatures[0].Height" style="max-width:100%; height:100%" />
                                     </div>
@@ -372,10 +372,10 @@ else
             @foreach(var sign in OthercompanySignatures)
             {
                 <div class="pdfElement">
-                <div class="row">
-                    <div class="col-6">
-                    </div>
-                     <div class="col-6">
+                    <div class="row">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6">
                             <div class="paddingDescrizione border my-2">
                                 <RadzenText>Per: <strong>@DocumentUtils.PrintCompanyFromSignature(sign, Document)</strong></RadzenText>
                                 @if (!string.IsNullOrEmpty(sign.Sign))
@@ -400,9 +400,9 @@ else
                                     }
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
-            </div>
             }
         </div>
     </div>
@@ -420,6 +420,9 @@ else
     [Parameter]
     public DocumentModel? Document { get; set; }
 
+    // Categorie da stampare nel pdf (printable = true)
+    private List<DocumentCategoryModel> printableCategory { get; set; } = [];
+    // Categorie visualizzate nel pdf
     private List<VisualCategory> visualCategories { get; set; } = [];
     private List<QuestionNote> NoteList { get; set; } = [];
     private List<SignatureModel> OthercompanySignatures { get; set; } = [];
@@ -446,6 +449,7 @@ else
     {
         if(Document is not null)
         {
+            CreatePrintableCategories();
             visualCategories = DocumentUtils.CreateVisualCategories(Document.Categories);
             LoadQuestionNotes();
             if(Document.Signatures.Count > 0)
@@ -468,9 +472,12 @@ else
         ///Da caricare per ogni question
         if (Document is not null)
         {
-            foreach (var cat in Document.Categories)
+            var printableCategories = Document.Categories.Where(c => c.Printable);
+
+            foreach (var cat in printableCategories)
             {
-                foreach (var question in cat.Questions)
+                var printableQuestion = cat.Questions.Where(q => q.Printable);
+                foreach (var question in printableQuestion)
                 {
                     if (!string.IsNullOrEmpty(question.Note.Trim()))
                     {
@@ -523,6 +530,12 @@ else
     private bool CheckCompanyPresent(bool? value)
     {
         return value.HasValue ? value.Value : false;
+    }
+
+    private void CreatePrintableCategories()
+    {
+        var list = Document!.Categories.Where(c => c.Printable);
+        //fore
     }
 
     #region Visualizzazione
