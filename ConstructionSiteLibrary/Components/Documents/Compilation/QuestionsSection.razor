@@ -16,11 +16,14 @@
             @foreach (var visual in visualCategories)
             {
                 <a class="anchor" id="@CreateAnchor(visual)"></a>
-                <div class="accordion-item" >
+                <div class="accordion-item">
                     <h2 class="mb-0">
+                        <RadzenCheckBox Value="@visual.Category.Printable" TValue="bool" @onclick:preventDefault="true" />
+
                         <button class="accordion-button titleCategory" type="button" data-bs-toggle="collapse" data-bs-target="@ReturnCollapseTarget(visualCategories.IndexOf(visual), true)" aria-expanded="false" aria-controls="@ReturnCollapseTarget(visualCategories.IndexOf(visual))">
                             @DocumentUtils.CategoryNumberAndText(visual.Category)
                         </button>
+                        
                     </h2>
                     <div id="@ReturnCollapseTarget(visualCategories.IndexOf(visual))" class="accordion-collapse collapse show">
                         <div class="accordion-body">
@@ -31,6 +34,12 @@
                                     <div class="row mt-3 border-bottom">
                                         <div class="col bor">
                                             <p><strong>@DocumentUtils.QuestionNumber(visual.Category, question.Order)</strong> @DocumentUtils.QuestionText(visual.Category, question.Text)</p>
+                                            @if (question.Attachments.Count > 0)
+                                            {
+
+                                                <RadzenButton Icon="Image" class="buttonPhoto" Click="@(() => OpenQuestionAttachmentsGallery(visual.Category, question))" />
+
+                                            }
                                         </div>
                                         <div class="col-md-auto">
                                             @foreach (var answer in question.CurrentChoices)
@@ -39,31 +48,34 @@
                                                     <div>
                                                         <RadzenDropDown Value="@answer" Data=@question.Choices TValue="DocumentChoiceModel"
                                                                         TextProperty="Value" AllowClear="true" class="inputBorder"
-                                                            Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
+                                                                        Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
                                                     </div>
                                                     @if (ShowDeleteChoiceButton(answer, question))
                                                     {
                                                         <div>
                                                             <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Text"
-                                                                class="buttonChoice" Click="@(()=>RemoveAnswer(question, answer))" />
+                                                                          class="buttonChoice" Click="@(()=>RemoveAnswer(question, answer))" />
                                                         </div>
                                                     }
                                                     @if (ShowAddChoiceButton(answer, question))
                                                     {
                                                         <div>
                                                             <RadzenButton Icon="add" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text"
-                                                                class="buttonChoice" Click="@(()=>AddAnswer(question))" />
+                                                                          class="buttonChoice" Click="@(()=>AddAnswer(question))" />
                                                         </div>
                                                     }
                                                 </div>
                                                 <div>
-                                                    <RadzenText TextStyle="TextStyle.Body1" onclick="@{()=>OpenCompanyListDialog(answer) }">
-                                                        @ReportedCompany(answer)</RadzenText>
+                                                    <RadzenText TextStyle="TextStyle.Body1" onclick="@{
+                                        ()=>OpenCompanyListDialog(answer)
+ }">
+                                                        @ReportedCompany(answer)
+                                                    </RadzenText>
                                                 </div>
                                             }
                                             <div>
                                                 <RadzenButton Text="Aggiungi note" Variant="Variant.Text" Click="@(()=>OpenNoteDialog(question))"
-                                                    Style="width: 170px;" />
+                                                              Style="width: 170px;" />
                                             </div>
                                         </div>
                                         <div class="col-md-auto">
@@ -75,6 +87,9 @@
                                                 </ChildContent>
                                             </RadzenSplitButton>
                                             <InputFile OnChange="@(args => LoadFile(args, question))" style="display: none;" id="pictureLoader" />
+                                        </div>
+                                        <div class="col-md-auto">
+                                            <RadzenCheckBox Value="@question.Printable" TValue="bool" />
                                         </div>
                                     </div>
                                 }
@@ -149,11 +164,11 @@
         var img = "data:image/jpeg;charset=utf-8;base64," + base64Image;
 
         question.Attachments.Add(new AttachmentModel()
-                {
-                    Name = "",
-                    Date = DateTime.Now,
-                    Image = img,
-                });
+            {
+                Name = "",
+                Date = DateTime.Now,
+                Image = img,
+            });
 
         await StateChangeNotification();
     }
@@ -302,6 +317,23 @@
                 { "Companies", Companies },
             };
         await DialogService.OpenAsync<FormSelectCompany>("Seleziona aziende", parameters: param, options: newOptions);
+    }
+
+    private async Task OpenQuestionAttachmentsGallery(DocumentCategoryModel category,  DocumentQuestionModel question)
+    {
+        var width = screenComponent.GetScreenSize();
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
+        var newOptions = new DialogOptions
+            { Style = additionalStyle };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+            {
+                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+                { "Question", question },
+                { "Category", category },
+            };
+        await DialogService.OpenAsync<QuestionAttachments>("Galleria allegati", parameters: param, options: newOptions);
     }
 
     private async Task SelectedCompanies()

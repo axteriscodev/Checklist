@@ -1,0 +1,37 @@
+﻿@using ConstructionSiteLibrary.Model.DocumentCompilation
+@using Shared.Documents
+
+<div class="paddingSezione">
+    <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
+        <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
+            <RadzenText TextStyle="TextStyle.H6">@DocumentUtils.QuestionNumber(Category, Question.Order)</RadzenText>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenRow>
+                @foreach (var attach in Question.Attachments)
+                {
+                    <RadzenStack Orientation="Orientation.Vertical">
+                        <RadzenImage Path="@attach.Image" Style="width: 10rem;" />
+                        <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
+                                      Click="@(() => DeleteAttachment(Question.Attachments, attach))" />
+                    </RadzenStack>
+                }
+            </RadzenRow>
+        </RadzenColumn>
+    </RadzenRow>
+</div>
+
+
+@code {
+    [Parameter]
+    public DocumentQuestionModel Question { get; set; } = new();
+
+    [Parameter]
+    public DocumentCategoryModel Category { get; set; } = new();
+
+    private void DeleteAttachment(List<AttachmentModel> attachments, AttachmentModel attachment)
+    {
+        attachments.Remove(attachment);
+        //visualCategories = DocumentUtils.CreateVisualCategories(Categories);
+    }
+}
