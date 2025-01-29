@@ -18,7 +18,7 @@
                 <a class="anchor" id="@CreateAnchor(visual)"></a>
                 <div class="accordion-item">
                     <div class="hstack g-0">
-                        <RadzenCheckBox Value="@visual.Category.Printable" TValue="bool" @onclick:preventDefault="true" />
+                        <RadzenCheckBox @bind-Value="@visual.Category.Printable" TValue="bool" @onclick:preventDefault="true" />
                         <h2 class="mb-0 w-100">
                             <button class="accordion-button titleCategory" type="button" data-bs-toggle="collapse" data-bs-target="@ReturnCollapseTarget(visualCategories.IndexOf(visual), true)" aria-expanded="false" aria-controls="@ReturnCollapseTarget(visualCategories.IndexOf(visual))">
                                 @DocumentUtils.CategoryNumberAndText(visual.Category)
@@ -33,7 +33,7 @@
                                 {
                                     <div class="row mt-3 border-bottom">
                                         <div class="col-md-auto">
-                                            <RadzenCheckBox Value="@question.Printable" TValue="bool" />
+                                            <RadzenCheckBox @bind-Value="@question.Printable" TValue="bool" />
                                         </div>
                                         <div class="col bor">
                                             <p><strong>@DocumentUtils.QuestionNumber(visual.Category, question.Order)</strong> @DocumentUtils.QuestionText(visual.Category, question.Text)</p>

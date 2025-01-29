@@ -265,6 +265,7 @@ public class DocumentDbHelper
                 DraftedIn = document.DraftedIn,
                 CompletedIn = document.CompletedIn,
                 IdMeteo = document.MeteoCondition?.Id,
+                
             };
 
             db.Documents.Add(newDocument);

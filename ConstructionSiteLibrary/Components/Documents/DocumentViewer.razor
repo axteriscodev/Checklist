@@ -159,7 +159,7 @@ else
                 }
             }
             @* DOMANDE DOCUMENTO *@
-            @foreach (var category in Document!.Categories)
+            @foreach (var category in categories)
             {
                 @if(category.Printable)
                 {
@@ -238,7 +238,7 @@ else
                 }   
             }
             @* ALLEGATI ASSEGNATI ALLE DOMANDE *@
-            @if(visualCategories.Count > 0)
+            @if(CheckAllegatiDomande())
             {
                 <div class="pdfElement">
                     <div class="row SectionTitleDiv">
@@ -249,9 +249,9 @@ else
                         </RadzenText>
                     </div>
                 </div>
-                @foreach(var cat in visualCategories)
+                @foreach(var cat in categories)
                 {
-                    foreach(var elem in cat.Category.Questions)
+                    foreach(var elem in cat.Questions)
                     {
                         if(elem.Attachments.Count > 0)
                         {
@@ -259,7 +259,7 @@ else
                                 <div class="paddingSezione">
                                     <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
                                         <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
-                                            <RadzenText TextStyle="TextStyle.H6">@DocumentUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
+                                            <RadzenText TextStyle="TextStyle.H6">@DocumentUtils.QuestionNumber(cat, elem.Order)</RadzenText>
                                         </RadzenColumn>
                                         <RadzenColumn>
                                             <RadzenRow>
@@ -361,7 +361,7 @@ else
                                     <RadzenText TextStyle="TextStyle.Caption" class="mb-0 rz-text-wrap">
                                         @foreach (var questionId in Document.Signatures[0].ReporteQuestionsIds)
                                         {
-                                            @DocumentUtils.PrintQuestionForReported(questionId, visualCategories)
+                                            @DocumentUtils.PrintQuestionForReported(questionId, categories)
                                         }
                                     </RadzenText>
                                 </div>
@@ -399,7 +399,7 @@ else
                                     <RadzenText TextStyle="TextStyle.Caption" class="mb-0 rz-text-wrap">
                                         @foreach (var questionId in sign.ReporteQuestionsIds)
                                         {
-                                            @DocumentUtils.PrintQuestionForReported(questionId, visualCategories);
+                                            @DocumentUtils.PrintQuestionForReported(questionId, categories);
                                         }
                                     </RadzenText>
                                 </div>
@@ -424,7 +424,7 @@ else
     [Parameter]
     public DocumentModel? Document { get; set; }
     // Categorie visualizzate nel pdf
-    private List<VisualCategory> visualCategories { get; set; } = [];
+    private List<DocumentCategoryModel> categories { get; set; } = [];
     private List<QuestionNote> NoteList { get; set; } = [];
     private List<SignatureModel> OthercompanySignatures { get; set; } = [];
     private SignatureModel? firstCompanySignature;
@@ -462,14 +462,14 @@ else
 
     private void GetSignatures()
     {
-            if(Document!.Signatures.Count > 0)
+        if(Document!.Signatures.Count > 0)
+        {
+            firstCompanySignature = Document.Signatures.Select(s=> s.Clone()).FirstOrDefault();
+            for(int i = 1; i < Document.Signatures.Count; i++)
             {
-                firstCompanySignature = Document.Signatures.Select(s=> s.Clone()).FirstOrDefault();
-                for(int i = 1; i < Document.Signatures.Count; i++)
-                {
-                    OthercompanySignatures.Add(Document.Signatures[i].Clone());
-                }
+                OthercompanySignatures.Add(Document.Signatures[i].Clone());
             }
+        }
     }
 
     /// <summary>
@@ -479,7 +479,7 @@ else
     private void CreatePrintableCategories()
     {
 
-        List<DocumentCategoryModel> catList = [];
+        categories = [];
         var countCategory = 1;
         foreach (var c in Document!.Categories)
         {
@@ -507,13 +507,12 @@ else
                     //per ogni domanda stampabile aggiorno l ordine
                     catClone.Questions = qList;
                     //inserisco la categoria nella lista
-                    catList.Add(catClone);
+                    categories.Add(catClone);
                     //aumento il count
                     countCategory++;
                 } 
             }
         }
-        visualCategories = DocumentUtils.CreateVisualCategories(catList);
     }
 
     private void LoadQuestionNotes()
@@ -525,15 +524,15 @@ else
         {
             var printableCategories = Document.Categories.Where(c => c.Printable);
 
-            foreach (var cat in visualCategories)
+            foreach (var cat in categories)
             {
-                foreach (var question in cat.Category.Questions)
+                foreach (var question in cat.Questions)
                 {
                     if (!string.IsNullOrEmpty(question.Note.Trim()))
                     {
                         var qNote = new QuestionNote()
                         {
-                                QuestionNumber = cat.Category.Order.ToString() + "." + question.Order.ToString(),
+                                QuestionNumber = cat.Order.ToString() + "." + question.Order.ToString(),
                                 Note = question.Note
                         };
                         NoteList.Add(qNote);
@@ -541,6 +540,23 @@ else
                 }
             }
         }
+    }
+
+    private bool CheckAllegatiDomande()
+    {
+        bool found = false;
+        foreach(var cat in categories)
+        {
+            foreach(var q in cat.Questions)
+            {
+                if(q.Attachments.Count > 0)
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        return found;
     }
 
     private async Task StampaDocumento()
