@@ -67,6 +67,21 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
             return questionNumber;
         }
 
+        public static string PrintQuestionForReported(int idQuestion, List<DocumentCategoryModel> categories)
+        {
+            var questionNumber = "";
+            foreach (var category in categories)
+            {
+                var q = category.Questions.Where(x => x.Id == idQuestion).SingleOrDefault();
+                if (q is not null)
+                {
+                    questionNumber = $"{category.Order}.{q.Order} ";
+                    break;
+                }
+            }
+            return questionNumber;
+        }
+
         #endregion
 
         #region Metodi di visualizzazione per Question
