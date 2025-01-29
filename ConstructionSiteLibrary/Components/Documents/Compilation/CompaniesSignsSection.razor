@@ -162,7 +162,10 @@ else
                         var cs = Document.Signatures.Where(x => x.CompanyId == companyId).FirstOrDefault();
                         if (cs is not null)
                         {
-                            cs.ReporteQuestionsIds.Add(question.Id);
+                            if (!cs.ReporteQuestionsIds.Contains(question.Id))
+                            {
+                                cs.ReporteQuestionsIds.Add(question.Id);
+                            }
                         }
                         else
                         {

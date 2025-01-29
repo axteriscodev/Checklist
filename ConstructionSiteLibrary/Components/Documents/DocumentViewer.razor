@@ -357,11 +357,13 @@ else
                                 }
                                 <div class="borderBottom w-100"></div>
                                 <div class="hstack mt-2">
-                                    <RadzenText TextStyle="TextStyle.Caption" class="mb-0">Quesiti contestati:</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Caption" class="mb-0">Riferimento quesiti:</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Caption" class="mb-0 rz-text-wrap">
                                     @foreach (var questionId in Document.Signatures[0].ReporteQuestionsIds)
                                     {
-                                        <RadzenText TextStyle="TextStyle.Caption" class="mb-0">@DocumentUtils.PrintQuestionForReported(questionId, Document)</RadzenText>
+                                        @DocumentUtils.PrintQuestionForReported(questionId, Document)
                                     }
+                                    </RadzenText>
                                 </div>
                             </div>
                         }
@@ -393,11 +395,13 @@ else
                                 }
                                 <div class="borderBottom w-100"></div>
                                 <div class="hstack mt-2">
-                                    <RadzenText TextStyle="TextStyle.Caption" class="mb-0">Riferimento quesiti:</RadzenText>
+                                    <RadzenText  class="mb-0">Riferimento quesiti:</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Caption" class="mb-0 rz-text-wrap">
                                     @foreach (var questionId in sign.ReporteQuestionsIds)
                                     {
-                                        <RadzenText TextStyle="TextStyle.Caption" class="mb-0">@DocumentUtils.PrintQuestionForReported(questionId, Document)</RadzenText>
+                                        @DocumentUtils.PrintQuestionForReported(questionId, Document);
                                     }
+                                    </RadzenText>
                                 </div>
                             </div>
                         </div>
