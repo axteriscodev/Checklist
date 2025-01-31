@@ -4,16 +4,20 @@
 <div class="paddingSezione">
     <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
         <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
-            <RadzenText TextStyle="TextStyle.H6">@DocumentUtils.QuestionNumber(Category, Question.Order)</RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1"><strong>@DocumentUtils.QuestionNumber(Category, Question.Order)</strong></RadzenText>
         </RadzenColumn>
         <RadzenColumn>
-            <RadzenRow>
+            <RadzenRow Gap="5">
                 @foreach (var attach in Question.Attachments)
                 {
-                    <RadzenStack Orientation="Orientation.Vertical">
+                    <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween">
                         <RadzenImage Path="@attach.Image" Style="width: 10rem;" />
-                        <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
-                                      Click="@(() => DeleteAttachment(Question.Attachments, attach))" />
+                        <div class="hstack gap-1 justify-content-center">
+                            <RadzenButton Icon="arrow_back" Click="@(()=>ReorderImages(false,attach))" />
+                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
+                            Click="@(() => DeleteAttachment(Question.Attachments, attach))" />
+                            <RadzenButton Icon="arrow_forward" Click="@(()=>ReorderImages(true,attach))" />
+                        </div>
                     </RadzenStack>
                 }
             </RadzenRow>
@@ -23,15 +27,47 @@
 
 
 @code {
-    [Parameter]
-    public DocumentQuestionModel Question { get; set; } = new();
 
     [Parameter]
+    public EventCallback UpdatedAttachment { get; set; }
+    [Parameter]
+    public DocumentQuestionModel Question { get; set; } = new();
+    [Parameter]
     public DocumentCategoryModel Category { get; set; } = new();
+    [Parameter]
+    public bool NotifyStatusChanged { get; set; } = false;
 
     private void DeleteAttachment(List<AttachmentModel> attachments, AttachmentModel attachment)
     {
         attachments.Remove(attachment);
         //visualCategories = DocumentUtils.CreateVisualCategories(Categories);
+    }
+
+    private async Task ReorderImages(bool forward, AttachmentModel attachment)
+    {
+        var updated = false;
+        var index = Question.Attachments.IndexOf(attachment);
+        if(forward && index < Question.Attachments.Count-1)
+        {
+            var newIndex = index + 1;
+            Question.Attachments.Remove(attachment);
+            Question.Attachments.Insert(newIndex, attachment);
+            updated = true;
+        }
+        else if (!forward && index > 0)
+        {
+            var newIndex = index - 1;
+            Question.Attachments.Remove(attachment);
+            Question.Attachments.Insert(newIndex, attachment);
+            updated = true;
+        }
+        if(updated)
+        {
+            if(NotifyStatusChanged)
+            {
+                await UpdatedAttachment.InvokeAsync();
+            }
+            StateHasChanged();
+        }
     }
 }

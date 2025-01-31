@@ -292,7 +292,7 @@
         var param = new Dictionary<string, object>
             {
                 //tra i parametri che invio al dialog creo un EventCallback da passare al componente
-                { "OnQuestionNoteChanged", EventCallback.Factory.Create(this, QuestionNotesChanged) },
+                { "OnQuestionNoteChanged", EventCallback.Factory.Create(this, QuestionChanged) },
                 { "Question", question},
             };
         await DialogService.OpenAsync<FormQuestionNote>("Scrivi note", parameters: param, options: newOptions);
@@ -328,8 +328,10 @@
         var param = new Dictionary<string, object>
             {
                 //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+                { "UpdatedAttachment", EventCallback.Factory.Create(this, StateChangeNotification) },
                 { "Question", question },
                 { "Category", category },
+                { "NotifyStatusChanged", true },
             };
         await DialogService.OpenAsync<QuestionAttachments>("Galleria allegati", parameters: param, options: newOptions);
     }
@@ -340,7 +342,7 @@
         await StateChangeNotification();
     }
 
-    private async Task QuestionNotesChanged()
+    private async Task QuestionChanged()
     {
         DialogService.Close();
         await StateChangeNotification();
