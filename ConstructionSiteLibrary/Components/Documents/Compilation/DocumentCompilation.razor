@@ -25,7 +25,7 @@ else
         <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@UpdateDocument"
                           DocumentNavigator="@documenNavigator" />
         <QuestionNotesSection Document="@document" DocumentNavigator="@documenNavigator" />
-        <AttachmentsSection Categories="@document.Categories" DocumentNavigator="@documenNavigator" />
+        <AttachmentsSection Categories="@document.Categories" DocumentNavigator="@documenNavigator" OnDeleteAttachment="@UpdateDocument" />
         <DocumentNoteSection Document="@document" DocumentNavigator="@documenNavigator" />
         <CompaniesSignsSection Document="@document" DocumentNavigator="@documenNavigator" />
        

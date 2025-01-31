@@ -18,7 +18,7 @@
                     if (elem.Attachments.Count > 0)
                     {
                         <a class="anchor" id="@CreateAnchor(cat,elem)"></a>
-                        <QuestionAttachments Category="@cat.Category" Question="elem" />
+                        <QuestionAttachments Category="@cat.Category" Question="elem" OnDeleteAttachment="@DeleteAttachment"/>
 @*                         <div class="paddingSezione">
                             <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
                                 <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
@@ -51,6 +51,8 @@
     [Parameter]
     public EventCallback OnAnchorAdd { get; set; }
     [Parameter]
+    public EventCallback OnDeleteAttachment { get; set; }
+    [Parameter]
     public List<DocumentCategoryModel> Categories { get; set; } = [];
     [Parameter]
     public DocumentNavigator DocumentNavigator { get; set; } = new();
@@ -70,6 +72,15 @@
     {
         attachments.Remove(attachment);
         visualCategories = DocumentUtils.CreateVisualCategories(Categories);
+    }
+
+    private void DeleteAttachment()
+    {
+        @* attachments.Remove(attachment);
+        visualCategories = DocumentUtils.CreateVisualCategories(Categories); *@
+        StateHasChanged();
+
+        OnDeleteAttachment.InvokeAsync();
     }
 
 

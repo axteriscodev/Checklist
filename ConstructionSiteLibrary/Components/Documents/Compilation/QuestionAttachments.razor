@@ -31,6 +31,8 @@
     [Parameter]
     public EventCallback UpdatedAttachment { get; set; }
     [Parameter]
+    public EventCallback OnDeleteAttachment { get; set; }
+    [Parameter]
     public DocumentQuestionModel Question { get; set; } = new();
     [Parameter]
     public DocumentCategoryModel Category { get; set; } = new();
@@ -41,6 +43,8 @@
     {
         attachments.Remove(attachment);
         //visualCategories = DocumentUtils.CreateVisualCategories(Categories);
+        OnDeleteAttachment.InvokeAsync();
+        StateHasChanged();
     }
 
     private async Task ReorderImages(bool forward, AttachmentModel attachment)
