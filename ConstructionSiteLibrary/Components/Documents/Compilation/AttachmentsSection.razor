@@ -18,7 +18,8 @@
                     if (elem.Attachments.Count > 0)
                     {
                         <a class="anchor" id="@CreateAnchor(cat,elem)"></a>
-                        <div class="paddingSezione">
+                        <QuestionAttachments Category="@cat.Category" Question="elem" />
+@*                         <div class="paddingSezione">
                             <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
                                 <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
                                     <RadzenText TextStyle="TextStyle.H6">@DocumentUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
@@ -36,7 +37,7 @@
                                     </RadzenRow>
                                 </RadzenColumn>
                             </RadzenRow>
-                        </div>
+                        </div> *@
                     }
                 }
             }
