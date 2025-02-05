@@ -280,7 +280,7 @@ public class DocumentDbHelper
                 }
 
                 //associo le aziende al cantiere
-                ConstructorSiteDbHelper.AddCompanyToConstructionSite(db, companyDoc, document.ConstructorSite.Id);
+                ConstructorSiteDbHelper.HandleCompaniesToConstructionSite(db, [companyDoc], document.ConstructorSite.Id);
 
                 //associazione con il documento
                 CompanyDocument cd = new()
