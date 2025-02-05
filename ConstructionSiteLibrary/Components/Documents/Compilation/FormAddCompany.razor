@@ -12,8 +12,12 @@ else
     <div class="vstack mb-5">
     <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="formField">
         <ChildContent>
-            <RadzenDropDown TValue="CompanyModel" @bind-Value=@selectedCompany Data=@Companies Name="Companies"
-                TextProperty="CompanyName" class="my-input" />
+            <RadzenDropDownDataGrid FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"  TValue="CompanyModel" @bind-Value=@selectedCompany Data=@Companies Name="Companies"
+                TextProperty="CompanyName" class="my-input" >
+                <Columns>
+                    <RadzenDropDownDataGridColumn Property="CompanyName" Title="Nome" Width="200px" />
+                </Columns>
+            </RadzenDropDownDataGrid>
         </ChildContent>
     </RadzenFormField>
 </div>
