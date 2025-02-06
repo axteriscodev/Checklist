@@ -4,6 +4,8 @@
 @inject AppAuthenticationStateProvider AuthProvider
 @inject UserRepository UserRepository
 
+@inject DialogService _dialogService
+
 @attribute [Route(PageRouting.UserPage)]
 
 @if (onLoading)
@@ -17,9 +19,11 @@ else
         <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start">
             <h1 class="title">Il mio profilo</h1>
         </div>
-        <div class="col-12 col-lg-6 mt-5 m-lg-0 d-flex justify-content-center justify-content-lg-end">
+        <div class="col-12 col-lg-6 mt-5 m-lg-0 d-flex justify-content-center justify-content-lg-end gap-3">
             <RadzenButton Icon="save" Text="Salva modifiche" ButtonStyle="ButtonStyle.Info" Click="@Save"
                 IsBusy="@onSaving" class="my-button" />
+            <RadzenButton Icon="password" Text="Cambio password" ButtonStyle="ButtonStyle.Base" Click="@OpenChangePassword"
+                IsBusy="@onSaving"  />
         </div>
     </div>
 </div>
@@ -75,6 +79,32 @@ else
 
        
        onSaving = false;
+    }
+
+    private async Task OpenChangePassword()
+    {
+        if (user is not null)
+        {
+            //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+            var additionalStyle = "max-width:500px;height:fit-content;max-height:90%";
+            var newOptions = new DialogOptions
+                {
+                    Style = additionalStyle,
+                    Draggable = true,
+                };
+            //creo parametri da inviare al componente caricato con il popup
+            var param = new Dictionary<string, object>
+        {
+            { "OnPasswordChanged", EventCallback.Factory.Create(this, CloseDialog)},
+            { "UserModel", user}
+        };
+            await _dialogService.OpenAsync<FormChangePassword>($"Cambia password", parameters: param, options: newOptions);
+        }
+    }
+
+    private void CloseDialog()
+    {
+        _dialogService.Close();
     }
 
 

@@ -145,5 +145,50 @@ namespace TDatabase.Queries
                 }).SingleOrDefault() ?? new() { Id = user.IdRole },
             };
         }
+
+        public static async Task<bool> InsertResetToken(DB db, string email, string resetToken)
+        {
+            bool result = false;
+            try
+            {
+                var user = SelectUserFromEmail(db, email);
+                if(user is not null)
+                {
+                    var expiration = DateTime.Now.AddMinutes(10);
+                    user.ResetToken = resetToken;
+                    user.ResetTokenExpirationDate = expiration;
+                    await db.SaveChangesAsync();
+                    result = true;
+                }
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            return result;
+        }
+
+        public static async Task<bool> ChangePassword(DB db, string email, string newPassword, string salt)
+        {
+            var result = false;
+            try
+            {
+                var user = SelectUserFromEmail(db, email);
+                if (user is not null)
+                {
+                    user.Password = newPassword;
+                    user.Salt = salt;
+                    user.ResetToken = "";
+                    user.ResetTokenExpirationDate = null;
+                }
+                await db.SaveChangesAsync();
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            return result;
+        }
     }
 }

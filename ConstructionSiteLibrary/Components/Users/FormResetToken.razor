@@ -1,0 +1,64 @@
+﻿@inject UserRepository UserRepository
+
+<RadzenTemplateForm TItem="FormToken" Data="form" Submit="@Forward">
+    <div class="vstack gap-3">
+        <div class="mb-3">
+            <RadzenLabel>
+                Ti abbiamo inviato un codice di verifica allla tua email,
+                inseriscilo per verificare la tua identità.
+            </RadzenLabel>
+        </div>
+        <RadzenFormField Text="Inserisci il token" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox @bind-Value="@form.Token" Name="Token" />
+            </ChildContent>
+            <Helper>
+                <RadzenRequiredValidator Component="Token" Popup=false
+                Text="Il campo Token è obbligatorio" />
+            </Helper>
+        </RadzenFormField>
+        <div class="d-flex justify-content-center mt-3">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti"
+            IsBusy="onSaving" BusyText="Salva" Style="width:80%" />
+        </div>
+    </div>
+</RadzenTemplateForm>
+
+
+
+@code {
+
+    [Parameter]
+    public EventCallback<string> OnForward { get; set; }
+    [Parameter]
+    public string Email { get; set; } = "";
+    private FormToken form = new();
+
+    private Variant variant = Variant.Outlined;
+    private bool onSaving = false;
+    private FormToken token = new();
+
+
+    public async Task Forward()
+    {
+        onSaving = true;
+        try
+        {
+            var result = await UserRepository.VerifyResetToken(Email,form.Token!);
+            if (result)
+            {
+                await OnForward.InvokeAsync(form.Token);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        onSaving = false;
+    }
+
+    public class FormToken
+    {
+        public string Token { get; set; }
+    }
+}

@@ -123,9 +123,9 @@ namespace ServerHost.Model
 
         #region Generazione di stringhe e password casuali
 
-        public static string CreateRandomString(int number = 50)
+        public static string CreateRandomString(int number = 50, bool allChar = true)
         {
-            string mix = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=][}{<>";
+            string mix = allChar ? "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=][}{<>" : "0123456789";
             string salt = "";
             Random rnd1 = new();
             for (int i = 1; i <= number; i++)

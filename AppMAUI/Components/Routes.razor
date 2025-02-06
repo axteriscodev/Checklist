@@ -11,7 +11,9 @@
                     <FocusOnNavigate RouteData="@routeData" Selector="h1" />
                 </Authorized>
                 <NotAuthorized>
-                    <LoginPage />
+                    <LayoutView Layout="@typeof(EmptyLayout)">
+                        <LoginPage />
+                    </LayoutView>
                 </NotAuthorized>
             </AuthorizeView>
         </Found>
