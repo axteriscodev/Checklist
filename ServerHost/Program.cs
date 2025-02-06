@@ -37,6 +37,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddScoped<AccessService>();
 builder.Services.AddScoped<IMailService, MailKitService>();
 
 var app = builder.Build();

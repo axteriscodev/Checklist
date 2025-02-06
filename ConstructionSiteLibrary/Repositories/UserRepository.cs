@@ -20,6 +20,8 @@ namespace ConstructionSiteLibrary.Repositories
     public class UserRepository(HttpManager httpManager, AppAuthenticationStateProvider appAuth)
     {
 
+        const string SUCCESS = "0";
+
         private readonly HttpManager _httpManager = httpManager;
 
         private readonly AppAuthenticationStateProvider _appAuth = appAuth;
@@ -35,7 +37,7 @@ namespace ConstructionSiteLibrary.Repositories
         {
             var response = await _httpManager.SendHttpRequest(ApiRouting.UpdateUsers, rq);
 
-            if(response.Code.Equals("0"))
+            if(response.Code.Equals(SUCCESS))
             {
                 var jwt = response.Content.ToString();
                 if(!string.IsNullOrEmpty(jwt))
@@ -52,7 +54,7 @@ namespace ConstructionSiteLibrary.Repositories
         {
             bool result = false;
             var response = await _httpManager.SendHttpRequest(ApiRouting.ChangePassword, rq);
-            if (response.Code.Equals(Status.SUCCESS))
+            if (response.Code.Equals(SUCCESS))
             {
                 result = true;
             }
@@ -65,7 +67,7 @@ namespace ConstructionSiteLibrary.Repositories
             bool result = false;
             EmailRequest rq = new() { Email = uid };
             var response = await _httpManager.SendHttpRequest(ApiRouting.SendToken, rq);
-            if (response.Code.Equals(Status.SUCCESS))
+            if (response.Code.Equals(SUCCESS))
             {
                 result = true;
             }
@@ -78,7 +80,7 @@ namespace ConstructionSiteLibrary.Repositories
             bool result = false;
             VerifyResetTokenRequest rq = new() { Email = uid, ResetToken = token };
             var response = await _httpManager.SendHttpRequest(ApiRouting.VerifyToken, rq);
-            if (response.Code.Equals(Status.SUCCESS))
+            if (response.Code.Equals(SUCCESS))
             {
                 result = true;
             }
@@ -91,7 +93,7 @@ namespace ConstructionSiteLibrary.Repositories
             bool result = false;
             ChangePasswordRequest rq = new() { Email = uid, ResetToken = token, NewPassword = newPassword };
             var response = await _httpManager.SendHttpRequest(ApiRouting.ChangePasswordWithToken, rq);
-            if (response.Code.Equals(Status.SUCCESS))
+            if (response.Code.Equals(SUCCESS))
             {
                 result = true;
             }

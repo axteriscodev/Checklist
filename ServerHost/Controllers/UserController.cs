@@ -1,4 +1,5 @@
 ﻿using AXT_WebComunication.WebResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Model;
@@ -12,8 +13,11 @@ using TDatabase.Queries;
 namespace ServerHost.Controllers
 {
     [ApiController]
-    public class UserController : DefaultController
+    public class UserController(AccessService accessService) : DefaultController
     {
+
+        private readonly AccessService _accessService = accessService;
+
         #region Login
 
         [LogAction]
@@ -129,6 +133,96 @@ namespace ServerHost.Controllers
             catch (Exception ex)
             {
                 response = ExceptionWebResponse(ex, "");
+            }
+            StopTime(stopwatch);
+            return response;
+        }
+
+        [LogAction]
+        [Authorize]
+        [Route(ApiRouting.ChangePassword)]
+        [HttpPost]
+        public async Task<AXT_WebResponse> ChangePassword(ChangePasswordRequest rq)
+        {
+             AXT_WebResponse response = new(); 
+            // ConfigureLog(rq, 3);
+            // var stopwatch = StartTime();
+            // try
+            // {
+            //     var access = new UserAccess() { Uid = rq.Email, Password = rq.OldPassword };
+            //     var success = await _accessService.ChangePassword(access, rq.NewPassword);
+            //     response = success ? new(StatusResponse.GetStatus(Status.SUCCESS), "")
+            //                        : new(StatusResponse.GetStatus(Status.NO_UPDATE), "");
+            // }
+            // catch (Exception e)
+            // {
+            //     response = ExceptionWebResponse(e, "");
+            // }
+            // StopTime(stopwatch);
+             return response;
+        }
+
+        [LogAction]
+        [Route(ApiRouting.SendToken)]
+        [HttpPost]
+        public async Task<AXT_WebResponse> SendToken(EmailRequest rq)
+        {
+            AXT_WebResponse response;
+            ConfigureLog(rq, 3);
+            var stopwatch = StartTime();
+            try
+            {
+                var success = await _accessService.SendResetToken(rq.Email);
+                response = success ? new(StatusResponse.GetStatus(Status.SUCCESS), "")
+                                   : new(StatusResponse.GetStatus(Status.INSERT_ERROR), "");
+            }
+            catch (Exception e)
+            {
+                response = ExceptionWebResponse(e, "");
+            }
+            StopTime(stopwatch);
+            return response;
+        }
+
+        [LogAction]
+        [Route(ApiRouting.VerifyToken)]
+        [HttpPost]
+        public AXT_WebResponse VerifyToken(VerifyResetTokenRequest rq)
+        {
+            AXT_WebResponse response;
+            ConfigureLog(rq, 3);
+            var stopwatch = StartTime();
+            try
+            {
+                var success = _accessService.VerifyResetToken(rq.Email, rq.ResetToken);
+                response = success ? new(StatusResponse.GetStatus(Status.SUCCESS), "")
+                                   : new(StatusResponse.GetStatus(Status.INSERT_ERROR), "");
+            }
+            catch (Exception e)
+            {
+                response = ExceptionWebResponse(e, "");
+            }
+            StopTime(stopwatch);
+            return response;
+        }
+
+        [LogAction]
+        [Route(ApiRouting.ChangePasswordWithToken)]
+        [HttpPost]
+        public async Task<AXT_WebResponse> ChangePasswordWithToken(ChangePasswordRequest rq)
+        {
+            AXT_WebResponse response;
+            ConfigureLog(rq, 3);
+            var stopwatch = StartTime();
+            try
+            {
+                var success = await _accessService.ChangePasswordWithToken(rq.Email, rq.ResetToken, rq.NewPassword);
+                response = success ? new(StatusResponse.GetStatus(Status.SUCCESS), "")
+                                   : new(StatusResponse.GetStatus(Status.INSERT_ERROR), "");
+            }
+            catch (Exception e)
+            {
+                response = ExceptionWebResponse(e, "");
             }
             StopTime(stopwatch);
             return response;
