@@ -144,21 +144,22 @@ namespace ServerHost.Controllers
         [HttpPost]
         public async Task<AXT_WebResponse> ChangePassword(ChangePasswordRequest rq)
         {
-             AXT_WebResponse response = new(); 
-            // ConfigureLog(rq, 3);
-            // var stopwatch = StartTime();
-            // try
-            // {
-            //     var access = new UserAccess() { Uid = rq.Email, Password = rq.OldPassword };
-            //     var success = await _accessService.ChangePassword(access, rq.NewPassword);
-            //     response = success ? new(StatusResponse.GetStatus(Status.SUCCESS), "")
-            //                        : new(StatusResponse.GetStatus(Status.NO_UPDATE), "");
-            // }
-            // catch (Exception e)
-            // {
-            //     response = ExceptionWebResponse(e, "");
-            // }
-            // StopTime(stopwatch);
+             AXT_WebResponse response = new();
+            ConfigureLog(rq, 3);
+            var stopwatch = StartTime();
+            var db = GetDbConnection();
+            try
+            {
+                var access = new UserModel() { Email = rq.Email, Password = rq.OldPassword };
+                var success = await _accessService.ChangePassword(access,  rq.NewPassword);
+                response = success ? new(StatusResponse.GetStatus(Status.SUCCESS), "")
+                                   : new(StatusResponse.GetStatus(Status.NO_UPDATE), "");
+            }
+            catch (Exception e)
+            {
+                response = ExceptionWebResponse(e, "");
+            }
+            StopTime(stopwatch);
              return response;
         }
 

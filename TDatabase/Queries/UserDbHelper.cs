@@ -168,7 +168,7 @@ namespace TDatabase.Queries
             return result;
         }
 
-        public static async Task<bool> ChangePassword(DB db, string email, string password, string salt)
+        public static async Task<bool> ChangePassword(DB db, string email, string newPassword, string salt)
         {
             var result = false;
             try
@@ -176,7 +176,7 @@ namespace TDatabase.Queries
                 var user = SelectUserFromEmail(db, email);
                 if (user is not null)
                 {
-                    user.Password = password;
+                    user.Password = newPassword;
                     user.Salt = salt;
                     user.ResetToken = "";
                     user.ResetTokenExpirationDate = null;

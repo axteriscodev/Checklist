@@ -18,12 +18,12 @@ public class AccessService(IMailService mailService)
         {
             var result = false;
             var db = GetDbConnection();
-            var user = ValidateAccessData(access);
-            if(user is not null)
+            var user = UserDbHelper.SelectUserFromEmail(db, access.Email);
+            if (user is not null && user.Password.Equals(CryptUtilities.CryptPassword(access.Password, user.Salt)))
             {
                 var salt = CryptUtilities.CreateRandomString();
-                var password = CryptUtilities.CryptPassword(access.Password, salt);
-                result = await UserDbHelper.ChangePassword(db, user.Email, password, salt);
+                var password = CryptUtilities.CryptPassword(newPassword, salt);
+                result = await UserDbHelper.ChangePassword(db, access.Email, password, salt);
             }
             return result;
         }
@@ -81,6 +81,9 @@ public class AccessService(IMailService mailService)
                   && user.ResetTokenExpirationDate > DateTime.Now;
             return result;
         }
+
+
+
         public async Task<bool> ChangePasswordWithToken(string email, string token, string newPassword)
         {
             var result = false;
