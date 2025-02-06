@@ -1,4 +1,5 @@
 ﻿@using AXT_WebComunication.WebResponse
+@using ConstructionSiteLibrary.Components.Users
 @using ConstructionSiteLibrary.Utility
 @using Shared.Login
 @layout EmptyLayout
@@ -6,25 +7,29 @@
 @inject UserRepository UserRepository
 @inject NavigationService navigation
 @inject AppAuthenticationStateProvider AuthStateProvider
+@inject DialogService _dialogService
 
 @attribute [Route(PageRouting.LoginPage)]
 
-<RadzenStack Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 400px; overflow: hidden;">
+<RadzenStack Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10"
+    Style="width: 100%; max-width: 400px; overflow: hidden;">
     <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-background-color-info rz-p-12" style="text-align: center;">
-        <RadzenText TextStyle="TextStyle.DisplayH3" TagName="TagName.H2" Class="rz-color-white rz-mb-0">Accedi</RadzenText>
+        <RadzenText TextStyle="TextStyle.DisplayH3" TagName="TagName.H2" Class="rz-color-white rz-mb-0">Accedi
+        </RadzenText>
     </RadzenCard>
     <RadzenCard Class="rz-shadow-0 rz-p-12">
         <RadzenTemplateForm Data=@("SimpleLogin")>
-            <RadzenLogin AllowRegister="false" AllowResetPassword="false" Username="@username" Password="@password" Login="@(args => OnLogin(args))"
-                         UserText="Nome utente"
-                         UserRequired="Il nome utente è obbligatorio"
-                         PasswordRequired="La password è obbligatoria" />
+            <RadzenLogin AllowRegister="false" AllowResetPassword="true" Username="@username" Password="@password"
+                Login="@(args => OnLogin(args))" UserText="Nome utente" UserRequired="Il nome utente è obbligatorio"
+                PasswordRequired="La password è obbligatoria" ResetPasswordText="Password dimenticata?"
+                ResetPassword="@(() => ResetPassword())" />
         </RadzenTemplateForm>
     </RadzenCard>
 </RadzenStack>
 @* Messaggio di errore *@
 <RadzenRow Class="rz-my-12 rz-mx-auto" Style="width: 100%; max-width: 600px; overflow: hidden;">
-    <RadzenAlert Visible="@showAlert" AllowClose="false" AlertStyle="AlertStyle.Danger" Variant="Variant.Flat" Shade="Shade.Light">
+    <RadzenAlert Visible="@showAlert" AllowClose="false" AlertStyle="AlertStyle.Danger" Variant="Variant.Flat"
+        Shade="Shade.Light">
         @message
     </RadzenAlert>
 </RadzenRow>
@@ -33,7 +38,8 @@
 @if (loading)
 {
     <RadzenStack AlignItems="AlignItems.Center" Gap="2rem" class="mt-5">
-        <RadzenProgressBarCircular Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Size="ProgressBarCircularSize.Large" />
+        <RadzenProgressBarCircular Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"
+            Size="ProgressBarCircularSize.Large" />
     </RadzenStack>
 }
 
@@ -78,10 +84,10 @@
         showAlert = false;
         loading = true;
         UserLoginRequest rq = new()
-            {
-                Username = args.Username,
-                Password = args.Password
-            };
+        {
+            Username = args.Username,
+            Password = args.Password
+        };
         var response = await UserRepository.Login(rq);
         await ProcessWebResponse(response);
     }
@@ -99,7 +105,7 @@
             var token = response.Content!.ToString();
             if (token is not null)
             {
-                //salvo il token nello  storage
+                //salvo il token nello storage
                 await AuthStateProvider.SaveAuthenticationAsync(token);
                 navigation.ChangePage(PageRouting.HomePage);
             }
@@ -110,6 +116,28 @@
             showAlert = true;
         }
         loading = false;
+    }
+
+    private async Task ResetPassword()
+    {
+        //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = "max-width:500px;height:fit-content;max-height:90%";
+        var newOptions = new DialogOptions
+        {
+            Style = additionalStyle,
+            Draggable = true,
+        };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+                    {
+                        { "OnOperationComplete", EventCallback.Factory.Create(this, CloseDialog)},
+                    };
+        await _dialogService.OpenAsync<ForgottenPassword>($"Recupero Password", parameters: param, options: newOptions);
+    }
+
+    private void CloseDialog()
+    {
+        _dialogService.Close();
     }
 
 }
