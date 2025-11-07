@@ -13,6 +13,7 @@ namespace Shared.ApiRouting
         #region Funzionality Check
 
         public const string CheckOnline = "CheckOnline";
+        public const string Test = "functionality/test";
 
         #endregion
 
@@ -116,6 +117,11 @@ namespace Shared.ApiRouting
         public const string UpdateUsers = "UpdateUsers";
         public const string HideUsers = "HideUsers";
         public const string Login = "UserLogin";
+
+        public const string ChangePassword = "ChangePassword";
+        public const string SendToken = "SendResetToken";
+        public const string VerifyToken = "VerifyResetToken";
+        public const string ChangePasswordWithToken = "ChangePasswordWithToken";
 
 
         #endregion

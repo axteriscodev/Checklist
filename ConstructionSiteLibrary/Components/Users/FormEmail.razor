@@ -1,0 +1,55 @@
+﻿@inject UserRepository UserRepository
+
+<RadzenTemplateForm TItem="EmailForm" Data="form" Submit="@Forward">
+    <div class="vstack gap-3">
+        <div class="mb-3">
+            <RadzenLabel>Inserisci la tua email</RadzenLabel>
+        </div>
+            <RadzenFormField Text="Email" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox @bind-Value="@form.Email" Name="Email" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="Email" Popup=false
+                                             Text="Il campo Email a è obbligatorio" />
+                    <RadzenEmailValidator Component="Email" Text="Inserire un indirizzo email valido" />
+                </Helper>
+            </RadzenFormField>
+            <div class="d-flex justify-content-center mt-3">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti"
+                              IsBusy="onSaving" BusyText="Salva" Style="width:80%" />
+            </div>
+    </div>
+</RadzenTemplateForm>
+
+@code {
+
+    [Parameter]
+    public EventCallback<string> OnForward { get; set; }
+    private EmailForm form = new();
+    private Variant variant = Variant.Outlined;
+    private bool onSaving = false;
+
+    public async Task Forward()
+    {
+        onSaving = true;
+        try
+        {
+            var result = await UserRepository.SendResetToken(form.Email!);
+            if(result)
+            {
+                await OnForward.InvokeAsync(form.Email);
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        onSaving = false;
+    }
+
+    public class EmailForm
+    {
+        public string? Email { get; set; }
+    }
+}

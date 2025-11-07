@@ -19,6 +19,9 @@
     --rz-secondary-dark: #c34800 !important;
     --rz-secondary-darker: #c90000 !important;
     --rz-info: #0C336E !important;
+    /* colore link */
+    --rz-link-hover-color: #224488;
+    --rz-link-color: #2275e2;
     /* Colori background */
     --page-background-color: #F1F4F7 !important;
     --card-background-color: white !important;
@@ -26,7 +29,8 @@
     /* Dimensioni Sidebar */
     --sidebar-width-open: 370px !important;
     --sidebar-width-close: 80px !important;
-    --sidebar-top-hight: 186px !important;
+    /*--sidebar-top-hight: 186px !important;*/
+    --sidebar-top-hight: 125px !important;
     --nav-item-border-radius: 8px !important;
     /* Colori sidebar */
     --nav-item-selected-bg: #07234F !important;

@@ -27,7 +27,7 @@ public class DocumentQuestionModel : IQuestion
     public string Note { get; set; } = "";
 
     [JsonPropertyName("printable")]
-    public bool Printable { get; set; }
+    public bool Printable { get; set; } = true;
 
     [JsonPropertyName("hidden")]
     public bool Hidden { get; set; }

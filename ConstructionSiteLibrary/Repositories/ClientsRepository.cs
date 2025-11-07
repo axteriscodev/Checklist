@@ -13,13 +13,10 @@ public class ClientsRepository(HttpManager httpManager)
 
     public async Task<List<ClientModel>> GetClients()
     {
-        if (Clients.Count == 0)
+        var response = await _httpManager.SendHttpRequest(ApiRouting.ClientsList, "");
+        if (response.Code.Equals("0"))
         {
-            var response = await _httpManager.SendHttpRequest(ApiRouting.ClientsList, "");
-            if (response.Code.Equals("0"))
-            {
-                Clients = JsonSerializer.Deserialize<List<ClientModel>>(response.Content.ToString() ?? "") ?? [];
-            }
+            Clients = JsonSerializer.Deserialize<List<ClientModel>>(response.Content.ToString() ?? "") ?? [];
         }
 
         return Clients;

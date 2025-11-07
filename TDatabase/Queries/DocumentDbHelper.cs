@@ -39,25 +39,25 @@ public class DocumentDbHelper
                                               Description = m.Description,
                                           }).SingleOrDefault(),
                         Categories = (from r in (from qc in db.QuestionChosens
+                                                 from q in db.Questions
                                                  where qc.IdTemplate == d.IdTemplate
-                                                 join q in db.Questions on qc.IdQuestion equals q.Id
-                                                 select new { q.IdCategory }).Distinct()
+                                                 && q.Id == qc.IdQuestion
+                                                 group qc by qc.IdCategory into q2
+                                                 select new { q2.First().IdCategory, q2.First().OrderCategory })
 
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
-                                      orderby c.Order
+                                      orderby r.OrderCategory
                                       select new DocumentCategoryModel()
                                       {
-                                          Id = r.IdCategory,
+                                          Id = c.Id,
                                           Text = c.Text,
-                                          Order = c.Order,
-                                          Questions = (from tc in db.Templates
-                                                       from qc in db.QuestionChosens
+                                          Order = r.OrderCategory != null ? r.OrderCategory.Value : c.Order,
+                                          Questions = (from qc in db.QuestionChosens
                                                        from q in db.Questions
-                                                       where tc.Id == d.IdTemplate
-                                                       && qc.IdTemplate == tc.Id
+                                                       where qc.IdTemplate == d.IdTemplate
                                                        && q.Id == qc.IdQuestion
-                                                       && q.IdCategory == c.Id
+                                                       && qc.IdCategory == c.Id
                                                        orderby qc.Order
                                                        select new DocumentQuestionModel()
                                                        {
@@ -118,9 +118,14 @@ public class DocumentDbHelper
                                            select new ConstructorSiteModel()
                                            {
                                                Id = cs.Id,
+                                               Name = cs.Name,
                                                JobDescription = cs.JobDescription ?? "",
                                                StartDate = cs.StartDate ?? DateTime.Now,
                                                Address = cs.Address ?? "",
+                                               IdSico = cs.IdSico,
+                                               IdSicoInProgress = cs.IdSicoInProgress,
+                                               PreliminaryNotificationStartDate = cs.PreliminaryNotificationStart,
+                                               PreliminaryNotificationInProgress = cs.PreliminaryNotificationInProgress,
                                                Client = (from cl in db.Clients
                                                          where cl.Id == cs.IdClient
                                                          select new ClientModel()
@@ -128,6 +133,18 @@ public class DocumentDbHelper
                                                              Id = cl.Id,
                                                              Name = cl.Name
                                                          }).SingleOrDefault() ?? new(),
+                                               Companies = (from cc in db.CompanyConstructorSites
+                                                            join comp in db.Companies on cc.IdCompany equals comp.Id
+                                                            where cc.IdConstructorSite == cs.Id
+                                                            select new CompanyModel()
+                                                            {
+                                                                Id = comp.Id,
+                                                                CompanyName = comp.CompanyName ?? "",
+                                                                JobsDescriptions = cc.JobsDescription ?? "",
+                                                                SubcontractedBy = cc.SubcontractedBy,
+                                                                Address = comp.Address ?? "",
+                                                                VatCode = comp.Vatcode ?? "",                                      
+                                                            }).ToList(),
                                            }).SingleOrDefault() ?? new(),
                         Client = (from cl in db.Clients
                                   where cl.Id == d.IdClient
@@ -139,6 +156,10 @@ public class DocumentDbHelper
 
                         Companies = (from compDoc in db.CompanyDocuments
                                      from comp in db.Companies
+                                     join cc in (from cc in db.CompanyConstructorSites
+                                                 where cc.IdConstructorSite == d.IdConstructorSite
+                                                 select cc).DefaultIfEmpty() on comp.Id equals cc.IdCompany into constrComp
+                                     from compJoin in constrComp.DefaultIfEmpty()
                                      where compDoc.IdDocument == d.Id
                                      && comp.Id == compDoc.IdCompany
                                      select new CompanyModel()
@@ -149,7 +170,9 @@ public class DocumentDbHelper
                                          VatCode = comp.Vatcode ?? "",
                                          Present = compDoc.Present,
                                          InChargeWorker = compDoc.InChargeWorker ?? "",
-                                         Workers = compDoc.Workers ?? ""
+                                         Workers = compDoc.Workers ?? "",
+                                         JobsDescriptions = compJoin.JobsDescription ?? ""
+
                                      }).ToList(),
                         Notes = (from n in db.Notes
                                  where n.IdDocument == d.Id
@@ -195,11 +218,19 @@ public class DocumentDbHelper
                         CreationDate = d.CreationDate ?? DateTime.Now,
                         CompilationDate = d.CompilationDate,
                         LastEditDate = d.LastEditDate,
+                        MeteoCondition = db.MeteoConditions.Where(m => m.Id == d.IdMeteo)
+                                                           .Select(m => new MeteoConditionModel() { Id = m.Id, Description = m.Description })
+                                                           .SingleOrDefault(),
                         ConstructorSite = new()
                         {
                             Id = cs.Id,
+                            Name = cs.Name,
                             JobDescription = cs.JobDescription ?? "",
                             StartDate = cs.StartDate ?? DateTime.Now,
+                            IdSico = cs.IdSico,
+                            IdSicoInProgress = cs.IdSicoInProgress,
+                            PreliminaryNotificationStartDate = cs.PreliminaryNotificationStart,
+                            PreliminaryNotificationInProgress = cs.PreliminaryNotificationInProgress,
                             Address = cs.Address ?? "",
                             Client = (from cl in db.Clients
                                       where cl.Id == cs.IdClient
@@ -246,6 +277,7 @@ public class DocumentDbHelper
                 DraftedIn = document.DraftedIn,
                 CompletedIn = document.CompletedIn,
                 IdMeteo = document.MeteoCondition?.Id,
+
             };
 
             db.Documents.Add(newDocument);
@@ -259,6 +291,10 @@ public class DocumentDbHelper
                     companyDoc.Id = await CompanyDbHelper.Insert(db, companyDoc, organizationId, false);
                 }
 
+                //associo le aziende al cantiere
+                ConstructorSiteDbHelper.HandleCompaniesToConstructionSite(db, [companyDoc], document.ConstructorSite.Id);
+
+                //associazione con il documento
                 CompanyDocument cd = new()
                 {
                     IdCompany = companyDoc.Id,
@@ -393,6 +429,7 @@ public class DocumentDbHelper
                 var doc = db.Documents.Where(x => x.Id == document.Id).SingleOrDefault();
                 if (doc is not null)
                 {
+                    await ConstructorSiteDbHelper.Update(db, [document.ConstructorSite]);
                     db.Documents.Remove(doc);
                     await db.SaveChangesAsync();
                     await Insert(db, document, organizationId);

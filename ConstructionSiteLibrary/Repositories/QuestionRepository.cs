@@ -18,13 +18,10 @@ public class QuestionRepository(HttpManager httpManager)
 
     public async Task<List<TemplateQuestionModel>> GetQuestions()
     {
-        if(Questions.Count == 0)
+        var response = await _httpManager.SendHttpRequest(ApiRouting.QuestionsList, "");
+        if (response.Code.Equals("0"))
         {
-            var response = await _httpManager.SendHttpRequest(ApiRouting.QuestionsList, "");
-            if (response.Code.Equals("0"))
-            {
-                Questions = JsonSerializer.Deserialize<List<TemplateQuestionModel>>(response.Content.ToString() ?? "") ?? [];
-            }
+            Questions = JsonSerializer.Deserialize<List<TemplateQuestionModel>>(response.Content.ToString() ?? "") ?? [];
         }
         return Questions;
     }
@@ -76,13 +73,10 @@ public class QuestionRepository(HttpManager httpManager)
 
     public async Task<List<TemplateChoiceModel>> GetChoices()
     {
-        if (Choices.Count == 0)
+        var response = await _httpManager.SendHttpRequest(ApiRouting.ChoicesList, "");
+        if (response.Code.Equals("0"))
         {
-            var response = await _httpManager.SendHttpRequest(ApiRouting.ChoicesList, "");
-            if (response.Code.Equals("0"))
-            {
-                Choices = JsonSerializer.Deserialize<List<TemplateChoiceModel>>(response.Content.ToString() ?? "") ?? [];
-            }
+            Choices = JsonSerializer.Deserialize<List<TemplateChoiceModel>>(response.Content.ToString() ?? "") ?? [];
         }
         return Choices;
     }

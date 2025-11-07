@@ -8,6 +8,9 @@ using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
 public class ConstructorSiteDbHelper
 {
+
+    #region Query principali cantiere
+
     public static List<ConstructorSiteModel> Select(DB db, int organizationId, int idConstructorSite = 0)
     {
         var constructorSites = db.ConstructorSites.AsQueryable();
@@ -29,7 +32,16 @@ public class ConstructorSiteDbHelper
             {
                 Id = nc.Id,
                 Name = nc.Name,
-            }).FirstOrDefault() ?? new()
+            }).FirstOrDefault() ?? new(),
+            Companies = (from cc in db.CompanyConstructorSites
+                         join c in db.Companies on cc.IdCompany equals c.Id
+                         where cc.IdConstructorSite == x.Id
+                         select new CompanyModel()
+                         {
+                             Id = c.Id,
+                             CompanyName = c.CompanyName ?? "",
+                             JobsDescriptions = cc.JobsDescription ?? "",
+                             SubcontractedBy = cc.SubcontractedBy }).ToList(),
         }).ToList();
     }
 
@@ -50,6 +62,9 @@ public class ConstructorSiteDbHelper
                 IdClient = constructorSite.Client.Id > 0 ? constructorSite.Client.Id : null,
                 IdOrganization = organizationId
             };
+            //associo le aziende al cantiere
+            HandleCompaniesToConstructionSite(db, constructorSite.Companies, constructorSite.Id);
+
             db.ConstructorSites.Add(newConstructorSite);
             await db.SaveChangesAsync();
             siteId = nextId;
@@ -73,11 +88,18 @@ public class ConstructorSiteDbHelper
                     m.Address = elem.Address;
                     m.StartDate = elem.StartDate;
                     m.EndDate = elem.EndDate;
+                    m.IdSico = elem.IdSico;
+                    m.IdSicoInProgress = elem.IdSicoInProgress;
+                    m.PreliminaryNotificationStart = elem.PreliminaryNotificationStartDate;
+                    m.PreliminaryNotificationInProgress = elem.PreliminaryNotificationInProgress;
                     if (elem.Client is not null && elem.Client.Id > 0)
                     {
                         m.IdClient = elem.Client.Id;
                     }
                     m.JobDescription = elem.JobDescription;
+
+                    HandleCompaniesToConstructionSite(db, elem.Companies, elem.Id);
+
                     if (await db.SaveChangesAsync() > 0)
                     {
                         modified.Add(elem.Id);
@@ -114,4 +136,49 @@ public class ConstructorSiteDbHelper
             return hiddenItems;
 
     }
+
+    #endregion
+
+    #region Associazione Cantiere ed Aziende 
+
+
+    /// <summary>
+    /// Query parziale (non viene eseguito il salvataggio) per associare le anziede al cantiere
+    /// </summary>
+    /// <param name="db"></param>
+    /// <param name="companies"></param>
+    /// <param name="idContructorSite"></param>
+    public static void HandleCompaniesToConstructionSite(DB db, List<CompanyModel> companies, int idContructorSite)
+    {
+        var newCompaniesIds = companies.Select(x => x.Id).ToList();
+
+        var currentAssociatedCompanies = db.CompanyConstructorSites.Where(x => x.IdConstructorSite == idContructorSite).ToList();
+
+        var currentAssociatedCompaniesIds = currentAssociatedCompanies.Select(x => x.IdCompany).ToList();
+
+        var companiesToRemove = currentAssociatedCompanies.Where(x => !newCompaniesIds.Contains(x.IdCompany)).ToList();
+
+        var companiesToAdd = companies.Where(x => !currentAssociatedCompaniesIds.Contains(x.Id)).ToList();
+
+        foreach (var comp in companiesToRemove)
+        {
+            db.CompanyConstructorSites.Remove(comp);
+        }
+
+        foreach (var comp in companiesToAdd)
+        {
+                var CompConstruct = new CompanyConstructorSite()
+                {
+                    IdCompany = comp.Id,
+                    IdConstructorSite = idContructorSite,
+                    JobsDescription = comp.JobsDescriptions,
+                    SubcontractedBy = comp.SubcontractedBy,
+                };
+                db.CompanyConstructorSites.Add(CompConstruct);
+            // quando inseriremo i valori di JobsDescription e SubcontractedBy aggiungere anche else
+            // di aggiornamento, visto che potrebbe aver aggiornato anche quei campi
+        }
+    }
+
+    #endregion
 }

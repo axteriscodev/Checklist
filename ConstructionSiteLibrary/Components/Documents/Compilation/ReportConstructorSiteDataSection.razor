@@ -1,6 +1,7 @@
 ﻿@using Shared.Documents;
 @using ConstructionSiteLibrary.Model.DocumentCompilation;
 @using Radzen.Blazor;
+@using Radzen;
 
 @inject DocumentsRepository DocumentsRepository;
 @inject ClientsRepository ClientsRepository;
@@ -50,13 +51,14 @@ else
                     </RadzenDatePicker>
                 </div>
             </div>
-            <div class="my-1">
+            @* CONDIZIONI METEO *@
+@*             <div class="my-1">
                 <RadzenLabel Text="Condizioni meteo" />
                 <div class="bordered text-center p-3">
-                    <RadzenRadioButtonList Data="@meteoConditions" TValue="MeteoConditionModel" Orientation="@meteoButtonsOrientation"
-                                           Value="@Document.MeteoCondition" TextProperty="Description" />
+                    <RadzenRadioButtonList @bind-Value="@Document.MeteoCondition" Data="@meteoConditions" TValue="MeteoConditionModel" Orientation="@meteoButtonsOrientation"
+                                            TextProperty="Description"/>
                 </div>
-            </div>
+            </div> *@
         </fieldset>
         @* DATI CANTIERE *@
         <a class="anchor" id="@CreateAnchor(1)"></a>
@@ -156,6 +158,10 @@ else
     {
         meteoConditions = await DocumentsRepository.GetMeteoConditions();
         ClientsList = await ClientsRepository.GetClients();
+        if(Document.MeteoCondition is not null)
+        {
+            Document.MeteoCondition = meteoConditions.Where(x => x.Id == Document.MeteoCondition.Id).SingleOrDefault();
+        }
     }
 
 

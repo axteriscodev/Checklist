@@ -3,7 +3,6 @@
 
 @inject DialogService DialogService
 
-
 @if (onLoading)
 {
     <Loading />
@@ -18,15 +17,20 @@ else
                 <legend class="my-legend">Impresa Esecutrice</legend>
                 <div class="row">
                     <div class="col impresaEsecutrice">
-                        <RadzenRow>
-                            <RadzenLabel Text="Presente" Component="Presente" />
-                            <RadzenCheckBox Value="@company.Present" Name="Presente" TValue="bool?" Change="@(args=>AddPresent(args, company))" />
+                        <RadzenRow class="row-button">
+                            <div >
+                                <RadzenButton Icon="delete" Variant="Variant.Text" Click="@(()=>DeleteCompany(company))" />
+                            </div>
+                            <div class="present-container">
+                                <RadzenLabel Text="Presente" Component="Presente" />
+                                <RadzenCheckBox Value="@company.Present" Name="Presente" TValue="bool?" Change="@(args=>AddPresent(args, company))" />
+                            </div>
                         </RadzenRow>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-md-6 my-1">
-                        <RadzenLabel Text="Ragione Sociale:" Component="RagioneSociale" />
+                        <RadzenLabel Text="Rag. sociale impresa/Nominativo lav. autonomo" Component="RagioneSociale" />
                         <RadzenTextBox Placeholder="Inserisci Ragione Sociale" Name="RagioneSociale"
                                        Change=@(args => OnChangeRagioneSociale(company,args, "RagioneSociale"))
                                        class="my-input" @bind-Value=@company.CompanyName />
@@ -50,8 +54,8 @@ else
                                        class="my-input" @bind-Value=@company.VatCode />
                     </div>
                     <div class="col-12 col-md-6 my-1">
-                        <RadzenLabel Text="Reponsabile:" Component="Reponsabile" />
-                        <RadzenTextBox Placeholder="Reponsabile" Name="Reponsabile"
+                        <RadzenLabel Text="Figure responsabili individuate:" Component="Reponsabile" />
+                        <RadzenTextBox Placeholder="Figure responsabili" Name="Reponsabile"
                                         Change=@(args => OnChange(args, "Responsabile"))
                                        class="my-input" @bind-Value=@company.InChargeWorker />
                     </div>
@@ -69,6 +73,7 @@ else
             <RadzenSplitButton Click=@(args => AddCompany(args)) AlwaysOpenPopup=true Text="Aggiungi impresa esecutrice">
                 <ChildContent>
                     <RadzenSplitButtonItem Text="Da anagrafica" Value="Anagrafica" />
+                    <RadzenSplitButtonItem Text="Da cantiere" Value="Cantiere" />
                     <RadzenSplitButtonItem Text="Nuova" Value="Nuova" />
                 </ChildContent>
             </RadzenSplitButton>                
@@ -84,6 +89,8 @@ else
     public EventCallback OnUpdateState { get; set; }
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
+    [Parameter]
+    public DocumentModel Document { get; set; } = new();
     [Parameter]
     public DocumentNavigator DocumentNavigator { get; set; } = new();
 
@@ -145,6 +152,31 @@ else
                 CreateAnchor(selectedCompany);
             }
         }
+        else if(item.Value.Equals("Cantiere"))
+        {
+            //popup
+            // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+            var additionalStyle = $"min-height:fit-content;height:fit-content;max-width:600px";
+            var newOptions = new DialogOptions
+                {
+                    Style = additionalStyle
+                };
+            //creo parametri da inviare al componente caricato con il popup
+            var param = new Dictionary<string, object>
+            {
+
+                { "Companies", Document.ConstructorSite.Companies },
+                { "PresentCompanies", Companies }, 
+            }; 
+            CompanyModel? selectedCompany = await DialogService.OpenAsync<FormAddCompany>("Seleziona azienda", parameters: param,  options: newOptions);
+
+            if(selectedCompany is not null)
+            {
+                selectedCompany.Present = true;
+                Companies.Add(selectedCompany);
+                CreateAnchor(selectedCompany);
+            }
+        }
         else
         {
             var newComp = new CompanyModel() { Present = true };
@@ -153,6 +185,20 @@ else
         }
     }
 
+
+    private async Task DeleteCompany(CompanyModel company)
+    {
+        var titolo = $"Cancellazione {company.CompanyName}" ;
+        var text = $"Vuoi togliere {company.CompanyName} dal documento?";
+        var confirmationResult = await DialogService.Confirm(text, titolo,
+        new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
+        Console.WriteLine("cliccato: " + confirmationResult);
+        if (confirmationResult == true)
+        {
+            Companies.Remove(company);
+            StateHasChanged();
+        }
+    }
 
 
     private void OnChange(string? args, string name)

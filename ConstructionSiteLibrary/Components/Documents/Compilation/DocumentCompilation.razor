@@ -21,11 +21,11 @@ else
         <ActivityTopBar @ref="@topBar" OnButtonSaveClicked="SaveDocument" DocumentNavigator="@documenNavigator"
                         OnButtonPreviewClicked="@VisualizzaAnteprimaDocumento" ShowPreview="true" />
         <ReportConstructorSiteDataSection Document="@document" DocumentNavigator="@documenNavigator" />
-        <CompaniesPresentSection Companies="@document.Companies" DocumentNavigator="@documenNavigator" />
+        <CompaniesPresentSection Document="@document" Companies="@document.Companies" DocumentNavigator="@documenNavigator" />
         <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@UpdateDocument"
                           DocumentNavigator="@documenNavigator" />
         <QuestionNotesSection Document="@document" DocumentNavigator="@documenNavigator" />
-        <AttachmentsSection Categories="@document.Categories" DocumentNavigator="@documenNavigator" />
+        <AttachmentsSection Categories="@document.Categories" DocumentNavigator="@documenNavigator" OnDeleteAttachment="@UpdateDocument" />
         <DocumentNoteSection Document="@document" DocumentNavigator="@documenNavigator" />
         <CompaniesSignsSection Document="@document" DocumentNavigator="@documenNavigator" />
        
