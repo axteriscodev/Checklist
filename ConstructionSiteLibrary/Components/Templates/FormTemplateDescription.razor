@@ -5,7 +5,7 @@
 <div class="">
     <RadzenTemplateForm TItem="FormDescription" Data=@form Submit=@Save>
         <RadzenStack class="px-2">
-            <RadzenFormField Text="Titolo<span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+            <RadzenFormField Text="Titolo (obbligatorio)" Variant="@variant">
                 <ChildContent>
                     <RadzenTextBox Name="titolo" @bind-Value="@form.Title" />
                 </ChildContent>
@@ -14,7 +14,7 @@
                 </Helper>
             </RadzenFormField>
 
-            <RadzenFormField Text="Descrizione <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+            <RadzenFormField Text="Descrizione (obbligatorio)" Variant="@variant">
                 <ChildContent>
                     <RadzenTextArea Name="descrizione" @bind-Value="@form.Description" />
                 </ChildContent>

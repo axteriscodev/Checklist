@@ -13,7 +13,7 @@ else
     <div class="">
         <RadzenTemplateForm TItem="FormSite" Data=@form Submit=@Save>
             <RadzenStack class="px-2">
-                <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
+                <RadzenFormField Text="Nome (obbligatorio)" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenTextBox Name="Nome" @bind-Value="@form.Name"/>
                     </ChildContent>
@@ -26,7 +26,7 @@ else
                         <RadzenTextArea Name="Nome" @bind-Value="@form.JobDescription" Rows="3" />
                     </ChildContent>
                 </RadzenFormField>
-                <RadzenFormField Text="Indirizzo <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
+                <RadzenFormField Text="Indirizzo (obbligatorio)" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenTextBox Name="Indirizzo" @bind-Value="@form.Address" />
                     </ChildContent>
@@ -34,7 +34,7 @@ else
                         <RadzenRequiredValidator Component="Indirizzo" Popup=false Text="Il campo Indirizzo è obbligatorio" />
                     </Helper>
                 </RadzenFormField>
-                <RadzenFormField Text="Data inizio cantiere <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
+                <RadzenFormField Text="Data inizio cantiere (obbligatorio)" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenDatePicker Name="DataInizio" @bind-Value="@form.StartDate" DateFormat="dd/MM/yyyy" ShowTime="false" />
                     </ChildContent>
