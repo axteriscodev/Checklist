@@ -31,6 +31,15 @@ public class DocumentDbHelper
                         CSE = d.Cse,
                         DraftedIn = d.DraftedIn,
                         CompletedIn = d.CompletedIn,
+                        TemplateSettings = (from t in db.Templates
+                                            where t.Id == d.IdTemplate
+                                            select new TemplateSettingsModel()
+                                            {
+                                                //HasClient = t.h,
+                                                HasCompanies = t.HasCompanies,
+                                                HasMeteo = t.HasMeteo,
+                                                HasSiteData = t.HasSiteData,
+                                            }).FirstOrDefault() ?? new(),
                         MeteoCondition = (from m in db.MeteoConditions
                                           where d.IdMeteo == m.Id
                                           select new MeteoConditionModel()
@@ -113,9 +122,9 @@ public class DocumentDbHelper
                                                                           }).ToList(),
                                                        }).ToList()
                                       }).ToList(),
-                        ConstructorSite = (from cs in db.Sites
+                        Site = (from cs in db.Sites
                                            where cs.Id == d.IdSite
-                                           select new ConstructorSiteModel()
+                                           select new SiteModel()
                                            {
                                                Id = cs.Id,
                                                Name = cs.Name,
@@ -221,7 +230,7 @@ public class DocumentDbHelper
                         MeteoCondition = db.MeteoConditions.Where(m => m.Id == d.IdMeteo)
                                                            .Select(m => new MeteoConditionModel() { Id = m.Id, Description = m.Description })
                                                            .SingleOrDefault(),
-                        ConstructorSite = new()
+                        Site = new()
                         {
                             Id = cs.Id,
                             Name = cs.Name,
@@ -264,7 +273,7 @@ public class DocumentDbHelper
             {
                 Id = nextId,
                 IdOrganization = organizationId,
-                IdSite = document.ConstructorSite.Id,
+                IdSite = document.Site.Id,
                 IdClient = document.Client?.Id > 0 ? document.Client?.Id : null,
                 IdTemplate = document.IdTemplate,
                 CreationDate = document.CreationDate,
@@ -292,7 +301,7 @@ public class DocumentDbHelper
                 }
 
                 //associo le aziende al cantiere
-                ConstructorSiteDbHelper.HandleCompaniesToConstructionSite(db, [companyDoc], document.ConstructorSite.Id);
+                ConstructorSiteDbHelper.HandleCompaniesToConstructionSite(db, [companyDoc], document.Site.Id);
 
                 //associazione con il documento
                 CompanyDocument cd = new()
@@ -429,7 +438,7 @@ public class DocumentDbHelper
                 var doc = db.Documents.Where(x => x.Id == document.Id).SingleOrDefault();
                 if (doc is not null)
                 {
-                    await ConstructorSiteDbHelper.Update(db, [document.ConstructorSite]);
+                    await ConstructorSiteDbHelper.Update(db, [document.Site]);
                     db.Documents.Remove(doc);
                     await db.SaveChangesAsync();
                     await Insert(db, document, organizationId);

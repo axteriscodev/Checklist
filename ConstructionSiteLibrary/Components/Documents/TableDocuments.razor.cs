@@ -17,7 +17,7 @@ namespace ConstructionSiteLibrary.Components.Documents
         ScreenComponent? screenComponent;
 
 
-        private ConstructorSiteModel site = new();
+        private SiteModel site = new();
         private List<DocumentModel> documents = [];
         private List<DocumentModel> displayedDocuments = [];
         private bool onLoading = false;

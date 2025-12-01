@@ -18,6 +18,18 @@ public class TemplateModel
     [JsonPropertyName("note")]
     public string Note { get; set; } = "";
 
+    [JsonPropertyName("hasClient")]
+    public bool HasClient { get; set; } = false;
+
+    [JsonPropertyName("hasCompanies")]
+    public bool HasCompanies { get; set; } = false;
+
+    [JsonPropertyName("hasMeteo")]
+    public bool HasMeteo { get; set; } = false;
+
+    [JsonPropertyName("hasSiteData")]
+    public bool HasSiteData { get; set; } = false;
+
     [JsonPropertyName("creationDateTemplate")]
     public DateTime CreationDate { get; set; } = DateTime.Now;
 

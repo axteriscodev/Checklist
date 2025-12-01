@@ -11,7 +11,7 @@ public class ConstructorSiteDbHelper
 
     #region Query principali cantiere
 
-    public static List<ConstructorSiteModel> Select(DB db, int organizationId, int idConstructorSite = 0)
+    public static List<SiteModel> Select(DB db, int organizationId, int idConstructorSite = 0)
     {
         var constructorSites = db.Sites.AsQueryable();
 
@@ -20,7 +20,7 @@ public class ConstructorSiteDbHelper
             constructorSites = constructorSites.Where(x =>x.IdOrganization == organizationId && x.Id == idConstructorSite);
         }
 
-        return constructorSites.Where(x => x.IdOrganization == organizationId).Select(x => new ConstructorSiteModel()
+        return constructorSites.Where(x => x.IdOrganization == organizationId).Select(x => new SiteModel()
         {
             Id = x.Id,
             Name = x.Name,
@@ -45,7 +45,7 @@ public class ConstructorSiteDbHelper
         }).ToList();
     }
 
-    public static async Task<int> Insert(DB db, ConstructorSiteModel constructorSite, int organizationId)
+    public static async Task<int> Insert(DB db, SiteModel constructorSite, int organizationId)
     {
         var siteId = 0;
         try
@@ -74,7 +74,7 @@ public class ConstructorSiteDbHelper
         return siteId;
     }
 
-    public static async Task<List<int>> Update(DB db, List<ConstructorSiteModel> constructorSites)
+    public static async Task<List<int>> Update(DB db, List<SiteModel> constructorSites)
     {
         List<int> modified = [];
         try
@@ -113,7 +113,7 @@ public class ConstructorSiteDbHelper
         return modified;
     }
 
-    public static async Task<List<int>> Hide(DB db, List<ConstructorSiteModel> constructorSites)
+    public static async Task<List<int>> Hide(DB db, List<SiteModel> constructorSites)
     {
         List<int> hiddenItems = [];
             try
@@ -147,12 +147,12 @@ public class ConstructorSiteDbHelper
     /// </summary>
     /// <param name="db"></param>
     /// <param name="companies"></param>
-    /// <param name="idContructorSite"></param>
-    public static void HandleCompaniesToConstructionSite(DB db, List<CompanyModel> companies, int idContructorSite)
+    /// <param name="idSite"></param>
+    public static void HandleCompaniesToConstructionSite(DB db, List<CompanyModel> companies, int idSite)
     {
         var newCompaniesIds = companies.Select(x => x.Id).ToList();
 
-        var currentAssociatedCompanies = db.CompanySites.Where(x => x.IdSite == idContructorSite).ToList();
+        var currentAssociatedCompanies = db.CompanySites.Where(x => x.IdSite == idSite).ToList();
 
         var currentAssociatedCompaniesIds = currentAssociatedCompanies.Select(x => x.IdCompany).ToList();
 
@@ -170,7 +170,7 @@ public class ConstructorSiteDbHelper
                 var CompConstruct = new CompanySite()
                 {
                     IdCompany = comp.Id,
-                    IdSite = idContructorSite,
+                    IdSite = idSite,
                     JobsDescription = comp.JobsDescriptions,
                     SubcontractedBy = comp.SubcontractedBy,
                 };

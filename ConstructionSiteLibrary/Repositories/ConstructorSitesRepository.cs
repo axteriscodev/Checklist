@@ -8,35 +8,35 @@ namespace ConstructionSiteLibrary.Repositories;
 
 public class ConstructorSitesRepository(HttpManager httpManager)
 {
-    List<ConstructorSiteModel> ConstructorSites = [];
+    List<SiteModel> ConstructorSites = [];
 
     private HttpManager _httpManager = httpManager;
 
-    public async Task<List<ConstructorSiteModel>> GetConstructorSites()
+    public async Task<List<SiteModel>> GetConstructorSites()
     {
         var response = await _httpManager.SendHttpRequest(ApiRouting.ConstructorSitesList, "");
         if (response.Code.Equals("0"))
         {
-            ConstructorSites = JsonSerializer.Deserialize<List<ConstructorSiteModel>>(response.Content.ToString() ?? "") ?? [];
+            ConstructorSites = JsonSerializer.Deserialize<List<SiteModel>>(response.Content.ToString() ?? "") ?? [];
         }
 
         return ConstructorSites;
     }
 
-    public async Task<ConstructorSiteModel> GetConstructorSiteInfo(int idConstructorSite)
+    public async Task<SiteModel> GetConstructorSiteInfo(int idConstructorSite)
     {
-        ConstructorSiteModel site = new();
+        SiteModel site = new();
         var response = await _httpManager.SendHttpRequest(ApiRouting.ConstructorSiteInfo, idConstructorSite);
         if (response.Code.Equals("0"))
         {
-            var list = JsonSerializer.Deserialize<List<ConstructorSiteModel>>(response.Content.ToString() ?? "") ?? [];
+            var list = JsonSerializer.Deserialize<List<SiteModel>>(response.Content.ToString() ?? "") ?? [];
             site = list.FirstOrDefault() ?? new();
         }
 
         return site;
     }
 
-    public async Task<bool> SaveContructorSite(ConstructorSiteModel constructorSite)
+    public async Task<bool> SaveContructorSite(SiteModel constructorSite)
     {
          var response = await _httpManager.SendHttpRequest(ApiRouting.SaveConstructorSite, constructorSite);
 
@@ -50,7 +50,7 @@ public class ConstructorSitesRepository(HttpManager httpManager)
         return false;
     }
 
-    public async Task<bool> UpdateContructorSites(List<ConstructorSiteModel> constructorSites)
+    public async Task<bool> UpdateContructorSites(List<SiteModel> constructorSites)
     {
         var response = await _httpManager.SendHttpRequest(ApiRouting.UpdateConstructorSites, constructorSites);
         //NotificationService.Notify(response);
@@ -63,7 +63,7 @@ public class ConstructorSitesRepository(HttpManager httpManager)
         return false;
     }
 
-    public async Task<bool> HideConstructorSites(List<ConstructorSiteModel> constructorSites)
+    public async Task<bool> HideConstructorSites(List<SiteModel> constructorSites)
     {
         var response = await _httpManager.SendHttpRequest(ApiRouting.HideConstructorSites, constructorSites);
         //NotificationService.Notify(response);

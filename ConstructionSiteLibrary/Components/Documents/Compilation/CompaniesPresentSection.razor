@@ -165,7 +165,7 @@ else
             var param = new Dictionary<string, object>
             {
 
-                { "Companies", Document.ConstructorSite.Companies },
+                { "Companies", Document.Site.Companies },
                 { "PresentCompanies", Companies }, 
             }; 
             CompanyModel? selectedCompany = await DialogService.OpenAsync<FormAddCompany>("Seleziona azienda", parameters: param,  options: newOptions);

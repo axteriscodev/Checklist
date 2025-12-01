@@ -2,7 +2,7 @@
 
 namespace Shared.Documents;
 
-public class ConstructorSiteModel
+public class SiteModel
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }

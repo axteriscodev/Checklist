@@ -11,7 +11,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
         [Parameter]
         public bool CreationMode { get; set; }
         [Parameter]
-        public ConstructorSiteModel? Site { get; set; }
+        public SiteModel? Site { get; set; }
 
         private List<ClientModel> clients { get; set; } = [];
         private List<CompanyModel> companies { get; set; } = [];
