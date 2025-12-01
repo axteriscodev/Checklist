@@ -38,7 +38,7 @@ namespace ServerHost.Controllers
         }
 
         [NonAction]
-        protected DbCsclDamicoV2Context GetDbConnection()
+        protected ChecklistContext GetDbConnection()
         {
             var connectionString = ConfigurationService.GetConnection() ?? "";
             return DatabaseContextFactory.Create(connectionString);

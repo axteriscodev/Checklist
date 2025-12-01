@@ -13,11 +13,11 @@ namespace TDatabase.Utilities
         /// Metodo per creare un contesto del database
         /// </summary>
         /// <returns></returns>
-        public static DbCsclDamicoV2Context Create(string connectionString)
+        public static ChecklistContext Create(string connectionString)
         {
-            var OptionsBuilder = new DbContextOptionsBuilder<DbCsclDamicoV2Context>();
+            var OptionsBuilder = new DbContextOptionsBuilder<ChecklistContext>();
             OptionsBuilder.UseSqlServer(connectionString);
-            return new DbCsclDamicoV2Context(OptionsBuilder.Options);
+            return new ChecklistContext(OptionsBuilder.Options);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Data.Common;
 using Shared.Organizations;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclDamicoV2Context;
+using DB = TDatabase.Database.ChecklistContext;
 
 namespace TDatabase.Queries;
 

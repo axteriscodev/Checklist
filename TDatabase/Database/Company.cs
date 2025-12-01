@@ -43,13 +43,13 @@ public partial class Company
 
     public int? PatInail { get; set; }
 
-    public virtual ICollection<CompanyConstructorSite> CompanyConstructorSiteIdCompanyNavigations { get; set; } = new List<CompanyConstructorSite>();
-
-    public virtual ICollection<CompanyConstructorSite> CompanyConstructorSiteSubcontractedByNavigations { get; set; } = new List<CompanyConstructorSite>();
-
     public virtual ICollection<CompanyDocument> CompanyDocuments { get; set; } = new List<CompanyDocument>();
 
     public virtual ICollection<CompanyNote> CompanyNotes { get; set; } = new List<CompanyNote>();
+
+    public virtual ICollection<CompanySite> CompanySiteIdCompanyNavigations { get; set; } = new List<CompanySite>();
+
+    public virtual ICollection<CompanySite> CompanySiteSubcontractedByNavigations { get; set; } = new List<CompanySite>();
 
     public virtual Organization? IdOrganizationNavigation { get; set; }
 

@@ -2,7 +2,7 @@
 using Shared.Documents;
 using System.Reflection.Emit;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclDamicoV2Context;
+using DB = TDatabase.Database.ChecklistContext;
 
 namespace TDatabase.Queries;
 
@@ -113,8 +113,8 @@ public class DocumentDbHelper
                                                                           }).ToList(),
                                                        }).ToList()
                                       }).ToList(),
-                        ConstructorSite = (from cs in db.ConstructorSites
-                                           where cs.Id == d.IdConstructorSite
+                        ConstructorSite = (from cs in db.Sites
+                                           where cs.Id == d.IdSite
                                            select new ConstructorSiteModel()
                                            {
                                                Id = cs.Id,
@@ -133,9 +133,9 @@ public class DocumentDbHelper
                                                              Id = cl.Id,
                                                              Name = cl.Name
                                                          }).SingleOrDefault() ?? new(),
-                                               Companies = (from cc in db.CompanyConstructorSites
+                                               Companies = (from cc in db.CompanySites
                                                             join comp in db.Companies on cc.IdCompany equals comp.Id
-                                                            where cc.IdConstructorSite == cs.Id
+                                                            where cc.IdSite == cs.Id
                                                             select new CompanyModel()
                                                             {
                                                                 Id = comp.Id,
@@ -156,8 +156,8 @@ public class DocumentDbHelper
 
                         Companies = (from compDoc in db.CompanyDocuments
                                      from comp in db.Companies
-                                     join cc in (from cc in db.CompanyConstructorSites
-                                                 where cc.IdConstructorSite == d.IdConstructorSite
+                                     join cc in (from cc in db.CompanySites
+                                                 where cc.IdSite == d.IdSite
                                                  select cc).DefaultIfEmpty() on comp.Id equals cc.IdCompany into constrComp
                                      from compJoin in constrComp.DefaultIfEmpty()
                                      where compDoc.IdDocument == d.Id
@@ -207,8 +207,8 @@ public class DocumentDbHelper
     public static List<DocumentModel> SelectFromSite(DB db, int siteId)
     {
         var docs = (from d in db.Documents
-                    where d.IdConstructorSite == siteId
-                    join cs in db.ConstructorSites on d.IdConstructorSite equals cs.Id
+                    where d.IdSite == siteId
+                    join cs in db.Sites on d.IdSite equals cs.Id
                     select new DocumentModel()
                     {
                         Id = d.Id,
@@ -264,7 +264,7 @@ public class DocumentDbHelper
             {
                 Id = nextId,
                 IdOrganization = organizationId,
-                IdConstructorSite = document.ConstructorSite.Id,
+                IdSite = document.ConstructorSite.Id,
                 IdClient = document.Client?.Id > 0 ? document.Client?.Id : null,
                 IdTemplate = document.IdTemplate,
                 CreationDate = document.CreationDate,

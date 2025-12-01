@@ -15,6 +15,12 @@ public partial class Template
 
     public DateTime Date { get; set; }
 
+    public bool HasCompanies { get; set; }
+
+    public bool HasSiteData { get; set; }
+
+    public bool HasMeteo { get; set; }
+
     public string? Note { get; set; }
 
     public bool Active { get; set; }

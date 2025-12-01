@@ -1,13 +1,7 @@
-﻿using Shared.Defaults;
-using Shared.Organizations;
+﻿using Shared.Organizations;
 using Shared.Login;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclDamicoV2Context;
+using DB = TDatabase.Database.ChecklistContext;
 
 namespace TDatabase.Queries
 {

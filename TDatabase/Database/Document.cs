@@ -7,7 +7,7 @@ public partial class Document
 {
     public int Id { get; set; }
 
-    public int IdConstructorSite { get; set; }
+    public int IdSite { get; set; }
 
     public int? IdClient { get; set; }
 
@@ -41,11 +41,11 @@ public partial class Document
 
     public virtual Client? IdClientNavigation { get; set; }
 
-    public virtual ConstructorSite IdConstructorSiteNavigation { get; set; } = null!;
-
     public virtual MeteoCondition? IdMeteoNavigation { get; set; }
 
     public virtual Organization? IdOrganizationNavigation { get; set; }
+
+    public virtual Site IdSiteNavigation { get; set; } = null!;
 
     public virtual Template IdTemplateNavigation { get; set; } = null!;
 
