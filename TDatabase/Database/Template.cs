@@ -15,6 +15,8 @@ public partial class Template
 
     public DateTime Date { get; set; }
 
+    public bool HasClient { get; set; }
+
     public bool HasCompanies { get; set; }
 
     public bool HasSiteData { get; set; }

@@ -35,7 +35,7 @@ public class DocumentDbHelper
                                             where t.Id == d.IdTemplate
                                             select new TemplateSettingsModel()
                                             {
-                                                //HasClient = t.h,
+                                                HasClient = t.HasClient,
                                                 HasCompanies = t.HasCompanies,
                                                 HasMeteo = t.HasMeteo,
                                                 HasSiteData = t.HasSiteData,

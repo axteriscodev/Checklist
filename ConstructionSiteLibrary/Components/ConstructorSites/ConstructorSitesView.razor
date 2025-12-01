@@ -20,7 +20,7 @@ else
         <SectionTitle PageTitle="I miei cantieri" ButtonText="+ aggiungi cantiere" SearchPlaceholder="Cerca cantiere"
                       OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
         <div>
-            <Repeater Data="@displayedSites" TItem="ConstructorSiteModel">
+            <Repeater Data="@displayedSites" TItem="SiteModel">
                 <ContentTemplate Context="Item">
                     <div class="row mt-4">
                         <div class="col">

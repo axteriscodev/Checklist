@@ -487,7 +487,7 @@ public partial class ChecklistContext : DbContext
             entity.HasOne(d => d.IdTemplateNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdTemplate)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__DOCUMENT__ID_TEM__13BCEBC1");
+                .HasConstraintName("FK__DOCUMENT__ID_TEM__2022C2A6");
         });
 
         modelBuilder.Entity<MeteoCondition>(entity =>
@@ -673,7 +673,7 @@ public partial class ChecklistContext : DbContext
 
             entity.HasOne(d => d.IdTemplateNavigation).WithMany(p => p.QuestionChosens)
                 .HasForeignKey(d => d.IdTemplate)
-                .HasConstraintName("FK__QUESTION___ID_TE__0662F0A3");
+                .HasConstraintName("FK__QUESTION___ID_TE__2116E6DF");
         });
 
         modelBuilder.Entity<ReportedCompany>(entity =>
@@ -799,7 +799,7 @@ public partial class ChecklistContext : DbContext
 
         modelBuilder.Entity<Template>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC271767C21A");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC271E295840");
 
             entity.ToTable("TEMPLATE");
 
@@ -812,6 +812,7 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.Date)
                 .HasColumnType("datetime")
                 .HasColumnName("DATE");
+            entity.Property(e => e.HasClient).HasColumnName("HAS_CLIENT");
             entity.Property(e => e.HasCompanies).HasColumnName("HAS_COMPANIES");
             entity.Property(e => e.HasMeteo).HasColumnName("HAS_METEO");
             entity.Property(e => e.HasSiteData).HasColumnName("HAS_SITE_DATA");
@@ -830,7 +831,7 @@ public partial class ChecklistContext : DbContext
 
             entity.HasOne(d => d.IdDescriptionNavigation).WithMany(p => p.Templates)
                 .HasForeignKey(d => d.IdDescription)
-                .HasConstraintName("FK__TEMPLATE__ID_DES__056ECC6A");
+                .HasConstraintName("FK__TEMPLATE__ID_DES__22FF2F51");
 
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Templates)
                 .HasForeignKey(d => d.IdOrganization)
