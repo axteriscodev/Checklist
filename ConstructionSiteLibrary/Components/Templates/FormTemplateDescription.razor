@@ -40,9 +40,10 @@
     private async Task Save(){
         onSaving = true;
         var rq = new TemplateDescriptionModel() { Title = form.Title ?? "", Description = form.Description ?? "" };
-        var response = await TemplateRepository.SaveTemplateDescription(rq);
-        if (response)
+        var newId = await TemplateRepository.SaveTemplateDescription(rq);
+        if (newId > 0)
         {
+            rq.Id = newId;
             await OnSaveComplete.InvokeAsync(rq);
         }
         onSaving = false;

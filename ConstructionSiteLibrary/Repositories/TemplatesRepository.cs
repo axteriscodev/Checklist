@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Numerics;
 using System.Text.Json;
 using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Model;
@@ -147,7 +148,7 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
                 if (response.Code.Equals("0"))
                 {
                     _templateDescriptions = JsonSerializer.Deserialize<List<TemplateDescriptionModel>>(response.Content.ToString() ?? "") ?? [];
-                    _ = await _indexedDBService.Insert(IndexedDBTables.templateDescriptions, _templateDescriptions.Cast<object>().ToArray());
+                    //_ = await _indexedDBService.Insert(IndexedDBTables.templateDescriptions, _templateDescriptions.Cast<object>().ToArray());
                 }
                 else if (response.Code.Equals("Ex8995BA25"))
                 {
@@ -165,15 +166,15 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
         return _templateDescriptions;
     }
 
-    public async Task<bool> SaveTemplateDescription(TemplateDescriptionModel desc)
+    public async Task<int> SaveTemplateDescription(TemplateDescriptionModel desc)
     {
-        var result = false;
+        var result = 0;
         try
         {
             var response = await _httpManager.SendHttpRequest(ApiRouting.SaveTemplatesDescriptions, desc);
-            if (response.Code.Equals("0"))
+            if (response.Code.Equals("0") && int.TryParse(response.Content.ToString(), out int newId))
             {
-                result = true;
+                result = newId;
             }
         }
         catch (Exception) { }

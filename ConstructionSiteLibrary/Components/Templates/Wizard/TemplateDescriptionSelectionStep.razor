@@ -15,7 +15,7 @@ else
         <legend class="fieldset-title">Seleziona una descrizione</legend>
         <RadzenRow>
             <RadzenDropDown @bind-Value=@CurrentTemplate.Description Data=@TemplatesDescriptions TextProperty="Title"
-                            Style="width:70%; max-width: 500px" Change="@(args=>ChangeSelectedDescription(args))" />
+                            Style="width:70%; max-width: 500px" Change="@(args=>ChangeSelectedDescription(args))" AllowClear="true" />
             <RadzenButton Icon="add" Click="OpenNewForm" class="my-button-icon" />
         </RadzenRow>
 
