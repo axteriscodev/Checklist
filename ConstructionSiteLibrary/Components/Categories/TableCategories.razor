@@ -22,6 +22,7 @@ else
             <thead>
                 <th scope="col">N.</th>
                 <th scope="col">Nome</th>
+                <th scope="col">Topic</th>
                 <th scope="col"></th>
             </thead>
             <tbody>
@@ -32,6 +33,7 @@ else
                         <tr>
                             <td>@cat.Order</td>
                             <td>@cat.Text</td>
+                            <td>@PrintTopic(cat.Topic)</td>
                             <td>
                                 <ButtonDropdown Object="@cat"
                                                 OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide" />
@@ -42,7 +44,7 @@ else
                 else
                 {
                     <tr>
-                        <td colspan="3">Nessuna categoria trovata</td>
+                        <td colspan="4">Nessuna categoria trovata</td>
                     </tr>
                 }
             </tbody>

@@ -138,6 +138,7 @@ public class DocumentDbHelper
                                                IdSicoInProgress = cs.IdSicoInProgress,
                                                PreliminaryNotificationStartDate = cs.PreliminaryNotificationStart,
                                                PreliminaryNotificationInProgress = cs.PreliminaryNotificationInProgress,
+                                               Note = cs.Note,
                                                Client = (from cl in db.Clients
                                                          where cl.Id == cs.IdClient
                                                          select new ClientModel()
@@ -244,6 +245,7 @@ public class DocumentDbHelper
                             PreliminaryNotificationStartDate = cs.PreliminaryNotificationStart,
                             PreliminaryNotificationInProgress = cs.PreliminaryNotificationInProgress,
                             Address = cs.Address ?? "",
+                            Note = cs.Note,
                             Client = (from cl in db.Clients
                                       where cl.Id == cs.IdClient
                                       select new ClientModel()

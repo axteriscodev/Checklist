@@ -28,6 +28,7 @@ public class ConstructorSiteDbHelper
             Address = x.Address ?? "",
             StartDate = x.StartDate ?? DateTime.Now,
             EndDate = x.EndDate,
+            Note = x.Note,
             Client = db.Clients.Where(c => c.Id == x.IdClient).Select(nc => new ClientModel()
             {
                 Id = nc.Id,
@@ -59,8 +60,9 @@ public class ConstructorSiteDbHelper
                 Address = constructorSite.Address,
                 StartDate = constructorSite.StartDate,
                 EndDate = constructorSite.EndDate,
-                IdClient = constructorSite.Client.Id > 0 ? constructorSite.Client.Id : null,
-                IdOrganization = organizationId
+                IdClient = constructorSite.Client != null && constructorSite.Client.Id > 0 ? constructorSite.Client.Id : null,
+                IdOrganization = organizationId,
+                Note = constructorSite.Note,
             };
             //associo le aziende al cantiere
             HandleCompaniesToConstructionSite(db, constructorSite.Companies, constructorSite.Id);
@@ -92,6 +94,7 @@ public class ConstructorSiteDbHelper
                     m.IdSicoInProgress = elem.IdSicoInProgress;
                     m.PreliminaryNotificationStart = elem.PreliminaryNotificationStartDate;
                     m.PreliminaryNotificationInProgress = elem.PreliminaryNotificationInProgress;
+                    m.Note = elem.Note;
                     if (elem.Client is not null && elem.Client.Id > 0)
                     {
                         m.IdClient = elem.Client.Id;

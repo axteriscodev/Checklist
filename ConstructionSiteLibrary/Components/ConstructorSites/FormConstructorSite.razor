@@ -1,4 +1,4 @@
-﻿f@using Shared.Documents
+﻿@using Shared.Documents
 
 @inject ConstructorSitesRepository SiteRepository
 @inject CompaniesRepository CompaniesRepository
@@ -23,7 +23,7 @@ else
                 </RadzenFormField>
                 <RadzenFormField Text="Descrizione" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
-                        <RadzenTextArea Name="Nome" @bind-Value="@form.JobDescription" Rows="3" />
+                        <RadzenTextArea Name="Nome" @bind-Value="@form.Notes" Rows="3" />
                     </ChildContent>
                 </RadzenFormField>
                 <RadzenFormField Text="Indirizzo (obbligatorio)" Variant="@GlobalVariables.ComponentVariant">
@@ -34,37 +34,36 @@ else
                         <RadzenRequiredValidator Component="Indirizzo" Popup=false Text="Il campo Indirizzo è obbligatorio" />
                     </Helper>
                 </RadzenFormField>
-                <RadzenFormField Text="Data inizio cantiere (obbligatorio)" Variant="@GlobalVariables.ComponentVariant">
+@*                 <RadzenFormField Text="Data inizio cantiere (obbligatorio)" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenDatePicker Name="DataInizio" @bind-Value="@form.StartDate" DateFormat="dd/MM/yyyy" ShowTime="false" />
                     </ChildContent>
                     <Helper>
                         <RadzenRequiredValidator Component="DataInizio" Popup=false Text="Il campo data inizio è obbligatorio" />
                     </Helper>
-                </RadzenFormField>
-                <RadzenFormField Text="Notifica preliminare inizio cantiere" Variant="@GlobalVariables.ComponentVariant">
+                </RadzenFormField> *@
+@*                 <RadzenFormField Text="Notifica preliminare inizio cantiere" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenDatePicker @bind-Value="@form.PreliminaryNotificationStartDate" DateFormat="dd/MM/yyyy" ShowTime="false" />
                     </ChildContent>
-                </RadzenFormField>
-                <RadzenFormField Text="Id. SICO" Variant="@GlobalVariables.ComponentVariant">
+                </RadzenFormField> *@
+@*                 <RadzenFormField Text="Id. SICO" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenTextBox Name="IdSico" @bind-Value="@form.IdSico" />
                     </ChildContent>
-                </RadzenFormField>
-                <RadzenFormField Text="Cliente" Variant="@GlobalVariables.ComponentVariant">
+                </RadzenFormField> *@
+@*                 <RadzenFormField Text="Cliente" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenDropDownDataGrid Data="@clients" @bind-Value="@form.Client" TextProperty="Name"
                                                 AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                                 AllowColumnResize="true" AllowSorting="true" Name="Cliente">
                             <Columns>                           
-@*                                 <RadzenDropDownDataGridColumn Property="Id" Title="N." Width="40px" /> *@
                                 <RadzenDropDownDataGridColumn Property="Name" Title="Rag.Sociale/Nominativo lav. autonomo" Width="200px" />
                             </Columns>
                         </RadzenDropDownDataGrid>
                     </ChildContent>
-                </RadzenFormField>
-                <RadzenFormField Text="Aziende" Variant="@GlobalVariables.ComponentVariant">
+                </RadzenFormField> *@
+@*                 <RadzenFormField Text="Aziende" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenDropDownDataGrid Data="@companies" @bind-Value="@form.Companies" TextProperty="CompanyName" Multiple="true"
                                                 AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
@@ -79,12 +78,11 @@ else
                                         <RadzenCheckBox TriState="false" Value="@CheckIfSelected(data)"/>
                                     </Template>
                                 </RadzenDropDownDataGridColumn>
-                                @* <RadzenDropDownDataGridColumn Property="Id" Title="N." Width="40px" /> *@
                                 <RadzenDropDownDataGridColumn Property="CompanyName" Title="Nome" Width="200px" />
                             </Columns>
                         </RadzenDropDownDataGrid>
                     </ChildContent>
-                </RadzenFormField>
+                </RadzenFormField> *@
                 <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
                               BusyText="Salvataggio in corso" />
             </RadzenStack>

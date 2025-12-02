@@ -66,48 +66,19 @@ else
             <legend class="my-legend">@DocumentUtils.ConstructionSiteData</legend>
             <div class="row my-1">
                 <div class="col-12 col-md-6">
-                    <RadzenLabel Text="Committente:" Component="Committente" />
-                    <RadzenDropDown @bind-Value="@Document.Client" Data="@ClientsList" Name="Committente" TValue="ClientModel" TextProperty="Name" class="w-100 inputBorder" />
+                    <RadzenLabel Text="Sito:" Component="Sito" />
+                    <RadzenTextArea Placeholder="nome sito" Name="Sito"
+                                    class="w-100 inputBorder" @bind-Value=@Document.Site.Name />
                 </div>
                 <div class="col-12 col-md-6">
-                    <RadzenLabel Text="Inizio lavori:" Component="InizioLavori" />
-                    <RadzenDatePicker @bind-Value=@Document.Site.StartDate ShowTime="true" DateFormat="dd/MM/yyyy h:mm" Name="InizioLavori" class="w-100 inputBorder">
-                        <FooterTemplate>
-                            <RadzenButton Click=@(args =>
-                                      Document.Site.StartDate = DateTime.Now) Text="Ora"
-                                          class="my-3 w-100" />
-                        </FooterTemplate>
-                    </RadzenDatePicker>
-                </div>
-                <div class="col-12 col-md-6">
-                    <RadzenLabel Text="Indirizzo cantiere:" Component="IndirizzoCantiere" />
-                    <RadzenTextArea Placeholder="Inserisci l'indirizzo del cantiere" Name="IndirizzoCantiere"
+                    <RadzenLabel Text="Indirizzo:" Component="Indirizzo" />
+                    <RadzenTextArea Placeholder="Indirizzo" Name="Indirizzo"
                                     class="w-100 inputBorder" @bind-Value=@Document.Site.Address />
                 </div>
-                <div class="col-12 col-md-6">
-                    <RadzenLabel Text="Lavori di:" Component="LavoriDi" />
-                    <RadzenTextArea Placeholder="Inserisci il motivo dei lavori" Name="LavoriDi"
-                                    class="w-100 inputBorder" @bind-Value=@Document.Site.JobDescription />
-                </div>
-                <div class="col-12 col-md-6">
-                    <RadzenLabel Text="Notifica preliminare inizio cantiere:" Component="NotificaPreliminareInizio" />
-                    <RadzenDatePicker ShowTime=false DateFormat="dd/MM/yyyy" Name="NotificaPreliminareInizio"
-                                      class="w-100 inputBorder" @bind-Value=@Document.Site.PreliminaryNotificationStartDate />
-                </div>
-                <div class="col-12 col-md-6">
-                    <RadzenLabel Text="Id. SICO:" Component="IdSICOInizio" />
-                    <RadzenTextBox Placeholder="Inserisci Id. SICO" Name="IdSICOInizio"
-                                   class="w-100 inputBorder" @bind-Value=@Document.Site.IdSico />
-                </div>
-                <div class="col-12 col-md-6">
-                    <RadzenLabel Text="Notifica preliminare in corso:" Component="NotificaPreliminareInCorso" />
-                    <RadzenDatePicker ShowTime=false DateFormat="dd/MM/yyyy" Name="NotificaPreliminareInCorso"
-                                      class="w-100 inputBorder" @bind-Value=@Document.Site.PreliminaryNotificationInProgress />
-                </div>
-                <div class="col-12 col-md-6">
-                    <RadzenLabel Text="Id. SICO:" Component="IdSICOInCorso" />
-                    <RadzenTextBox Placeholder="Inserisci Id. SICO" Name="IdSICOInCorso"
-                                   class="w-100 inputBorder" @bind-Value=@Document.Site.IdSicoInProgress />
+                <div class="col-12">
+                    <RadzenLabel Text="Note:" Component="Note" />
+                    <RadzenTextArea Placeholder="Inserisci il motivo dei lavori" Name="Note"
+                                    class="w-100 inputBorder" @bind-Value=@Document.Site.Note />
                 </div>
             </div>
         </fieldset>

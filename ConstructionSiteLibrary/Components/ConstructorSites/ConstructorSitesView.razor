@@ -112,7 +112,7 @@ else
             { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
             { "CreationMode", true },
         };
-        await DialogService.OpenAsync<FormConstructorSite>("Nuovo cantiere", parameters: param, options: newOptions);
+        await DialogService.OpenAsync<FormConstructorSite>("Nuovo Sito", parameters: param, options: newOptions);
     }
 
     private async Task Reload()

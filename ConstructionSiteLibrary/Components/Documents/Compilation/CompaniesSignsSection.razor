@@ -15,13 +15,13 @@ else
         <a class="anchor" id="@CreateAnchor()"></a>
         <fieldset class="my-fieldset">
             <legend class="my-legend">@DocumentUtils.DocumentSignatures</legend>
-            <div class="paddingDescrizione marginYResponsive border">
+@*             <div class="paddingDescrizione marginYResponsive border">
                 <RadzenText Style="text-decoration:underline">
                     Le firme di presa visione e accettazione di seguito fanno
                     riferimento alle prescrizioni riportate nel verbale, riferite all'impresa di appartenenza e relativi
                     subappaltatori.
                 </RadzenText>
-            </div>
+            </div> *@
             <div class="hstack">
                 <RadzenLabel Text="Data:" Component="Data" Style="margin-right: 8px; vertical-align: middle;" />
                 <RadzenDatePicker Value="@Document.SignDate" TValue="DateTime?" DateFormat="dd/MM/yyyy HH:mm"
@@ -48,9 +48,13 @@ else
                     </div>
                 </div>
                 <div class="col-12 col-md-6 my-2">
-                    <div class="mb-1">
-                        <RadzenText Style="text-decoration:underline">Per presa visione e accettazione:</RadzenText>
-                    </div>
+                    @* Se ci sono aziende segnalate *@
+                    @if(CompaniesQuestionsReported.Count > 0)
+                    {
+                        <div class="mb-1">
+                            <RadzenText Style="text-decoration:underline">Per presa visione e accettazione:</RadzenText>
+                        </div>
+                    }
                     @foreach (var reportedCompany in CompaniesQuestionsReported)
                     {
                         if (reportedCompany.ReportedQuestions.Any())
