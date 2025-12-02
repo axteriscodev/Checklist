@@ -33,6 +33,10 @@ public partial class Document
 
     public bool ReadOnly { get; set; }
 
+    public bool Completed { get; set; }
+
+    public string? CseSign { get; set; }
+
     public int? IdOrganization { get; set; }
 
     public virtual ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();

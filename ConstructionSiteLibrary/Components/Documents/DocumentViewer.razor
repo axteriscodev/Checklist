@@ -338,17 +338,17 @@ else
                         <div class="mb-1">
                             <RadzenText Style="text-decoration:underline">Per presa visione e accettazione</RadzenText>
                         </div>
-                        @if(Document.Signatures.Count > 0)
+                        @if(Document.OtherSignatures.Count > 0)
                         {
                             <div class="paddingDescrizione border">
-                                <RadzenText>Per: <strong>@DocumentUtils.PrintCompanyFromSignature(Document.Signatures[0], Document)</strong></RadzenText>
+                                <RadzenText>Per: <strong>@DocumentUtils.PrintCompanyFromSignature(Document.OtherSignatures[0], Document)</strong></RadzenText>
                                 @if (!string.IsNullOrEmpty(firstCompanySignature.Sign))
                                 {
                                     <div class=" col-12 mb-2">
                                         <RadzenText> Nome: <strong>@firstCompanySignature.Name</strong></RadzenText>
                                     </div>
                                     <div class="col-12 p-2">
-                                        <img src="@Document.Signatures[0].Sign" width="@Document.Signatures[0].Width" height="@Document.Signatures[0].Height" style="max-width:100%; height:100%" />
+                                        <img src="@Document.OtherSignatures[0].Sign" width="@Document.OtherSignatures[0].Width" height="@Document.OtherSignatures[0].Height" style="max-width:100%; height:100%" />
                                     </div>
                                 }
                                 else
@@ -359,7 +359,7 @@ else
                                 <div class="hstack mt-2">
                                     <RadzenText TextStyle="TextStyle.Caption" class="mb-0">Riferimento quesiti:</RadzenText>
                                     <RadzenText TextStyle="TextStyle.Caption" class="mb-0 rz-text-wrap">
-                                        @foreach (var questionId in Document.Signatures[0].ReporteQuestionsIds)
+                                        @foreach (var questionId in Document.OtherSignatures[0].ReporteQuestionsIds)
                                         {
                                             @DocumentUtils.PrintQuestionForReported(questionId, categories)
                                         }
@@ -462,12 +462,12 @@ else
 
     private void GetSignatures()
     {
-        if(Document!.Signatures.Count > 0)
+        if(Document!.OtherSignatures.Count > 0)
         {
-            firstCompanySignature = Document.Signatures.Select(s=> s.Clone()).FirstOrDefault();
-            for(int i = 1; i < Document.Signatures.Count; i++)
+            firstCompanySignature = Document.OtherSignatures.Select(s=> s.Clone()).FirstOrDefault();
+            for(int i = 1; i < Document.OtherSignatures.Count; i++)
             {
-                OthercompanySignatures.Add(Document.Signatures[i].Clone());
+                OthercompanySignatures.Add(Document.OtherSignatures[i].Clone());
             }
         }
     }

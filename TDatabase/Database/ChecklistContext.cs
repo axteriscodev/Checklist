@@ -108,7 +108,7 @@ public partial class ChecklistContext : DbContext
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.IdDocument)
-                .HasConstraintName("FK__ATTACHMEN__ID_DO__10E07F16");
+                .HasConstraintName("FK__ATTACHMEN__ID_DO__3AD6B8E2");
 
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.IdOrganization)
@@ -189,7 +189,7 @@ public partial class ChecklistContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CATEGORY__3214EC2751AC9DF9");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27AF72144D");
 
             entity.ToTable("CATEGORY");
 
@@ -201,9 +201,10 @@ public partial class ChecklistContext : DbContext
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Order).HasColumnName("ORDER");
-            entity.Property(e => e.Text)
-                .IsUnicode(false)
-                .HasColumnName("TEXT");
+            entity.Property(e => e.Text).HasColumnName("TEXT");
+            entity.Property(e => e.Topic)
+                .HasDefaultValue("GENERALE")
+                .HasColumnName("TOPIC");
 
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Categories)
                 .HasForeignKey(d => d.IdOrganization)
@@ -371,7 +372,7 @@ public partial class ChecklistContext : DbContext
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.CompanyDocuments)
                 .HasForeignKey(d => d.IdDocument)
-                .HasConstraintName("FK__COMPANY_D__ID_DO__0FEC5ADD");
+                .HasConstraintName("FK__COMPANY_D__ID_DO__39E294A9");
         });
 
         modelBuilder.Entity<CompanyNote>(entity =>
@@ -430,7 +431,7 @@ public partial class ChecklistContext : DbContext
 
         modelBuilder.Entity<Document>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27DC5E6443");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27056C7980");
 
             entity.ToTable("DOCUMENT");
 
@@ -440,6 +441,7 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.CompilationDate)
                 .HasColumnType("datetime")
                 .HasColumnName("COMPILATION_DATE");
+            entity.Property(e => e.Completed).HasColumnName("COMPLETED");
             entity.Property(e => e.CompletedIn)
                 .IsUnicode(false)
                 .HasColumnName("COMPLETED_IN");
@@ -449,6 +451,7 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.Cse)
                 .IsUnicode(false)
                 .HasColumnName("CSE");
+            entity.Property(e => e.CseSign).HasColumnName("CSE_SIGN");
             entity.Property(e => e.Description)
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPTION");
@@ -470,11 +473,11 @@ public partial class ChecklistContext : DbContext
 
             entity.HasOne(d => d.IdClientNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdClient)
-                .HasConstraintName("FK__DOCUMENT__ID_CLI__14B10FFA");
+                .HasConstraintName("FK__DOCUMENT__ID_CLI__3DB3258D");
 
             entity.HasOne(d => d.IdMeteoNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdMeteo)
-                .HasConstraintName("FK__DOCUMENT__ID_MET__15A53433");
+                .HasConstraintName("FK__DOCUMENT__ID_MET__3EA749C6");
 
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdOrganization)
@@ -482,12 +485,12 @@ public partial class ChecklistContext : DbContext
 
             entity.HasOne(d => d.IdSiteNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdSite)
-                .HasConstraintName("FK__DOCUMENT__ID_SIT__178D7CA5");
+                .HasConstraintName("FK__DOCUMENT__ID_SIT__408F9238");
 
             entity.HasOne(d => d.IdTemplateNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdTemplate)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__DOCUMENT__ID_TEM__2022C2A6");
+                .HasConstraintName("FK__DOCUMENT__ID_TEM__4183B671");
         });
 
         modelBuilder.Entity<MeteoCondition>(entity =>
@@ -529,7 +532,7 @@ public partial class ChecklistContext : DbContext
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.Notes)
                 .HasForeignKey(d => d.IdDocument)
-                .HasConstraintName("FK__NOTE__ID_DOCUMEN__12C8C788");
+                .HasConstraintName("FK__NOTE__ID_DOCUMEN__3CBF0154");
         });
 
         modelBuilder.Entity<Organization>(entity =>
@@ -591,7 +594,7 @@ public partial class ChecklistContext : DbContext
 
             entity.HasOne(d => d.IdCategoryNavigation).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.IdCategory)
-                .HasConstraintName("FK__QUESTION__ID_CAT__7BE56230");
+                .HasConstraintName("FK__QUESTION__ID_CAT__29AC2CE0");
 
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.IdOrganization)
@@ -618,7 +621,7 @@ public partial class ChecklistContext : DbContext
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.QuestionAnswereds)
                 .HasForeignKey(d => d.IdDocument)
-                .HasConstraintName("FK__QUESTION___ID_DO__11D4A34F");
+                .HasConstraintName("FK__QUESTION___ID_DO__3BCADD1B");
 
             entity.HasOne(d => d.IdQuestionChosenNavigation).WithMany(p => p.QuestionAnswereds)
                 .HasForeignKey(d => d.IdQuestionChosen)

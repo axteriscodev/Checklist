@@ -11,6 +11,8 @@ public partial class Category
 
     public int Order { get; set; }
 
+    public string Topic { get; set; } = null!;
+
     public bool Active { get; set; }
 
     public int? IdOrganization { get; set; }

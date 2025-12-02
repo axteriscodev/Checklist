@@ -36,6 +36,12 @@ public class DocumentModel
 
     [JsonPropertyName("readonly")]
     public bool ReadOnly { get; set; }
+    
+    [JsonPropertyName("completed")]
+    public bool Completed { get; set; }
+
+    [JsonPropertyName("cseSign")]
+    public string? CseSign { get; set; }
 
     [JsonPropertyName("ChangedOffline")]
     public int ChangedOffline { get; set; }
@@ -52,10 +58,10 @@ public class DocumentModel
     [JsonPropertyName("companies")]
     public List<CompanyModel> Companies { get; set; } = [];
 
-    [JsonPropertyName("signatures")]
-    public List<SignatureModel> Signatures { get; set; } = [];
+    [JsonPropertyName("otherSignatures")]
+    public List<SignatureModel> OtherSignatures { get; set; } = [];
 
-    [JsonPropertyName("cseSign")]
+    [JsonPropertyName("cseSignature")]
     public SignatureModel? CseSignature { get; set; }
 
     [JsonPropertyName("attachments")]
@@ -72,6 +78,7 @@ public class DocumentModel
 
      [JsonPropertyName("completedIn")]
     public string? CompletedIn { get; set; }
+
 
 
 }
