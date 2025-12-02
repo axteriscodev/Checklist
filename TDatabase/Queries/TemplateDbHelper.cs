@@ -73,7 +73,6 @@ public class TemplateDbHelper
                                                              }).ToList()
                                                        }).ToList()
                                       }).ToList(),
-
                     }).ToList();
 
         return docs;
