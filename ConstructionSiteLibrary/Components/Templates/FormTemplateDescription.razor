@@ -13,17 +13,11 @@
                     <RadzenRequiredValidator Component="titolo" Popup=false Text="Il campo titolo è obbligatorio" />
                 </Helper>
             </RadzenFormField>
-
-            <RadzenFormField Text="Descrizione (obbligatorio)" Variant="@variant">
+            <RadzenFormField Text="Descrizione" Variant="@variant">
                 <ChildContent>
                     <RadzenTextArea Name="descrizione" @bind-Value="@form.Description" />
                 </ChildContent>
-                <Helper>
-                    <RadzenRequiredValidator Component="descrizione" Popup=false Text="Il campo descrizione è obbligatorio" />
-                </Helper>
             </RadzenFormField>
-
-
             <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
                           BusyText="Salvataggio in corso" />
         </RadzenStack>

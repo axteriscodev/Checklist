@@ -10,4 +10,11 @@ public class TemplateQuestionModel : QuestionModel
 
     [JsonPropertyName("choices")]
     public List<TemplateChoiceModel> Choices { get; set; } = [];
+
+    [JsonPropertyName("categoryName")]
+    public string CategoryName { get; set; } = string.Empty;
+
+    [JsonPropertyName("topic")]
+    public string Topic { get; set; } = string.Empty;
+
 }

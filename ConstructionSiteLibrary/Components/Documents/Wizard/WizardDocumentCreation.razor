@@ -37,7 +37,10 @@ else
         @if (_selectedTemplate is not null)
         {
             <ReportConstructorSiteDataSection Document="@_document" DocumentNavigator="@documenNavigator" />
-            <CompaniesPresentSection Companies="@_document.Companies" OnUpdateState="@UpdateDocument" DocumentNavigator="@documenNavigator" />
+            @if (_selectedTemplate.HasCompanies)
+            {
+                <CompaniesPresentSection Companies="@_document.Companies" OnUpdateState="@UpdateDocument" DocumentNavigator="@documenNavigator" />
+            }
             <QuestionsSection Categories="_document.Categories" Companies="_document.Companies" OnStateChangeNotification="@UpdateDocument"
                               DocumentNavigator="@documenNavigator" />
             <QuestionNotesSection Document="@_document" DocumentNavigator="@documenNavigator" />

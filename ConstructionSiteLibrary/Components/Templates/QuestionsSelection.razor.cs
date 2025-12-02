@@ -59,37 +59,40 @@ public partial class QuestionsSelection
     [Parameter]
     public string Param { get; set; } = "";
 
+    private List<string> _topicList = [];
+    private string? _selectedTopic = null;
 
     protected override async Task OnInitializedAsync()
     {
         initialLoading = true;
         await base.OnInitializedAsync();
-        await LoadData(CurrentTemplate);
+        await LoadData();
         initialLoading = false;
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        await LoadData(CurrentTemplate);
+        await LoadData();
     }
 
     #region Caricamento e Salvataggio
 
-    private async Task LoadData(TemplateModel selectedTemplate)
+    private async Task LoadData()
     {
         groups = [];
         categories = await CategoriesRepository.GetCategories();
         count = categories.Count;
+        //SelectTopics();
+        //var tempCategories = SelectCategoriesFromTopic();
         int categoryCount = 0;
-        //title = selectedTemplate?.TitleTemplate ?? "";
 
         foreach (var category in categories)
         {
             List<int> templateSelectedId = [];
 
-            if (selectedTemplate.Categories.Count != 0)
+            if (CurrentTemplate.Categories.Count != 0)
             {
-                var tempCat = selectedTemplate.Categories.Where(c => c.Id == category.Id).FirstOrDefault();
+                var tempCat = CurrentTemplate.Categories.Where(c => c.Id == category.Id).FirstOrDefault();
 
                 if (tempCat is not null)
                 {
@@ -168,7 +171,7 @@ public partial class QuestionsSelection
     private async Task ReloadTable()
     {
         DialogService.Close();
-        await LoadData(CurrentTemplate);
+        await LoadData();
         await grid!.Reload();
     }
 
@@ -243,6 +246,31 @@ public partial class QuestionsSelection
             ReorderActiveCategory();
         }
         return false;
+    }
+
+    #endregion
+
+    #region gestione topic
+
+    public void SelectTopics()
+    {
+        _topicList = categories?.Select(c => c.Topic ?? "Tutto").Distinct().ToList() ?? [];
+    }
+
+    public List<TemplateCategoryModel> SelectCategoriesFromTopic()
+    {
+        if (string.IsNullOrEmpty(_selectedTopic))
+        {
+            return categories;
+        }
+
+        return categories.Where(c => c.Topic == _selectedTopic).ToList();
+    }
+
+    private void ChangeSelectedTopic(string args)
+    {
+        _selectedTopic = args;
+        StateHasChanged();
     }
 
     #endregion

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
-using Shared.Defaults;
+﻿using Microsoft.EntityFrameworkCore;
 using Shared.Templates;
 using TDatabase.Database;
 using DB = TDatabase.Database.ChecklistContext;
@@ -10,7 +9,7 @@ namespace TDatabase.Queries
     {
         public static List<TemplateQuestionModel> Select(DB db, int organizationId, int idCategory = 0)
         {
-            var questions = db.Questions.Where(x=> x.IdOrganization == organizationId).AsQueryable();
+            var questions = db.Questions.Where(x=> x.IdOrganization == organizationId).AsNoTracking().AsQueryable();
 
             if (idCategory > 0)
             {
@@ -19,24 +18,29 @@ namespace TDatabase.Queries
                             select q;
             }
 
-            var list = questions.Where(x=>x.Active == true).Select(x => new TemplateQuestionModel()
-            {
-                Id = x.Id,
-                Text = x.Text,
-                IdCategory = x.IdCategory,
-                Choices = (from qc in db.QuestionChoices
-                           from c in db.Choices
-                           where qc.IdQuestion == x.Id
-                           && c.Id == qc.IdChoice && c.Active == true
-                           select new TemplateChoiceModel()
-                           {
-                               Id = c.Id,
-                               Tag = c.Tag,
-                               Value = c.Value,
-                               Reportable = c.Reportable,
-                               Color = c.Color,
-                           }).ToList()
-            }).ToList();
+            var list = (from q in questions
+                        join c in db.Categories on q.IdCategory equals c.Id
+                        where q.Active == true
+                        select new TemplateQuestionModel()
+                        {
+                            Id = q.Id,
+                            Text = q.Text,
+                            IdCategory = q.IdCategory,
+                            CategoryName = c.Text,
+                            Topic = c.Topic,
+                            Choices = (from qc in db.QuestionChoices
+                                       from c in db.Choices
+                                       where qc.IdQuestion == q.Id
+                                       && c.Id == qc.IdChoice && c.Active == true
+                                       select new TemplateChoiceModel()
+                                       {
+                                           Id = c.Id,
+                                           Tag = c.Tag,
+                                           Value = c.Value,
+                                           Reportable = c.Reportable,
+                                           Color = c.Color,
+                                       }).ToList()
+                        }).AsNoTracking().ToList();           
             return list;
         } 
 

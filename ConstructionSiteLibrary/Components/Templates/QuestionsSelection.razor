@@ -16,6 +16,10 @@
     }
     else
     {
+@*         <RadzenRow>
+            <RadzenDropDown @bind-Value=@_selectedTopic Data=@_topicList TValue="string"
+                            Style="width:70%; max-width: 500px" Change="@(args => ChangeSelectedTopic((string)args))" />
+        </RadzenRow> *@
         <RadzenStack Orientation="Orientation.Horizontal">
             <RadzenLabel Text="Ordina categorie:" />
             <RadzenSwitch @bind-Value=@ChangeCategoryOrder Style="margin-top: 5px;" />
