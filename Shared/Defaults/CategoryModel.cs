@@ -10,6 +10,9 @@ public class CategoryModel
     [JsonPropertyName("text")]
     public string Text { get; set; } = "";
 
+    [JsonPropertyName("topic")]
+    public string Topic { get; set; } = "";
+
     [JsonPropertyName("order")]
     public int Order { get; set; }
 

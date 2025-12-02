@@ -40,9 +40,6 @@ public class DocumentModel
     [JsonPropertyName("completed")]
     public bool Completed { get; set; }
 
-    [JsonPropertyName("cseSign")]
-    public string? CseSign { get; set; }
-
     [JsonPropertyName("ChangedOffline")]
     public int ChangedOffline { get; set; }
 

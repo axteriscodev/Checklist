@@ -31,6 +31,9 @@ public class DocumentDbHelper
                         CSE = d.Cse,
                         DraftedIn = d.DraftedIn,
                         CompletedIn = d.CompletedIn,
+                        ReadOnly = d.ReadOnly,
+                        Completed = d.Completed,
+                        CseSignature = d.CseSign != null ? new SignatureModel() { Sign = d.CseSign, Name = d.Cse} : null,
                         TemplateSettings = (from t in db.Templates
                                             where t.Id == d.IdTemplate
                                             select new TemplateSettingsModel()
@@ -286,6 +289,8 @@ public class DocumentDbHelper
                 DraftedIn = document.DraftedIn,
                 CompletedIn = document.CompletedIn,
                 IdMeteo = document.MeteoCondition?.Id,
+                Completed = document.Completed,
+                CseSign = document.CseSignature?.Sign ?? null,
 
             };
 
