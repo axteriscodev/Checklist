@@ -92,18 +92,13 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.DateTime)
                 .HasColumnType("datetime")
                 .HasColumnName("DATE_TIME");
-            entity.Property(e => e.FilePath)
-                .IsUnicode(false)
-                .HasColumnName("FILE_PATH");
+            entity.Property(e => e.FilePath).HasColumnName("FILE_PATH");
             entity.Property(e => e.IdDocument).HasColumnName("ID_DOCUMENT");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.IdType).HasColumnName("ID_TYPE");
-            entity.Property(e => e.Image)
-                .IsUnicode(false)
-                .HasColumnName("IMAGE");
+            entity.Property(e => e.Image).HasColumnName("IMAGE");
             entity.Property(e => e.Name)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("NAME");
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.Attachments)
@@ -130,9 +125,7 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
-            entity.Property(e => e.Name)
-                .IsUnicode(false)
-                .HasColumnName("NAME");
+            entity.Property(e => e.Name).HasColumnName("NAME");
 
             entity.HasOne(d => d.IdAttachmentNavigation).WithMany(p => p.AttachmentNotes)
                 .HasForeignKey(d => d.IdAttachment)
@@ -152,12 +145,8 @@ public partial class ChecklistContext : DbContext
 
             entity.Property(e => e.IdAttachment).HasColumnName("ID_ATTACHMENT");
             entity.Property(e => e.IdQuestion).HasColumnName("ID_QUESTION");
-            entity.Property(e => e.Description)
-                .IsUnicode(false)
-                .HasColumnName("DESCRIPTION");
-            entity.Property(e => e.Location)
-                .IsUnicode(false)
-                .HasColumnName("LOCATION");
+            entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
+            entity.Property(e => e.Location).HasColumnName("LOCATION");
 
             entity.HasOne(d => d.IdAttachmentNavigation).WithMany(p => p.AttachmentQuestions)
                 .HasForeignKey(d => d.IdAttachment)
@@ -183,7 +172,6 @@ public partial class ChecklistContext : DbContext
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.Name)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("NAME");
         });
 
@@ -225,17 +213,14 @@ public partial class ChecklistContext : DbContext
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.Color)
                 .HasMaxLength(10)
-                .IsUnicode(false)
                 .HasColumnName("COLOR");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Reportable).HasColumnName("REPORTABLE");
             entity.Property(e => e.Tag)
                 .HasMaxLength(10)
-                .IsUnicode(false)
                 .HasColumnName("TAG");
             entity.Property(e => e.Value)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("VALUE");
 
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Choices)
@@ -258,7 +243,6 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Name)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("NAME");
 
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Clients)
@@ -280,64 +264,48 @@ public partial class ChecklistContext : DbContext
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.Address)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("ADDRESS");
             entity.Property(e => e.Ccnl)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("CCNL");
             entity.Property(e => e.CompanyName)
                 .HasMaxLength(150)
-                .IsUnicode(false)
                 .HasColumnName("COMPANY_NAME");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
-                .IsUnicode(false)
                 .HasColumnName("EMAIL");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.InailId)
                 .HasMaxLength(50)
-                .IsUnicode(false)
                 .HasColumnName("INAIL_ID");
             entity.Property(e => e.InailPat)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("INAIL_PAT");
             entity.Property(e => e.InpsId)
                 .HasMaxLength(50)
-                .IsUnicode(false)
                 .HasColumnName("INPS_ID");
-            entity.Property(e => e.JobsDescriptions)
-                .IsUnicode(false)
-                .HasColumnName("JOBS_DESCRIPTIONS");
+            entity.Property(e => e.JobsDescriptions).HasColumnName("JOBS_DESCRIPTIONS");
             entity.Property(e => e.PatInail).HasColumnName("PAT_INAIL");
             entity.Property(e => e.Pec)
                 .HasMaxLength(50)
-                .IsUnicode(false)
                 .HasColumnName("PEC");
             entity.Property(e => e.Phone)
                 .HasMaxLength(20)
-                .IsUnicode(false)
                 .HasColumnName("PHONE");
             entity.Property(e => e.ReaNumber)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("REA_NUMBER");
             entity.Property(e => e.SelfEmployedName)
                 .HasMaxLength(150)
-                .IsUnicode(false)
                 .HasColumnName("SELF_EMPLOYED_NAME");
             entity.Property(e => e.TaxId)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("TAX_ID");
             entity.Property(e => e.Vatcode)
                 .HasMaxLength(50)
-                .IsUnicode(false)
                 .HasColumnName("VATCODE");
             entity.Property(e => e.WorkerWelfareFunds)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("WORKER_WELFARE_FUNDS");
 
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Companies)
@@ -357,13 +325,9 @@ public partial class ChecklistContext : DbContext
 
             entity.Property(e => e.IdDocument).HasColumnName("ID_DOCUMENT");
             entity.Property(e => e.IdCompany).HasColumnName("ID_COMPANY");
-            entity.Property(e => e.InChargeWorker)
-                .IsUnicode(false)
-                .HasColumnName("IN_CHARGE_WORKER");
+            entity.Property(e => e.InChargeWorker).HasColumnName("IN_CHARGE_WORKER");
             entity.Property(e => e.Present).HasColumnName("PRESENT");
-            entity.Property(e => e.Workers)
-                .IsUnicode(false)
-                .HasColumnName("WORKERS");
+            entity.Property(e => e.Workers).HasColumnName("WORKERS");
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyDocuments)
                 .HasForeignKey(d => d.IdCompany)
@@ -386,9 +350,7 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
-            entity.Property(e => e.Note)
-                .IsUnicode(false)
-                .HasColumnName("NOTE");
+            entity.Property(e => e.Note).HasColumnName("NOTE");
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyNotes)
                 .HasForeignKey(d => d.IdCompany)
@@ -408,12 +370,8 @@ public partial class ChecklistContext : DbContext
 
             entity.Property(e => e.IdCompany).HasColumnName("ID_COMPANY");
             entity.Property(e => e.IdSite).HasColumnName("ID_SITE");
-            entity.Property(e => e.JobsDescription)
-                .IsUnicode(false)
-                .HasColumnName("JOBS_DESCRIPTION");
-            entity.Property(e => e.Note)
-                .IsUnicode(false)
-                .HasColumnName("NOTE");
+            entity.Property(e => e.JobsDescription).HasColumnName("JOBS_DESCRIPTION");
+            entity.Property(e => e.Note).HasColumnName("NOTE");
             entity.Property(e => e.SubcontractedBy).HasColumnName("SUBCONTRACTED_BY");
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanySiteIdCompanyNavigations)
@@ -442,22 +400,14 @@ public partial class ChecklistContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("COMPILATION_DATE");
             entity.Property(e => e.Completed).HasColumnName("COMPLETED");
-            entity.Property(e => e.CompletedIn)
-                .IsUnicode(false)
-                .HasColumnName("COMPLETED_IN");
+            entity.Property(e => e.CompletedIn).HasColumnName("COMPLETED_IN");
             entity.Property(e => e.CreationDate)
                 .HasColumnType("datetime")
                 .HasColumnName("CREATION_DATE");
-            entity.Property(e => e.Cse)
-                .IsUnicode(false)
-                .HasColumnName("CSE");
+            entity.Property(e => e.Cse).HasColumnName("CSE");
             entity.Property(e => e.CseSign).HasColumnName("CSE_SIGN");
-            entity.Property(e => e.Description)
-                .IsUnicode(false)
-                .HasColumnName("DESCRIPTION");
-            entity.Property(e => e.DraftedIn)
-                .IsUnicode(false)
-                .HasColumnName("DRAFTED_IN");
+            entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
+            entity.Property(e => e.DraftedIn).HasColumnName("DRAFTED_IN");
             entity.Property(e => e.IdClient).HasColumnName("ID_CLIENT");
             entity.Property(e => e.IdMeteo).HasColumnName("ID_METEO");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
@@ -467,9 +417,7 @@ public partial class ChecklistContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("LAST_EDIT_DATE");
             entity.Property(e => e.ReadOnly).HasColumnName("READ_ONLY");
-            entity.Property(e => e.Title)
-                .IsUnicode(false)
-                .HasColumnName("TITLE");
+            entity.Property(e => e.Title).HasColumnName("TITLE");
 
             entity.HasOne(d => d.IdClientNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdClient)
@@ -499,18 +447,15 @@ public partial class ChecklistContext : DbContext
 
             entity.ToTable("METEO_CONDITION");
 
-            entity.HasIndex(e => e.Description, "UQ__METEO_CO__4193D92E6216CE25").IsUnique();
+            entity.HasIndex(e => e.Description, "UQ__METEO_CO__4193D92E15C9BC10").IsUnique();
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
             entity.Property(e => e.Description)
                 .HasMaxLength(100)
-                .IsUnicode(false)
                 .HasColumnName("DESCRIPTION");
-            entity.Property(e => e.Note)
-                .IsUnicode(false)
-                .HasColumnName("NOTE");
+            entity.Property(e => e.Note).HasColumnName("NOTE");
         });
 
         modelBuilder.Entity<Note>(entity =>
@@ -526,9 +471,7 @@ public partial class ChecklistContext : DbContext
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.IdDocument).HasColumnName("ID_DOCUMENT");
-            entity.Property(e => e.Text)
-                .IsUnicode(false)
-                .HasColumnName("TEXT");
+            entity.Property(e => e.Text).HasColumnName("TEXT");
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.Notes)
                 .HasForeignKey(d => d.IdDocument)
@@ -545,16 +488,10 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
-            entity.Property(e => e.Address)
-                .IsUnicode(false)
-                .HasColumnName("ADDRESS");
+            entity.Property(e => e.Address).HasColumnName("ADDRESS");
             entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
-            entity.Property(e => e.Name)
-                .IsUnicode(false)
-                .HasColumnName("NAME");
-            entity.Property(e => e.Phone)
-                .IsUnicode(false)
-                .HasColumnName("PHONE");
+            entity.Property(e => e.Name).HasColumnName("NAME");
+            entity.Property(e => e.Phone).HasColumnName("PHONE");
         });
 
         modelBuilder.Entity<PatInail>(entity =>
@@ -570,7 +507,6 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
             entity.Property(e => e.Name)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("NAME");
         });
 
@@ -588,9 +524,7 @@ public partial class ChecklistContext : DbContext
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.IdCategory).HasColumnName("ID_CATEGORY");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
-            entity.Property(e => e.Text)
-                .IsUnicode(false)
-                .HasColumnName("TEXT");
+            entity.Property(e => e.Text).HasColumnName("TEXT");
 
             entity.HasOne(d => d.IdCategoryNavigation).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.IdCategory)
@@ -610,9 +544,7 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.IdCurrentChoice).HasColumnName("ID_CURRENT_CHOICE");
             entity.Property(e => e.IdQuestionChosen).HasColumnName("ID_QUESTION_CHOSEN");
             entity.Property(e => e.IdDocument).HasColumnName("ID_DOCUMENT");
-            entity.Property(e => e.Note)
-                .IsUnicode(false)
-                .HasColumnName("NOTE");
+            entity.Property(e => e.Note).HasColumnName("NOTE");
 
             entity.HasOne(d => d.IdCurrentChoiceNavigation).WithMany(p => p.QuestionAnswereds)
                 .HasForeignKey(d => d.IdCurrentChoice)
@@ -637,9 +569,7 @@ public partial class ChecklistContext : DbContext
 
             entity.Property(e => e.IdQuestion).HasColumnName("ID_QUESTION");
             entity.Property(e => e.IdChoice).HasColumnName("ID_CHOICE");
-            entity.Property(e => e.Note)
-                .IsUnicode(false)
-                .HasColumnName("NOTE");
+            entity.Property(e => e.Note).HasColumnName("NOTE");
 
             entity.HasOne(d => d.IdChoiceNavigation).WithMany(p => p.QuestionChoices)
                 .HasForeignKey(d => d.IdChoice)
@@ -663,9 +593,7 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.IdCategory).HasColumnName("ID_CATEGORY");
             entity.Property(e => e.IdQuestion).HasColumnName("ID_QUESTION");
             entity.Property(e => e.IdTemplate).HasColumnName("ID_TEMPLATE");
-            entity.Property(e => e.Note)
-                .IsUnicode(false)
-                .HasColumnName("NOTE");
+            entity.Property(e => e.Note).HasColumnName("NOTE");
             entity.Property(e => e.Order).HasColumnName("ORDER");
             entity.Property(e => e.OrderCategory).HasColumnName("ORDER_CATEGORY");
 
@@ -689,9 +617,7 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.IdCurrentChoice).HasColumnName("ID_CURRENT_CHOICE");
             entity.Property(e => e.IdQuestionChosen).HasColumnName("ID_QUESTION_CHOSEN");
             entity.Property(e => e.IdDocument).HasColumnName("ID_DOCUMENT");
-            entity.Property(e => e.Note)
-                .IsUnicode(false)
-                .HasColumnName("NOTE");
+            entity.Property(e => e.Note).HasColumnName("NOTE");
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.ReportedCompanies)
                 .HasForeignKey(d => d.IdCompany)
@@ -718,9 +644,7 @@ public partial class ChecklistContext : DbContext
                 .HasColumnName("DOCUMENTS_MANAGEMENT");
             entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
-            entity.Property(e => e.Name)
-                .IsUnicode(false)
-                .HasColumnName("NAME");
+            entity.Property(e => e.Name).HasColumnName("NAME");
             entity.Property(e => e.UsersManagement)
                 .HasDefaultValue(true)
                 .HasColumnName("USERS_MANAGEMENT");
@@ -737,7 +661,7 @@ public partial class ChecklistContext : DbContext
 
             entity.ToTable("SITE");
 
-            entity.HasIndex(e => e.Name, "UQ__tmp_ms_x__D9C1FA00BD4550CD").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__SITE__D9C1FA0059750DCF").IsUnique();
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -747,14 +671,9 @@ public partial class ChecklistContext : DbContext
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.Address)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("ADDRESS");
-            entity.Property(e => e.Cse)
-                .IsUnicode(false)
-                .HasColumnName("CSE");
-            entity.Property(e => e.Dl)
-                .IsUnicode(false)
-                .HasColumnName("DL");
+            entity.Property(e => e.Cse).HasColumnName("CSE");
+            entity.Property(e => e.Dl).HasColumnName("DL");
             entity.Property(e => e.EndDate)
                 .HasColumnType("datetime")
                 .HasColumnName("END_DATE");
@@ -762,31 +681,22 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.IdSico)
                 .HasMaxLength(30)
-                .IsUnicode(false)
                 .HasColumnName("ID_SICO");
             entity.Property(e => e.IdSicoInProgress)
                 .HasMaxLength(30)
-                .IsUnicode(false)
                 .HasColumnName("ID_SICO_IN_PROGRESS");
-            entity.Property(e => e.JobDescription)
-                .IsUnicode(false)
-                .HasColumnName("JOB_DESCRIPTION");
+            entity.Property(e => e.JobDescription).HasColumnName("JOB_DESCRIPTION");
             entity.Property(e => e.Name)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("NAME");
-            entity.Property(e => e.Note)
-                .IsUnicode(false)
-                .HasColumnName("NOTE");
+            entity.Property(e => e.Note).HasColumnName("NOTE");
             entity.Property(e => e.PreliminaryNotificationInProgress)
                 .HasColumnType("datetime")
                 .HasColumnName("PRELIMINARY_NOTIFICATION_IN_PROGRESS");
             entity.Property(e => e.PreliminaryNotificationStart)
                 .HasColumnType("datetime")
                 .HasColumnName("PRELIMINARY_NOTIFICATION_START");
-            entity.Property(e => e.Rl)
-                .IsUnicode(false)
-                .HasColumnName("RL");
+            entity.Property(e => e.Rl).HasColumnName("RL");
             entity.Property(e => e.StartDate)
                 .HasColumnType("datetime")
                 .HasColumnName("START_DATE");
@@ -822,15 +732,10 @@ public partial class ChecklistContext : DbContext
             entity.Property(e => e.IdDescription).HasColumnName("ID_DESCRIPTION");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Name)
-                .IsUnicode(false)
                 .HasDefaultValue("")
                 .HasColumnName("NAME");
-            entity.Property(e => e.Note)
-                .IsUnicode(false)
-                .HasColumnName("NOTE");
-            entity.Property(e => e.Title)
-                .IsUnicode(false)
-                .HasColumnName("TITLE");
+            entity.Property(e => e.Note).HasColumnName("NOTE");
+            entity.Property(e => e.Title).HasColumnName("TITLE");
 
             entity.HasOne(d => d.IdDescriptionNavigation).WithMany(p => p.Templates)
                 .HasForeignKey(d => d.IdDescription)
@@ -851,13 +756,9 @@ public partial class ChecklistContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
             entity.Property(e => e.Active).HasColumnName("ACTIVE");
-            entity.Property(e => e.Description)
-                .IsUnicode(false)
-                .HasColumnName("DESCRIPTION");
+            entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
-            entity.Property(e => e.Title)
-                .IsUnicode(false)
-                .HasColumnName("TITLE");
+            entity.Property(e => e.Title).HasColumnName("TITLE");
 
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.TemplateDescriptions)
                 .HasForeignKey(d => d.IdOrganization)
@@ -868,7 +769,7 @@ public partial class ChecklistContext : DbContext
         {
             entity.ToTable("USER");
 
-            entity.HasIndex(e => e.Email, "UQ__tmp_ms_x__161CF724AF36A7CF").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__USER__161CF724BA83C1A6").IsUnique();
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -878,30 +779,19 @@ public partial class ChecklistContext : DbContext
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.Email)
                 .HasMaxLength(200)
-                .IsUnicode(false)
                 .HasColumnName("EMAIL");
             entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
             entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.IdRole).HasColumnName("ID_ROLE");
-            entity.Property(e => e.Name)
-                .IsUnicode(false)
-                .HasColumnName("NAME");
-            entity.Property(e => e.Password)
-                .IsUnicode(false)
-                .HasColumnName("PASSWORD");
-            entity.Property(e => e.Phone)
-                .IsUnicode(false)
-                .HasColumnName("PHONE");
+            entity.Property(e => e.Name).HasColumnName("NAME");
+            entity.Property(e => e.Password).HasColumnName("PASSWORD");
+            entity.Property(e => e.Phone).HasColumnName("PHONE");
             entity.Property(e => e.ResetToken).HasColumnName("RESET_TOKEN");
             entity.Property(e => e.ResetTokenExpirationDate)
                 .HasColumnType("datetime")
                 .HasColumnName("RESET_TOKEN_EXPIRATION_DATE");
-            entity.Property(e => e.Salt)
-                .IsUnicode(false)
-                .HasColumnName("SALT");
-            entity.Property(e => e.Surname)
-                .IsUnicode(false)
-                .HasColumnName("SURNAME");
+            entity.Property(e => e.Salt).HasColumnName("SALT");
+            entity.Property(e => e.Surname).HasColumnName("SURNAME");
 
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdOrganization)
@@ -926,9 +816,7 @@ public partial class ChecklistContext : DbContext
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
             entity.Property(e => e.IdUser).HasColumnName("ID_USER");
-            entity.Property(e => e.Path)
-                .IsUnicode(false)
-                .HasColumnName("PATH");
+            entity.Property(e => e.Path).HasColumnName("PATH");
             entity.Property(e => e.Type).HasColumnName("TYPE");
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserAttachments)
@@ -953,9 +841,7 @@ public partial class ChecklistContext : DbContext
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
-            entity.Property(e => e.Name)
-                .IsUnicode(false)
-                .HasColumnName("NAME");
+            entity.Property(e => e.Name).HasColumnName("NAME");
         });
 
         OnModelCreatingPartial(modelBuilder);
