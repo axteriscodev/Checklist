@@ -11,7 +11,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
         [Parameter]
         public bool CreationMode { get; set; }
         [Parameter]
-        public ConstructorSiteModel? Site { get; set; }
+        public SiteModel? Site { get; set; }
 
         private List<ClientModel> clients { get; set; } = [];
         private List<CompanyModel> companies { get; set; } = [];
@@ -103,7 +103,8 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
                 PreliminaryNotificationStartDate = form.PreliminaryNotificationStartDate,
                 IdSico = form.IdSico,
                 Client = form.Client,
-                Companies = form.Companies
+                Companies = form.Companies,
+                Note = form.Notes ?? ""
             };
             var success = CreationMode ? await SiteRepository.SaveContructorSite(Site)
                                        : await SiteRepository.UpdateContructorSites([Site]);
@@ -118,6 +119,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
             public int Id { get; set; }
             public string? Name { get; set; }
             public string? JobDescription { get; set; }
+            public string? Notes { get; set; }
             public string? Address { get; set; }
             public DateTime? StartDate { get; set; }
             public DateTime? PreliminaryNotificationStartDate { get; set; }

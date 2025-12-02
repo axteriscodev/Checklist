@@ -1,7 +1,7 @@
 ﻿using Shared.Defaults;
 using Shared.Templates;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclDamicoV2Context;
+using DB = TDatabase.Database.ChecklistContext;
 
 namespace TDatabase.Queries
 {
@@ -14,6 +14,7 @@ namespace TDatabase.Queries
                 Id = x.Id,
                 Text = x.Text,
                 Order = x.Order,
+                Topic = x.Topic,
                 Questions = (from q in db.Questions
                              where q.IdCategory == x.Id
                              && q.Active == true
@@ -21,7 +22,7 @@ namespace TDatabase.Queries
                              {
                                  Id = q.Id,
                                  IdCategory = q.IdCategory,
-                                 Text = q.Text,
+                                 Text = q.Text,                         
                              }).ToList()
             }).OrderBy(x => x.Order).ToList();
         }
@@ -40,6 +41,7 @@ namespace TDatabase.Queries
                     Text = category.Text,
                     Order = nextOrder,
                     IdOrganization = organizationId,
+                    Topic = category.Topic,
                     Active = true
                 };
                 db.Categories.Add(newCat);
@@ -63,6 +65,7 @@ namespace TDatabase.Queries
                     {
                         m.Text = elem.Text;
                         m.Order = elem.Order;
+                        m.Topic = elem.Topic;
                         if (await db.SaveChangesAsync() > 0)
                         {
                             modified.Add(elem.Id);

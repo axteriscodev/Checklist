@@ -7,7 +7,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
     public partial class CardConstructorSite
     {
         [Parameter]
-        public ConstructorSiteModel Site { get; set; } = new();
+        public SiteModel Site { get; set; } = new();
 
 
         private string PrintDate(DateTime? date)

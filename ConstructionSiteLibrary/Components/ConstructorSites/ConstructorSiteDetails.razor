@@ -18,13 +18,13 @@
 else
 {
     <div class="mx-sm-1 mx-lg-5 my-5">
-        <SectionTitle PageTitle="I miei cantieri" ButtonText="+ aggiungi cantiere" SearchPlaceholder="Cerca cantiere"
+        <SectionTitle PageTitle="I miei sito" ButtonText="+ aggiungi sito" SearchPlaceholder="Cerca sito"
                       ShowSearchBar="false" ShowButton="false" />
         @* Bottone torna indietro *@
         <div class="row margin-top-100">
             <div class="col-12">
                 <RadzenButton Variant="Variant.Text" Click="@Back" class="btu-back">
-                    <RadzenIcon Icon="chevron_left" /> Torna a tutti i cantieri
+                    <RadzenIcon Icon="chevron_left" /> Torna a tutti i siti
                 </RadzenButton>
             </div>
         </div>
@@ -95,7 +95,7 @@ else
     [Parameter]
     public int SiteId { get; set; }
 
-    ConstructorSiteModel site = new();
+    SiteModel site = new();
 
     private List<DocumentModel> documents = [];
     private List<DocumentModel> displayedDocuments = [];

@@ -21,7 +21,11 @@ else
         <ActivityTopBar @ref="@topBar" OnButtonSaveClicked="SaveDocument" DocumentNavigator="@documenNavigator"
                         OnButtonPreviewClicked="@VisualizzaAnteprimaDocumento" ShowPreview="true" />
         <ReportConstructorSiteDataSection Document="@document" DocumentNavigator="@documenNavigator" />
-        <CompaniesPresentSection Document="@document" Companies="@document.Companies" DocumentNavigator="@documenNavigator" />
+        @*Se il documento ha la sezione delle aziende associate al sito *@
+        @if (document.TemplateSettings.HasCompanies)
+        {
+            <CompaniesPresentSection Document="@document" Companies="@document.Companies" DocumentNavigator="@documenNavigator" />
+        }
         <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@UpdateDocument"
                           DocumentNavigator="@documenNavigator" />
         <QuestionNotesSection Document="@document" DocumentNavigator="@documenNavigator" />

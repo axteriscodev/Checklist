@@ -37,7 +37,10 @@ else
         @if (_selectedTemplate is not null)
         {
             <ReportConstructorSiteDataSection Document="@_document" DocumentNavigator="@documenNavigator" />
-            <CompaniesPresentSection Companies="@_document.Companies" OnUpdateState="@UpdateDocument" DocumentNavigator="@documenNavigator" />
+            @if (_selectedTemplate.HasCompanies)
+            {
+                <CompaniesPresentSection Companies="@_document.Companies" OnUpdateState="@UpdateDocument" DocumentNavigator="@documenNavigator" />
+            }
             <QuestionsSection Categories="_document.Categories" Companies="_document.Companies" OnStateChangeNotification="@UpdateDocument"
                               DocumentNavigator="@documenNavigator" />
             <QuestionNotesSection Document="@_document" DocumentNavigator="@documenNavigator" />
@@ -58,7 +61,7 @@ else
     private TemplateModel? _selectedTemplate;
     private DocumentModel _document = new();
 
-    private ConstructorSiteModel _constructorSite = new();
+    private SiteModel _constructorSite = new();
 
     private ActivityTopBar topBar;
     private bool initialLoading;
@@ -70,7 +73,7 @@ else
     protected override async Task OnParametersSetAsync()
     {
         _constructorSite = await ConstructorSitesRepository.GetConstructorSiteInfo(SiteId);
-        _document.ConstructorSite = _constructorSite;
+        _document.Site = _constructorSite;
         await base.OnParametersSetAsync();
     }
 
@@ -81,7 +84,7 @@ else
         {
             topBar.ChangeOnSavingStatus();
         }
-        NavigationService.ChangePage(PageRouting.ConstructorSitePage + _document.ConstructorSite.Id);
+        NavigationService.ChangePage(PageRouting.ConstructorSitePage + _document.Site.Id);
 
     }
 
@@ -99,7 +102,7 @@ else
         {
             _document = new();
             //mi salvo solo l'id perchè al momento non mi interessano i dati del cantiere
-            _document.ConstructorSite = new() { Id = SiteId };
+            _document.Site = new() { Id = SiteId };
         }
         _document.IdTemplate = _selectedTemplate.IdTemplate;
         _document.Title = _selectedTemplate.Description.Title;

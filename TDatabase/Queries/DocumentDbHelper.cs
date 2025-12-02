@@ -2,7 +2,7 @@
 using Shared.Documents;
 using System.Reflection.Emit;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclDamicoV2Context;
+using DB = TDatabase.Database.ChecklistContext;
 
 namespace TDatabase.Queries;
 
@@ -31,6 +31,18 @@ public class DocumentDbHelper
                         CSE = d.Cse,
                         DraftedIn = d.DraftedIn,
                         CompletedIn = d.CompletedIn,
+                        ReadOnly = d.ReadOnly,
+                        Completed = d.Completed,
+                        CseSignature = d.CseSign != null ? new SignatureModel() { Sign = d.CseSign, Name = d.Cse} : null,
+                        TemplateSettings = (from t in db.Templates
+                                            where t.Id == d.IdTemplate
+                                            select new TemplateSettingsModel()
+                                            {
+                                                HasClient = t.HasClient,
+                                                HasCompanies = t.HasCompanies,
+                                                HasMeteo = t.HasMeteo,
+                                                HasSiteData = t.HasSiteData,
+                                            }).FirstOrDefault() ?? new(),
                         MeteoCondition = (from m in db.MeteoConditions
                                           where d.IdMeteo == m.Id
                                           select new MeteoConditionModel()
@@ -113,9 +125,9 @@ public class DocumentDbHelper
                                                                           }).ToList(),
                                                        }).ToList()
                                       }).ToList(),
-                        ConstructorSite = (from cs in db.ConstructorSites
-                                           where cs.Id == d.IdConstructorSite
-                                           select new ConstructorSiteModel()
+                        Site = (from cs in db.Sites
+                                           where cs.Id == d.IdSite
+                                           select new SiteModel()
                                            {
                                                Id = cs.Id,
                                                Name = cs.Name,
@@ -126,6 +138,7 @@ public class DocumentDbHelper
                                                IdSicoInProgress = cs.IdSicoInProgress,
                                                PreliminaryNotificationStartDate = cs.PreliminaryNotificationStart,
                                                PreliminaryNotificationInProgress = cs.PreliminaryNotificationInProgress,
+                                               Note = cs.Note,
                                                Client = (from cl in db.Clients
                                                          where cl.Id == cs.IdClient
                                                          select new ClientModel()
@@ -133,9 +146,9 @@ public class DocumentDbHelper
                                                              Id = cl.Id,
                                                              Name = cl.Name
                                                          }).SingleOrDefault() ?? new(),
-                                               Companies = (from cc in db.CompanyConstructorSites
+                                               Companies = (from cc in db.CompanySites
                                                             join comp in db.Companies on cc.IdCompany equals comp.Id
-                                                            where cc.IdConstructorSite == cs.Id
+                                                            where cc.IdSite == cs.Id
                                                             select new CompanyModel()
                                                             {
                                                                 Id = comp.Id,
@@ -156,8 +169,8 @@ public class DocumentDbHelper
 
                         Companies = (from compDoc in db.CompanyDocuments
                                      from comp in db.Companies
-                                     join cc in (from cc in db.CompanyConstructorSites
-                                                 where cc.IdConstructorSite == d.IdConstructorSite
+                                     join cc in (from cc in db.CompanySites
+                                                 where cc.IdSite == d.IdSite
                                                  select cc).DefaultIfEmpty() on comp.Id equals cc.IdCompany into constrComp
                                      from compJoin in constrComp.DefaultIfEmpty()
                                      where compDoc.IdDocument == d.Id
@@ -207,8 +220,8 @@ public class DocumentDbHelper
     public static List<DocumentModel> SelectFromSite(DB db, int siteId)
     {
         var docs = (from d in db.Documents
-                    where d.IdConstructorSite == siteId
-                    join cs in db.ConstructorSites on d.IdConstructorSite equals cs.Id
+                    where d.IdSite == siteId
+                    join cs in db.Sites on d.IdSite equals cs.Id
                     select new DocumentModel()
                     {
                         Id = d.Id,
@@ -221,7 +234,7 @@ public class DocumentDbHelper
                         MeteoCondition = db.MeteoConditions.Where(m => m.Id == d.IdMeteo)
                                                            .Select(m => new MeteoConditionModel() { Id = m.Id, Description = m.Description })
                                                            .SingleOrDefault(),
-                        ConstructorSite = new()
+                        Site = new()
                         {
                             Id = cs.Id,
                             Name = cs.Name,
@@ -232,6 +245,7 @@ public class DocumentDbHelper
                             PreliminaryNotificationStartDate = cs.PreliminaryNotificationStart,
                             PreliminaryNotificationInProgress = cs.PreliminaryNotificationInProgress,
                             Address = cs.Address ?? "",
+                            Note = cs.Note,
                             Client = (from cl in db.Clients
                                       where cl.Id == cs.IdClient
                                       select new ClientModel()
@@ -264,7 +278,7 @@ public class DocumentDbHelper
             {
                 Id = nextId,
                 IdOrganization = organizationId,
-                IdConstructorSite = document.ConstructorSite.Id,
+                IdSite = document.Site.Id,
                 IdClient = document.Client?.Id > 0 ? document.Client?.Id : null,
                 IdTemplate = document.IdTemplate,
                 CreationDate = document.CreationDate,
@@ -277,6 +291,8 @@ public class DocumentDbHelper
                 DraftedIn = document.DraftedIn,
                 CompletedIn = document.CompletedIn,
                 IdMeteo = document.MeteoCondition?.Id,
+                Completed = document.Completed,
+                CseSign = document.CseSignature?.Sign ?? null,
 
             };
 
@@ -292,7 +308,7 @@ public class DocumentDbHelper
                 }
 
                 //associo le aziende al cantiere
-                ConstructorSiteDbHelper.HandleCompaniesToConstructionSite(db, [companyDoc], document.ConstructorSite.Id);
+                ConstructorSiteDbHelper.HandleCompaniesToConstructionSite(db, [companyDoc], document.Site.Id);
 
                 //associazione con il documento
                 CompanyDocument cd = new()
@@ -429,7 +445,7 @@ public class DocumentDbHelper
                 var doc = db.Documents.Where(x => x.Id == document.Id).SingleOrDefault();
                 if (doc is not null)
                 {
-                    await ConstructorSiteDbHelper.Update(db, [document.ConstructorSite]);
+                    await ConstructorSiteDbHelper.Update(db, [document.Site]);
                     db.Documents.Remove(doc);
                     await db.SaveChangesAsync();
                     await Insert(db, document, organizationId);

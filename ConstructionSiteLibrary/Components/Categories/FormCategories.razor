@@ -7,7 +7,7 @@
 <div class="">
     <RadzenTemplateForm TItem="FormCategoriesData" Data=@form Submit=@Save>
         <RadzenStack class="px-2">
-            <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+            <RadzenFormField Text="Nome (obbligatorio)" Variant="@variant">
                 <ChildContent>
                     <RadzenTextBox Name="nome" @bind-Value="@form.Nome" />
                 </ChildContent>
@@ -16,7 +16,11 @@
                                              Text="Il campo nome è obbligatorio" />
                 </Helper>
             </RadzenFormField>
-           
+            <RadzenFormField Text="Topic" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox Name="topic" @bind-Value="@form.Topic" />
+                </ChildContent>
+            </RadzenFormField>
             <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
                           BusyText="Salvataggio in corso" />
         </RadzenStack>

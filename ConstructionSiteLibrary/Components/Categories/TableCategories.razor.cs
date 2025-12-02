@@ -30,9 +30,9 @@ public partial class TableCategories
 
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} categorie)";
 
-    
 
-    
+
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,7 +64,7 @@ public partial class TableCategories
     {
         displayedCategories = categories;
         search = search.TrimStart().TrimEnd();
-        if(!string.IsNullOrEmpty(search))
+        if (!string.IsNullOrEmpty(search))
         {
             displayedCategories = categories.Where(x => x.Text.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
@@ -79,24 +79,9 @@ public partial class TableCategories
         displayedCategories = displayedCategories.Skip(skip).Take(pageSize).ToList();
     }
 
-    private async Task OpenOrderForm()
-    {   
-        var width = screenComponent.ScreenSize.Width;
-
-        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
-        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
-        var newOptions = new DialogOptions
-        {
-            Style = additionalStyle
-        };
-        //creo parametri da inviare al componente caricato con il popup
-        var param = new Dictionary<string, object>
-            {
-                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
-                { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
-                { "Categories", categories },
-            };
-        await DialogService.OpenAsync<SortCategories>("Ordinamento", parameters: param, options: newOptions);
+    private string PrintTopic(string? topic)
+    {
+        return string.IsNullOrEmpty(topic) ? "-" : topic;
     }
 
     /// <summary>

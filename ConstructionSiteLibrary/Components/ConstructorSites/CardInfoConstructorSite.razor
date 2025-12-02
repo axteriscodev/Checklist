@@ -16,24 +16,24 @@
     <div class="row">
         <div class="col-6">
             <label class="info-label">Descrizione</label>
-            <p>@ConstructorSite.JobDescription</p>
-        </div>
-        <div class="col-6">
-            <label class="info-label">Data inizio</label>
-            <p>@PrintDate(ConstructorSite.StartDate)</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <label class="info-label">Cliente</label>
-            <p>@PrintClient()</p>
+            <p>@ConstructorSite.Note</p>
         </div>
         <div class="col-6">
             <label class="info-label">Indirizzo</label>
             <p>@ConstructorSite.Address</p>
         </div>
     </div>
-    <div class="row">
+@*     <div class="row">
+        <div class="col-6">
+            <label class="info-label">Cliente</label>
+            <p>@PrintClient()</p>
+        </div>
+        <div class="col-6">
+            <label class="info-label">Data inizio</label>
+            <p>@PrintDate(ConstructorSite.StartDate)</p>
+        </div>
+    </div> *@
+@*     <div class="row">
         <div class="col-6">
             <label class="info-label">Notifica preliminare inizio cantiere</label>
             <p>@PrintDate(ConstructorSite.PreliminaryNotificationInProgress)</p>
@@ -42,7 +42,7 @@
             <label class="info-label">Id. SICO</label>
             <p>@PrintNullableString(ConstructorSite.IdSico)</p>
         </div>
-    </div>
+    </div> *@
 </div>
 
 @code {
@@ -50,7 +50,7 @@
     [Parameter]
     public EventCallback ReloadInfo { get; set; }
     [Parameter]
-    public ConstructorSiteModel ConstructorSite { get; set; } = new();
+    public SiteModel ConstructorSite { get; set; } = new();
 
     ScreenComponent? screenComponent;
 

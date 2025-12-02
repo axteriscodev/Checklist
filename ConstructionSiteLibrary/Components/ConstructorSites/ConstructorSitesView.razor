@@ -17,10 +17,10 @@
 else
 {
     <div class="mx-2 my-5">
-        <SectionTitle PageTitle="I miei cantieri" ButtonText="+ aggiungi cantiere" SearchPlaceholder="Cerca cantiere"
+        <SectionTitle PageTitle="I miei siti" ButtonText="+ aggiungi sito" SearchPlaceholder="Cerca sito"
                       OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
         <div>
-            <Repeater Data="@displayedSites" TItem="ConstructorSiteModel">
+            <Repeater Data="@displayedSites" TItem="SiteModel">
                 <ContentTemplate Context="Item">
                     <div class="row mt-4">
                         <div class="col">
@@ -40,8 +40,8 @@ else
 @code {
     ScreenComponent? screenComponent;
 
-    private List<ConstructorSiteModel> sites = [];
-    private List<ConstructorSiteModel> displayedSites = [];
+    private List<SiteModel> sites = [];
+    private List<SiteModel> displayedSites = [];
     private bool onLoading = false;
     private string search = "";
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} cantieri)";
@@ -112,7 +112,7 @@ else
             { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
             { "CreationMode", true },
         };
-        await DialogService.OpenAsync<FormConstructorSite>("Nuovo cantiere", parameters: param, options: newOptions);
+        await DialogService.OpenAsync<FormConstructorSite>("Nuovo Sito", parameters: param, options: newOptions);
     }
 
     private async Task Reload()

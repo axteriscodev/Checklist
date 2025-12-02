@@ -3,7 +3,7 @@
 using System.Diagnostics;
 using Shared.Documents;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclDamicoV2Context;
+using DB = TDatabase.Database.ChecklistContext;
 
 
 public class ConstructorSiteDbHelper
@@ -11,16 +11,16 @@ public class ConstructorSiteDbHelper
 
     #region Query principali cantiere
 
-    public static List<ConstructorSiteModel> Select(DB db, int organizationId, int idConstructorSite = 0)
+    public static List<SiteModel> Select(DB db, int organizationId, int idConstructorSite = 0)
     {
-        var constructorSites = db.ConstructorSites.AsQueryable();
+        var constructorSites = db.Sites.AsQueryable();
 
         if (idConstructorSite > 0)
         {
             constructorSites = constructorSites.Where(x =>x.IdOrganization == organizationId && x.Id == idConstructorSite);
         }
 
-        return constructorSites.Where(x => x.IdOrganization == organizationId).Select(x => new ConstructorSiteModel()
+        return constructorSites.Where(x => x.IdOrganization == organizationId).Select(x => new SiteModel()
         {
             Id = x.Id,
             Name = x.Name,
@@ -28,14 +28,15 @@ public class ConstructorSiteDbHelper
             Address = x.Address ?? "",
             StartDate = x.StartDate ?? DateTime.Now,
             EndDate = x.EndDate,
+            Note = x.Note,
             Client = db.Clients.Where(c => c.Id == x.IdClient).Select(nc => new ClientModel()
             {
                 Id = nc.Id,
                 Name = nc.Name,
             }).FirstOrDefault() ?? new(),
-            Companies = (from cc in db.CompanyConstructorSites
+            Companies = (from cc in db.CompanySites
                          join c in db.Companies on cc.IdCompany equals c.Id
-                         where cc.IdConstructorSite == x.Id
+                         where cc.IdSite == x.Id
                          select new CompanyModel()
                          {
                              Id = c.Id,
@@ -45,13 +46,13 @@ public class ConstructorSiteDbHelper
         }).ToList();
     }
 
-    public static async Task<int> Insert(DB db, ConstructorSiteModel constructorSite, int organizationId)
+    public static async Task<int> Insert(DB db, SiteModel constructorSite, int organizationId)
     {
         var siteId = 0;
         try
         {
-            var nextId = (db.ConstructorSites.Any() ? db.ConstructorSites.Max(x => x.Id) : 0) + 1;
-            ConstructorSite newConstructorSite = new()
+            var nextId = (db.Sites.Any() ? db.Sites.Max(x => x.Id) : 0) + 1;
+            Site newConstructorSite = new()
             {
                 Id = nextId,
                 Name = constructorSite.Name,
@@ -59,13 +60,14 @@ public class ConstructorSiteDbHelper
                 Address = constructorSite.Address,
                 StartDate = constructorSite.StartDate,
                 EndDate = constructorSite.EndDate,
-                IdClient = constructorSite.Client.Id > 0 ? constructorSite.Client.Id : null,
-                IdOrganization = organizationId
+                IdClient = constructorSite.Client != null && constructorSite.Client.Id > 0 ? constructorSite.Client.Id : null,
+                IdOrganization = organizationId,
+                Note = constructorSite.Note,
             };
             //associo le aziende al cantiere
             HandleCompaniesToConstructionSite(db, constructorSite.Companies, constructorSite.Id);
 
-            db.ConstructorSites.Add(newConstructorSite);
+            db.Sites.Add(newConstructorSite);
             await db.SaveChangesAsync();
             siteId = nextId;
         }
@@ -74,14 +76,14 @@ public class ConstructorSiteDbHelper
         return siteId;
     }
 
-    public static async Task<List<int>> Update(DB db, List<ConstructorSiteModel> constructorSites)
+    public static async Task<List<int>> Update(DB db, List<SiteModel> constructorSites)
     {
         List<int> modified = [];
         try
         {
             foreach (var elem in constructorSites)
             {
-                var m = db.ConstructorSites.Where(x => x.Id == elem.Id).SingleOrDefault();
+                var m = db.Sites.Where(x => x.Id == elem.Id).SingleOrDefault();
                 if (m is not null)
                 {
                     m.Name = elem.Name;
@@ -92,6 +94,7 @@ public class ConstructorSiteDbHelper
                     m.IdSicoInProgress = elem.IdSicoInProgress;
                     m.PreliminaryNotificationStart = elem.PreliminaryNotificationStartDate;
                     m.PreliminaryNotificationInProgress = elem.PreliminaryNotificationInProgress;
+                    m.Note = elem.Note;
                     if (elem.Client is not null && elem.Client.Id > 0)
                     {
                         m.IdClient = elem.Client.Id;
@@ -113,14 +116,14 @@ public class ConstructorSiteDbHelper
         return modified;
     }
 
-    public static async Task<List<int>> Hide(DB db, List<ConstructorSiteModel> constructorSites)
+    public static async Task<List<int>> Hide(DB db, List<SiteModel> constructorSites)
     {
         List<int> hiddenItems = [];
             try
             {
                 foreach (var elem in constructorSites)
                 {
-                    var mc = db.ConstructorSites.Where(x => x.Id == elem.Id).SingleOrDefault();
+                    var mc = db.Sites.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (mc is not null)
                     {
                         mc.Active = false;
@@ -147,12 +150,12 @@ public class ConstructorSiteDbHelper
     /// </summary>
     /// <param name="db"></param>
     /// <param name="companies"></param>
-    /// <param name="idContructorSite"></param>
-    public static void HandleCompaniesToConstructionSite(DB db, List<CompanyModel> companies, int idContructorSite)
+    /// <param name="idSite"></param>
+    public static void HandleCompaniesToConstructionSite(DB db, List<CompanyModel> companies, int idSite)
     {
         var newCompaniesIds = companies.Select(x => x.Id).ToList();
 
-        var currentAssociatedCompanies = db.CompanyConstructorSites.Where(x => x.IdConstructorSite == idContructorSite).ToList();
+        var currentAssociatedCompanies = db.CompanySites.Where(x => x.IdSite == idSite).ToList();
 
         var currentAssociatedCompaniesIds = currentAssociatedCompanies.Select(x => x.IdCompany).ToList();
 
@@ -162,19 +165,19 @@ public class ConstructorSiteDbHelper
 
         foreach (var comp in companiesToRemove)
         {
-            db.CompanyConstructorSites.Remove(comp);
+            db.CompanySites.Remove(comp);
         }
 
         foreach (var comp in companiesToAdd)
         {
-                var CompConstruct = new CompanyConstructorSite()
+                var CompConstruct = new CompanySite()
                 {
                     IdCompany = comp.Id,
-                    IdConstructorSite = idContructorSite,
+                    IdSite = idSite,
                     JobsDescription = comp.JobsDescriptions,
                     SubcontractedBy = comp.SubcontractedBy,
                 };
-                db.CompanyConstructorSites.Add(CompConstruct);
+                db.CompanySites.Add(CompConstruct);
             // quando inseriremo i valori di JobsDescription e SubcontractedBy aggiungere anche else
             // di aggiornamento, visto che potrebbe aver aggiornato anche quei campi
         }

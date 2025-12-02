@@ -27,13 +27,13 @@ public partial class Organization
 
     public virtual ICollection<Company> Companies { get; set; } = new List<Company>();
 
-    public virtual ICollection<ConstructorSite> ConstructorSites { get; set; } = new List<ConstructorSite>();
-
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
     public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
 
     public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
+
+    public virtual ICollection<Site> Sites { get; set; } = new List<Site>();
 
     public virtual ICollection<TemplateDescription> TemplateDescriptions { get; set; } = new List<TemplateDescription>();
 

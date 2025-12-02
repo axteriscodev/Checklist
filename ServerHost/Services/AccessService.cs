@@ -116,7 +116,7 @@ public class AccessService(IMailService mailService)
             return result;
         }
 
-        private DbCsclDamicoV2Context GetDbConnection()
+        private ChecklistContext GetDbConnection()
         {
             var connectionString = ConfigurationService.GetConnection() ?? "";
             return DatabaseContextFactory.Create(connectionString);

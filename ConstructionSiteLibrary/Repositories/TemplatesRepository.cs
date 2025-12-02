@@ -39,7 +39,7 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
                 if (response.Code.Equals("0"))
                 {
                     _templates = JsonSerializer.Deserialize<List<TemplateModel>>(response.Content.ToString() ?? "") ?? [];
-                    _ = await _indexedDBService.Insert(IndexedDBTables.templates, _templates.Cast<object>().ToArray());
+                    //_ = await _indexedDBService.Insert(IndexedDBTables.templates, _templates.Cast<object>().ToArray());
                 }
                 else if (response.Code.Equals("Ex8995BA25"))
                 {

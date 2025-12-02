@@ -32,7 +32,10 @@ else
                         <span> Domanda</span>
                     </th>
                     <th>
-                        <span class="">Id Categoria</span>
+                        <span class="">Categoria</span>
+                    </th>
+                    <th>
+                        <span class="">Topic</span>
                     </th>
                 </thead>
                 <tbody>
@@ -42,7 +45,8 @@ else
                         {
                             <tr>
                                 <td>@question.Text</td>
-                                <td>@question.IdCategory</td>
+                                <td>@question.CategoryName</td>
+                                <td>@question.Topic</td>
                                 <td>
                                     <ButtonDropdown Object="@question" OnUpdateClicked="@OpenModifyQuestion"
                                                     OnDeleteClicked="@OpenDeleteQuestion" />

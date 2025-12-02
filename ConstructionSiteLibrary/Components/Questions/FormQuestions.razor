@@ -12,7 +12,7 @@ else
     <div class="">
         <RadzenTemplateForm TItem="FormQuestionData" Data=@form Submit=@Save>
             <RadzenStack class="px-2">
-                <RadzenFormField Text="Testo <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <RadzenFormField Text="Testo (obbligatorio)" Variant="@variant">
                     <ChildContent>
                         <RadzenTextArea Name="Testo" @bind-Value="@form.Text" Rows="3"/>
                     </ChildContent>
@@ -20,7 +20,7 @@ else
                         <RadzenRequiredValidator Component="Testo" Popup=false Text="Il campo Testo è obbligatorio" />
                     </Helper>
                 </RadzenFormField>
-                <RadzenFormField Text="Categoria <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <RadzenFormField Text="Categoria (obbligatorio)" Variant="@variant">
                     <ChildContent>
                         <RadzenDropDownDataGrid Data="@categories" TextProperty="Text" ValueProperty="Id" @bind-Value="@form.IdCategory"
                                                 AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
@@ -41,7 +41,7 @@ else
                     </ChildContent>
                 </RadzenFormField>
                 @* Gestione della scelta delle risposte *@
-                <RadzenFormField Text="Possibili Scelte <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <RadzenFormField Text="Possibili Scelte (obbligatorio)" Variant="@variant">
                     <ChildContent>
                         <RadzenDropDownDataGrid @ref="choicesDropDown" Data="@choices" TextProperty="Tag" @bind-Value="@form.Choices"
                                 Multiple="true" AllowFiltering="true" AllowColumnResize="true" AllowSorting="true">

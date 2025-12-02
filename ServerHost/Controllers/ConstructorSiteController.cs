@@ -65,7 +65,7 @@ public class ConstructorSiteController : DefaultController
     [Route(ApiRouting.SaveConstructorSite)]
     [Authorize]
     [HttpPost]
-    public async Task<AXT_WebResponse> SaveConstructorSite(ConstructorSiteModel newContructorSite)
+    public async Task<AXT_WebResponse> SaveConstructorSite(SiteModel newContructorSite)
     {
          var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -91,7 +91,7 @@ public class ConstructorSiteController : DefaultController
     [Route(ApiRouting.UpdateConstructorSites)]
     [Authorize]
     [HttpPost]
-    public async Task<AXT_WebResponse> UpdateConstructorSites(List<ConstructorSiteModel> constructorSites)
+    public async Task<AXT_WebResponse> UpdateConstructorSites(List<SiteModel> constructorSites)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -116,7 +116,7 @@ public class ConstructorSiteController : DefaultController
     [Route(ApiRouting.HideConstructorSites)]
     [Authorize]
     [HttpPost]
-    public async Task<AXT_WebResponse> HideConstructorSites(List<ConstructorSiteModel> constructorSites)
+    public async Task<AXT_WebResponse> HideConstructorSites(List<SiteModel> constructorSites)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
