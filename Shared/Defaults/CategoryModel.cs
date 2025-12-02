@@ -11,7 +11,7 @@ public class CategoryModel
     public string Text { get; set; } = "";
 
     [JsonPropertyName("topic")]
-    public string Topic { get; set; } = "";
+    public string? Topic { get; set; }
 
     [JsonPropertyName("order")]
     public int Order { get; set; }

@@ -57,6 +57,7 @@ public partial class FormCategories
                 Id = ((CategoryModel)Object).Id,
                 Nome = ((CategoryModel)Object).Text,
                 Order = ((CategoryModel)Object).Order,
+                Topic = ((CategoryModel)Object).Topic
             };
         }
         else
@@ -79,11 +80,11 @@ public partial class FormCategories
         bool response;
         if (CreationMode)
         {
-            response = await CategoriesRepository.SaveCategory(new TemplateCategoryModel { Text = form.Nome ?? "" });
+            response = await CategoriesRepository.SaveCategory(new TemplateCategoryModel { Text = form.Nome ?? "", Topic=form.Topic });
         }
         else
         {
-            response = await CategoriesRepository.UpdateCategories([new TemplateCategoryModel() { Id = form.Id, Text = form.Nome ?? "", Order = form.Order ?? 0 }]);
+            response = await CategoriesRepository.UpdateCategories([new TemplateCategoryModel() { Id = form.Id, Text = form.Nome ?? "", Order = form.Order ?? 0, Topic = form.Topic }]);
         }
 
         //NotificationService.Notify(response);
@@ -100,7 +101,7 @@ public partial class FormCategories
     {
         public int Id { get; set; }
         public string? Nome { get; set; }
-
+        public string? Topic { get; set; }
         public int? Order { get; set; }
     }
 }
