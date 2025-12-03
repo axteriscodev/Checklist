@@ -33,7 +33,7 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
         public static int TypeSign = 7;
 
         public static DocumentAnchor ADatiVerbale = new("Dati Verbale", "DatiVerbale");
-        public static DocumentAnchor ADatiCantiere = new("Dati Cantiere", "DatiCantiere");
+        public static DocumentAnchor ADatiCantiere = new("Dati Sito", "DatiSito");
         public static DocumentAnchor ADatiAnziende = new("", "");
 
         #endregion
