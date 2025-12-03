@@ -1,9 +1,6 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
-using ConstructionSiteLibrary.Managers;
 using Microsoft.AspNetCore.Components;
 using Radzen;
-using Radzen.Blazor;
-using Shared.Defaults;
 using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Questions;
@@ -31,6 +28,10 @@ public partial class TableQuestionMobile
     /// Riferimento alla lista di questions
     /// </summary>
     private List<TemplateQuestionModel> questions = [];
+    private List<TemplateQuestionModel> displayedQuestions = [];
+    private string search = "";
+
+    private int pageIndex = 0;
 
     ScreenComponent? screenComponent;
 
@@ -54,29 +55,34 @@ public partial class TableQuestionMobile
         await DialogService.OpenAsync<FormQuestions>("Aggiorna domanda", parameters: param, options: newOptions);
     }
 
-    private async Task OpenUpdateForm(QuestionModel model)
+    private async Task OpenUpdateForm(object question)
     {
         var width = screenComponent.ScreenSize.Width;
-
-        //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
-        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
-        var newOptions = new DialogOptions
+        var model = question as TemplateChoiceModel;
+        if(model is not null)
         {
-            Style = additionalStyle
-        };
-        //creo parametri da inviare al componente caricato con il popup
-        var param = new Dictionary<string, object>
+            //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+            var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
+            var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+            //creo parametri da inviare al componente caricato con il popup
+            var param = new Dictionary<string, object>
             {
                 //tra i parametri che invio al dialog creo un EventCallback da passare al componente
                 { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
                 { "Question", model},
                 {"CreationMode", false },
             };
-        await DialogService.OpenAsync<FormQuestions>("Aggiorna domanda", parameters: param, options: newOptions);
+            await DialogService.OpenAsync<FormQuestions>("Aggiorna domanda", parameters: param, options: newOptions);
+        }
     }
 
-    private async Task Disable(TemplateQuestionModel model)
+    private async Task Hide(object item)
     {
+
+        var model = item as TemplateQuestionModel;
         var titolo = "Disattivazione domanda";
         var text = "Vuoi disattivare la domanda: " + model.Text + "?";
         var confirmationResult = await DialogService.Confirm(text, titolo,
@@ -114,5 +120,23 @@ public partial class TableQuestionMobile
     private string PrintSubject(int? idSubject)
     {
         return idSubject is not null && idSubject > 0 ? idSubject.Value.ToString() : "-";
+    }
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterQuestions();
+    }
+
+    private void FilterQuestions()
+    {
+        displayedQuestions = questions;
+        search = search.TrimStart().TrimEnd();
+        if (!string.IsNullOrEmpty(search))
+        {
+            displayedQuestions = questions.Where(x => x.Text.Contains(search,
+            StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+        count = displayedQuestions.Count;
     }
 }

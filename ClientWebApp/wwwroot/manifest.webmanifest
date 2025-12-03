@@ -1,6 +1,6 @@
 {
-  "name": "ClientWebApp",
-  "short_name": "ClientWebApp",
+  "name": "Checklist Gestisco",
+  "short_name": "Checklist Gestisco",
   "id": "./",
   "start_url": "./",
   "display": "standalone",
