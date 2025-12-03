@@ -15,11 +15,6 @@ else
     @* La tabella delle Categorie *@
     <div class="marginMobile">
 
-        @* <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-    Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
-    <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-    Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" /> *@
-
         <SectionTitle PageTitle="Categorie" ButtonText="+ aggiungi categoria" SearchPlaceholder="Cerca categoria"
             OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
 
