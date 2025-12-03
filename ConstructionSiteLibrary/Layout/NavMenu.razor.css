@@ -1,3 +1,15 @@
+
+.axt-logo {
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+    .axt-logo :hover {
+        transform: scale(1.1);
+        filter: brightness(1.1);
+    }
+
 .navbar-toggler {
     background-color: rgba(255, 255, 255, 0.1);
 }

@@ -147,8 +147,18 @@
         *@
     </nav>
     <div class="bottom-row">
-        <div class="icon-menu-arrow">
-            <RadzenButton Icon=@menuIcon Click="ToggleIconMenu" Style="color: white;" Variant="Variant.Text" />
+        <div class="d-flex justify-content-between align-items-center" style="padding-left:20px;">
+            @if (!IconMenuActive)
+            {
+                <div class="axt-logo">
+                    <a class="" href="https://www.axterisco.it" target="_blank">
+                        <img src="/logoAXTbianco.png" width="160" height="40" alt="">
+                    </a>
+                </div>
+            }
+            <div class="icon-menu-arrow">
+                <RadzenButton Icon=@menuIcon Click="ToggleIconMenu" Style="color: white;" Variant="Variant.Text" />
+            </div>
         </div>
     </div>
 </div>
