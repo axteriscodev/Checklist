@@ -113,6 +113,7 @@ public partial class TableQuestionMobile
     private async Task LoadData()
     {
         questions = await QuestionRepository.GetQuestions();
+        FilterQuestions();
         count = questions.Count;
     }
 
